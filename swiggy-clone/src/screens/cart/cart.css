@@ -1,0 +1,158 @@
+.cart-container .title {
+  margin-bottom: 5vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.cart-container .card {
+  margin: auto;
+  width: 100%;
+  border: transparent;
+}
+
+.cart-container .cart {
+  padding: 4vh 5vh;
+}
+
+.cart-container .summary {
+  background-color: #ddd;
+  border-radius: 1rem;
+  padding: 4vh;
+  color: rgb(65, 65, 65);
+}
+
+.cart-container .summary .col-2 {
+  padding: 0;
+}
+.cart-container .summary .col-10 {
+  padding: 0;
+}
+.cart-container .row {
+  margin: 0;
+}
+.cart-container .title b {
+  font-size: 1.5rem;
+}
+.cart-container .main {
+  margin: 0;
+  padding: 2vh 0;
+  width: 100%;
+}
+.cart-container .col-2,
+.col {
+  padding: 0 1vh;
+}
+.cart-container a {
+  padding: 0 1vh;
+}
+.cart-container .close {
+  margin-left: auto;
+  font-size: 0.8rem;
+  border: none;
+  background-color: transparent;
+}
+.cart-container img {
+  width: 3.5rem;
+}
+.cart-container .back-to-shop {
+  margin-top: 4.5rem;
+}
+.cart-container h5 {
+  margin-top: 4vh;
+}
+.cart-container hr {
+  margin-top: 1.25rem;
+}
+form {
+  padding: 2vh 0;
+}
+
+.cart-container input {
+  border: 1px solid rgba(0, 0, 0, 0.137);
+  padding: 1vh;
+  margin-bottom: 4vh;
+  outline: none;
+  width: 100%;
+  background-color: rgb(247, 247, 247);
+}
+.cart-container input:focus::-webkit-input-placeholder {
+  color: transparent;
+}
+.cart-container .btn {
+  background-color: #db7c38;
+  border-color: #db7c38;
+  color: white;
+  width: 100%;
+  font-size: 0.7rem;
+  margin-top: 4vh;
+  padding: 1vh;
+  border-radius: 0;
+}
+.cart-container .btn:focus {
+  box-shadow: none;
+  outline: none;
+  box-shadow: none;
+  color: white;
+  -webkit-box-shadow: none;
+  -webkit-user-select: none;
+  transition: none;
+}
+.cart-container .btn:hover {
+  color: white;
+}
+.cart-container a {
+  color: black;
+}
+.cart-container a:hover {
+  color: black;
+  text-decoration: none;
+}
+.cart-container #code {
+  background-image: linear-gradient(
+      to left,
+      rgba(255, 255, 255, 0.253),
+      rgba(255, 255, 255, 0.185)
+    ),
+    url('https://img.icons8.com/small/16/000000/long-arrow-right.png');
+  background-repeat: no-repeat;
+  background-position-x: 95%;
+  background-position-y: center;
+}
+
+.cart-btn {
+  border: none;
+  background-color: transparent;
+  user-select: none;
+}
+
+@media screen and (max-width: 1002px) {
+}
+
+@media (max-width: 767px) {
+  .cart-container .summary {
+    margin-top: 2rem;
+    padding: 2rem;
+  }
+
+  .cart-container .card {
+    margin: 0vh auto;
+  }
+
+  .cart-container .cart {
+    padding: 0;
+  }
+}
+
+@media (min-width: 768px) {
+  .container,
+  .container-md,
+  .container-sm {
+    max-width: 90%;
+  }
+}
+
+
+@media screen and (max-width: 406px){
+  
+}

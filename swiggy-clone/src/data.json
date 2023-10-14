@@ -1,0 +1,22 @@
+[
+  {
+    "_id": 1,
+    "image": "/images/item1.png",
+    "title": "La Pino’z Pizza",
+    "desc": "Italian, Pizzas, Fast Food, Mexican, Desserts, Beverages",
+    "rating": "3.4",
+    "price": "250",
+    "time": "24 Mins",
+    "quantity": 1
+  },
+  {
+    "_id": 2,
+    "image": "/images/item2.jpg",
+    "title": "La Pino’z Pizza",
+    "desc": "Italian, Pizzas, Fast Food, Mexican, Desserts, Beverages",
+    "rating": "3.4",
+    "price": "250",
+    "time": "24 Mins",
+    "quantity": 1
+  }
+]

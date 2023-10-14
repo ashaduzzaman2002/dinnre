@@ -1,0 +1,39 @@
+.error-text i {
+    font-size: 90px;
+    margin-bottom: 30px;
+}
+
+.error-text h1 {
+    font-size: 40px;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.error-text p {
+    font-size: 15px;
+    margin-bottom: 30px;
+}
+
+a.boxed-btn {
+    -webkit-transition: 0.3s;
+    -o-transition: 0.3s;
+    transition: 0.3s;
+}
+
+a.boxed-btn, a.bordered-btn, a.cart-btn {
+    border-radius: 50px;
+}
+
+a.boxed-btn {
+    font-family: 'Poppins', sans-serif;
+    display: inline-block;
+    background-color: #F28123;
+    color: #fff;
+    padding: 10px 20px;
+    user-select: none;
+    cursor: default;
+}
+
+a.boxed-btn:active {
+    background-color: #ff9036;
+}

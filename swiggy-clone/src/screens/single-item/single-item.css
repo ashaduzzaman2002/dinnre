@@ -1,0 +1,21 @@
+.mini-item-image img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.mini-item-image {
+    aspect-ratio: 1/1;
+}
+
+.item-details .card {
+    border-color: #BE2AED !important;
+}
+
+.big-item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}

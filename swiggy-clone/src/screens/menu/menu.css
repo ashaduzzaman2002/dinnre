@@ -1,0 +1,249 @@
+.restaurants-card{
+    position: relative;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.restaurants-card-outer {
+    width: 251px;
+    height: 110px;
+    position: relative;
+}
+
+.tmKiP {
+    width: 216px;
+    height: 110px;
+    margin-left: 35px;
+    position: absolute;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    background: #fff;
+    box-shadow: 0 1px 10px 0 rgba(40,44,63,.08);
+}
+
+._2Y2X_ {
+    background: #eef0f5;
+    width: 70px;
+    height: 70px;
+    position: absolute;
+    margin-top: 20px;
+}
+
+._2Y2X_ img {
+    object-fit: cover;
+}
+
+._12_oN {
+    opacity: 0;
+    transition: opacity .3s ease-out;
+}
+
+._2tuBw {
+    opacity: 1!important;
+}
+
+._1zjMg {
+    margin-left: 50px;
+    width: 146px;
+}
+
+._1s9IR, ._1VerS {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+._1s9IR {
+    font-size: 17px;
+    font-weight: 600;
+}
+
+._1VerS {
+    color: #93959f;
+}
+
+._1VerS, ._3e6YM {
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+
+/* Menu */
+.menu-container {
+    width: 60%;
+    margin: auto;
+}
+
+.RestaurantNameAddress_wrapper__24l_g {
+    display: inline-block;
+    margin-right: 16px;
+    width: calc(100% - 120px);
+}
+
+.RestaurantNameAddress_name__2IaTv {
+    font-size: 1.43rem;
+    font-weight: 600;
+    color: #282c3f;
+    margin-bottom: 8px;
+    text-transform: capitalize;
+}
+
+.RestaurantNameAddress_cuisines__mBHr2 {
+    font-size: .93rem;
+    color: #7e808c;
+    height: calc(0.93rem + 2px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 1rem;
+    white-space: nowrap;
+}
+
+.RestaurantNameAddress_areaWrapper__3HIxj {
+    display: flex;
+    align-items: center;
+    height: 16px;
+}
+
+.RestaurantNameAddress_area__2P9ib, .RestaurantNameAddress_lastMile__26BNf {
+    font-size: .93rem;
+    color: #7e808c;
+}
+
+
+.RestaurantRatings_wrapper__2294i {
+    border: 1px solid #e9e9eb;
+    box-shadow: 0 1px 5px #f9f9f9;
+    border-radius: 6px;
+    text-align: center;
+    padding: 8px;
+    max-width: 100px;
+    float: right;
+}
+
+.RestaurantRatings_avgRating__1TOWY {
+    color: #FEA116;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e9e9eb;
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.RestaurantRatings_totalRatings__3d6Zc {
+    font-size: 11px;
+    color: #8b8d97;
+    font-family: ProximaNovaCondensedRegular,arial,Helvetica Neue,sans-serif;
+    font-weight: 600;
+}
+
+.RestaurantHeader_dottedSeparator__2O2hU {
+    border: none;
+    border-bottom: 1px dashed #d3d3d3;
+}
+
+.RestaurantHeader_marginBottom__1rbfK {
+    margin-bottom: 18px;
+}
+
+.RestaurantHeader_marginBottom__1rbfK {
+    margin-bottom: 18px;
+}
+
+.RestaurantTimeCost_wrapper__3YXF9 {
+    color: #3e4152;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.RestaurantTimeCost_item__2HCUz:first-child {
+    margin-right: 24px;
+}
+
+.styles_vegOnly__3k3n5 {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    height: 14px;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+.styles_vegOnlyLabel__HR3Ii {
+    font-size: 1rem;
+    color: #3d4152;
+    font-weight: 600;
+}
+
+.styles_vegOnlyFilter__3ODDm {
+    margin-left: 12px;
+    font-size: 0;
+}
+
+.ToggleSwitch_toggleBar__1peIy, .ToggleSwitch_toggleThumb__NBLuA {
+    height: 18px;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+.ToggleSwitch_toggleBar__1peIy {
+    background: #d4d5d9;
+    width: 36px;
+    position: relative;
+    -webkit-transition: background-color .25s linear;
+    -o-transition: background-color .25s linear;
+    transition: background-color .25s linear;
+    will-change: background-color;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    contain: layout;
+    display: inline-block;
+    border-radius: 4px;
+}
+
+.ToggleSwitch_toggleThumb__NBLuA {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 18px;
+    background: #fff;
+    border: 2px solid #d4d5d9;
+    -webkit-transition: all .25s linear;
+    -o-transition: all .25s linear;
+    transition: all .25s linear;
+    will-change: transform,border-color;
+    contain: strict;
+    border-radius: 4px;
+}
+
+.ToggleSwitch_toggleBar__1peIy, .ToggleSwitch_toggleThumb__NBLuA {
+    height: 18px;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+.add-to-cart-btn {
+    border: none;
+    border-radius: 50%;
+    width: 40px !important;
+    height: 40px !important;
+    transition: all 0.3s ease-in-out;
+}
+
+.add-to-cart-btn:active {
+    background-color: #FEA116;
+}
+
+.add-to-cart-btn:focus {
+    outline: none;
+}

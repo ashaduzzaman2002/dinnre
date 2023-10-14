@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Nunito+Sans:opsz@6..12&family=Outfit:wght@600&family=Poppins:wght@600&display=swap');
+* {
+  font-family: "Lato", sans-serif !important;
+  margin: 0;
+}
+
+body {
+  scroll-behavior: smooth;
+}
+
+.cm {
+  margin-top: 4rem;
+}
+.mobile-view {
+  display: none !important;
+}
+
+.slider-custom {
+  display: none !important;
+}
+
+@media screen and (max-width: 1081px) {
+  .desktop-view {
+    display: none !important;
+  }
+
+  .mobile-view  {
+    display: block !important;
+  }
+}
+
+
+@media screen and (min-width: 1980px) {
+  .container {
+    max-width: 1920px !important;
+  }
+}
+
+.item-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+}
+
+@media screen and (max-width: 1500px) {
+  .item-container {
+    gap: 15px;
+  }
+  
+}
+
+@media screen and (max-width: 1200px) {
+  .item-container {
+   display: none;
+  }
+
+  .slider-custom {
+    display: block !important;
+  }
+  
+}
+
+@media screen and (max-width: 769px) {
+  .item-container {
+    grid-template-columns: repeat(1, 1fr);
+    gap: 15px;
+  }
+
+  .cm {
+    margin-top: 3.5rem;
+  }
+}
+
+::-webkit-file-upload-button {
+  display: none;
+}
+
+::file-selector-button {
+  display: none;
+}
+
+
+input[type="file"]{
+  color: transparent;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}

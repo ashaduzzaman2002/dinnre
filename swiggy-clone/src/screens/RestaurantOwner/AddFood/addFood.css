@@ -1,0 +1,82 @@
+input::file-selector-button {
+  background-color: #f8a100;
+}
+
+.add-food {
+  background-color: #0000005c;
+  backdrop-filter: blur(2px);
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-food-container {
+  border-radius: 15px;
+  background: var(--white-100, #FFF);
+  box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.06);
+  width: 500px;
+  /* max-height: 638px; */
+}
+
+.add-food-header h4 {
+  color: #000;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-transform: capitalize;
+}
+
+.add-food-header svg {
+  width: 16px;
+  height: 16px;
+}
+
+.add-food-image {
+  display: grid;
+  grid-template-columns: 90px calc(100% - 110px);
+  justify-content: space-between;
+}
+
+.file-upload svg {
+  height: 16px;
+  width: 16px;
+}
+
+.file-upload p {
+  color: #969696;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-transform: capitalize;
+}
+
+.file-upload {
+  border-radius: 5px;
+  border: 1px dashed #D4D4D4;
+}
+
+.add-food label {
+  color: #000;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  text-transform: capitalize;
+}
+.add-food input, .add-food select {
+  height: 43px;
+}
+
+.form-control:focus {
+  border-color: #dee2e6 !important;
+  outline: 0;
+  box-shadow:none !important;
+}
