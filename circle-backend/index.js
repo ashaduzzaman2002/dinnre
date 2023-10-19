@@ -28,7 +28,7 @@ initialize(server)
 // Middleware
 app.use(
   cors({
-    origin: ['http://localhost:3000', 'https://swiggy-clone-kappa.vercel.app'],
+    origin: ['http://localhost:3000', 'http://localhost:5173', 'https://swiggy-clone-kappa.vercel.app'],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],

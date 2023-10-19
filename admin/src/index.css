@@ -89,3 +89,14 @@ input[type="file"]{
   bottom: 0;
   width: 100%;
 }
+
+.btn{
+  background-color: #BE2AED;
+  border: 1px solid #BE2AED;
+  color: white;
+}
+
+.btn:hover{
+  border: 1px solid #BE2AED;
+  color: #BE2AED;
+}
