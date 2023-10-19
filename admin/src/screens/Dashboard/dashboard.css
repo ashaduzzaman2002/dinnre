@@ -110,3 +110,6 @@ th {
   margin-top: -10px;
 }
 
+:focus {
+  outline: none;
+}

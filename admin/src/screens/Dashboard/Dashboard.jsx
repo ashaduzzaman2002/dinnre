@@ -73,8 +73,8 @@ const Dashboard = () => {
   useEffect(() => {
     const updateChartWidth = () => {
       if (window.innerWidth < 576) {
-        setLineChartWidth(window.innerWidth - 40);
-        setPieChartWidth(window.innerWidth - 40);
+        setLineChartWidth(350);
+        setPieChartWidth(350);
         setPieChartHeight(265);
         setLineChartHeight(250);
       } else if (window.innerWidth < 768) {
