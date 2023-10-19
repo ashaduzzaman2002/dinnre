@@ -15,7 +15,6 @@ import Order from "./screens/RestaurantOwner/Order/Order";
 import AllFoods from "./screens/RestaurantOwner/AllFood/AllFoods";
 import AddFood from "./screens/RestaurantOwner/AddFood/AddFood";
 import Item from "./screens/menu/Item";
-import AdminDash from "./screens/admin/Dashboard/AdminDash";
 // import AllRestaurant from "./screens/admin/AllRestaurant/AllRestaurant";
 import AddRestaurant from "./screens/admin/AddRestaurant/AddRestaurant";
 import CheckoutSuccess from "./screens/checkout/CheckoutSuccess";
@@ -98,7 +97,6 @@ function App() {
 
         <Route path="/admin" element={<Navigate to={"/admin/dashboard"} />} />
 
-        <Route path="/admin/dashboard" element={<AdminDash />} />
         <Route path="/admin/all-restaurant" element={<AllRestaurant />} />
         <Route path="/admin/add-restaurant" element={<AddRestaurant />} />
 

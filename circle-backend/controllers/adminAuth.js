@@ -6,24 +6,28 @@ const { validationResult } = require("express-validator");
 exports.login = async (req, res) => {
   const { email, password } = req.body;
 
-  const err = validationResult(req)
-  if(!err.isEmpty()) {
-    return res.status(400).json({success: false, msg: err.array()})
+  const err = validationResult(req);
+  if (!err.isEmpty()) {
+    return res.status(400).json({ success: false, msg: err.array() });
   }
 
   try {
     let user = await Admin.findOne({ email });
 
-    if (!user) return res.status(404).json({ success: false, msg: "User not exist" });
+    if (!user)
+      return res.status(404).json({ success: false, msg: "User not exist" });
 
     const isPasswordMatched = await bcrypt.compare(password, user.password);
 
-    if (!isPasswordMatched) return res.status(401).json({ success: false, msg: "Invalid credentials" });
+    if (!isPasswordMatched)
+      return res
+        .status(401)
+        .json({ success: false, msg: "Invalid credentials" });
 
     res.clearCookie("jwt");
 
-    const token = await jwt.sign({ user: user._id },  process.env.JWT_SECRECT, {
-      expiresIn: '30d',
+    const token = await jwt.sign({ user: user._id }, process.env.JWT_SECRECT, {
+      expiresIn: "30d",
     });
 
     res.cookie(user._id, token, {
@@ -33,34 +37,44 @@ exports.login = async (req, res) => {
       sameSite: "lax",
     });
 
-    user.password = undefined
+    user.password = undefined;
 
-    res.status(200).json({ success: true, msg: "User logged in successfully", user });
-
+    res
+      .status(200)
+      .json({ success: true, msg: "User logged in successfully", user });
   } catch (error) {
-    console.log(error)
-    res.status(501).json({success: false, msg: 'Internal server error'})
-
+    console.log(error);
+    res.status(501).json({ success: false, msg: "Internal server error" });
   }
 };
 
 exports.register = async (req, res) => {
-    const {username, email, password} = req.body
-    try {
-        let user = await Admin.findOne({email})
-        
-        if(user) return res.json({status: false, msg: 'User already exist'})
-        let hashPassword = await bcrypt.hash(password, 10)
-        user = await Admin.create({username, email, password: hashPassword})
+  const { username, email, password } = req.body;
 
-        user.password = undefined
+  try {
+    const errors = validationResult(req);
 
-        res.json({
-            success: true,
-            msg: 'User created successfully',
-            user,
-        })
-    } catch (error) {
-        res.json({success: 'false', msg: 'User creation failed'})
+    if (!errors.isEmpty()) {
+      return res
+        .status(400)
+        .json({ success: false, msg: errors.array()[0]?.msg });
     }
-}
+
+    let user = await Admin.findOne({ email });
+
+    if (user) return res.json({ status: false, msg: "User already exist" });
+    let hashPassword = await bcrypt.hash(password, 10);
+    user = await Admin.create({ username, email, password: hashPassword });
+
+    user.password = undefined;
+
+    res.json({
+      success: true,
+      msg: "User created successfully",
+      user,
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: "false", msg: "User creation failed" });
+  }
+};

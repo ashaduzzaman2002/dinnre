@@ -27,8 +27,18 @@ exports.UserLoginInputValidation = [
 
 // Admin
 exports.AdminCreateUserInputValidation = [
-  body("email").isEmail(),
-  body("password").isLength({ min: 8 }),
+  body("username").not().isEmpty().withMessage('Username is required.'),
+  body("email")
+    .not()
+    .isEmpty()
+    .withMessage("Email is required")
+    .isEmail()
+    .withMessage("Invalid email format"),
+  body("password")
+    .notEmpty()
+    .withMessage("Password is required")
+    .isLength({ min: 8 })
+    .withMessage("Password must be at least 8 characters long"),
 ];
 
 exports.AdminLoginInputValidation = [
