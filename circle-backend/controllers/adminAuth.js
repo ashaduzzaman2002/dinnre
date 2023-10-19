@@ -8,7 +8,7 @@ exports.login = async (req, res) => {
 
   const err = validationResult(req);
   if (!err.isEmpty()) {
-    return res.status(400).json({ success: false, msg: err.array() });
+    return res.status(400).json({ success: false, msg: err.array().at(0) });
   }
 
   try {
@@ -30,7 +30,7 @@ exports.login = async (req, res) => {
       expiresIn: "30d",
     });
 
-    res.cookie(user._id, token, {
+    res.cookie('token', token, {
       path: "/",
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
       httpOnly: true,
@@ -78,3 +78,24 @@ exports.register = async (req, res) => {
     res.json({ success: "false", msg: "User creation failed" });
   }
 };
+
+exports.logout = async (req, res) => {
+  try {
+    res.cookie('token', null, {
+      path: "/",
+      expires: 0,
+      httpOnly: true,
+      sameSite: "lax",
+    });
+
+    res.status(200).json({
+      success: true,
+      msg: "Logout successful"
+    })
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      msg: "Internal server error"
+    })    
+  }
+}

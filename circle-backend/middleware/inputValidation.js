@@ -5,7 +5,7 @@ exports.UserCreateUserInputValidation = [
   body("name")
     .isLength({ min: 4 })
     .withMessage("location contains atleast 4 character"),
-  body("email").isEmail().withMessage("Enter a valid email"),
+  body("email").isEmail().withMessage("Please enter a valid email"),
   body("password")
     .isLength({ min: 8, max: 16 })
     .withMessage("password must be grater than 7 and less than 19"),
@@ -19,7 +19,7 @@ exports.UserCreateUserInputValidation = [
 ];
 
 exports.UserLoginInputValidation = [
-  body("email").isEmail(),
+  body("email").isEmail().withMessage("Please enter a valid email"),
   body("password")
     .isLength({ min: 8, max: 16 })
     .withMessage("password must be grater than 7 and less than 19"),
@@ -42,7 +42,7 @@ exports.AdminCreateUserInputValidation = [
 ];
 
 exports.AdminLoginInputValidation = [
-  body("email").isEmail(),
+  body("email").isEmail().withMessage("Please enter a valid email"),
   body("password")
     .isLength({ min: 8, max: 16 })
     .withMessage("password must be grater than 7 and less than 19"),
