@@ -99,3 +99,39 @@ exports.logout = async (req, res) => {
     })    
   }
 }
+
+exports.getProfile = async (req, res) => {
+  try {
+    const { userId } = req;
+
+    if(!userId) {
+      return res.status(400).json({
+        success: false,
+        msg: "Unauthorized access"
+      })
+    }
+
+    const user = await Admin.findById(userId);
+
+    if(!user) {
+      return res.status(400).json({
+        success: false,
+        msg: "User does not exist"
+      })
+    }
+
+    user.password = undefined
+
+    res.status(200).json({
+      success: true,
+      msg: "User details fetched seccessfully",
+      user
+    });
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({
+      success: false,
+      msg: "Internal server error"
+    })
+  } 
+}
