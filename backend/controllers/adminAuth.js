@@ -8,7 +8,7 @@ exports.login = async (req, res) => {
 
   const err = validationResult(req);
   if (!err.isEmpty()) {
-    return res.status(400).json({ success: false, msg: err.array().at(0) });
+    return res.status(400).json({ success: false, msg: err.array()[0].msg });
   }
 
   try {
