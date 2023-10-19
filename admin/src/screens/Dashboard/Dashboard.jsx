@@ -21,7 +21,34 @@ import {
   Cell,
 } from "recharts";
 
+const RADIAN = Math.PI / 180;
+const renderCustomizedLabel = ({
+  cx,
+  cy,
+  midAngle,
+  innerRadius,
+  outerRadius,
+  percent,
+}) => {
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+  return (
+    <text
+      x={x}
+      y={y}
+      fill="white"
+      textAnchor={x > cx ? "start" : "end"}
+      dominantBaseline="central"
+    >
+      {`${(percent * 100).toFixed(0)}%`}
+    </text>
+  );
+};
+
 const Dashboard = () => {
+  // Earning carts data
   const Data = [
     {
       title: "Order(Today)",
@@ -45,57 +72,59 @@ const Dashboard = () => {
     },
   ];
 
+  // Line chart data
   const monthlyIncome = [
     { name: "Jan", inr: 4000 },
     { name: "Feb", inr: 3000 },
-    { name: "Mar", inr: 2000 },
+    { name: "Mar", inr: 500 },
     { name: "Apr", inr: 2780 },
     { name: "May", inr: 1890 },
     { name: "Jun", inr: 2390 },
     { name: "Jul", inr: 3490 },
   ];
 
-  const donatChart = [
+  // Pie chart data
+  const pieChart = [
     { name: "Category A", value: 400 },
     { name: "Category B", value: 300 },
     { name: "Category C", value: 200 },
     { name: "Category D", value: 100 },
   ];
-
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
+  // update width and height of charts
   const [lineCharWidth, setLineChartWidth] = useState(640);
   const [lineCharHeight, setLineChartHeight] = useState(300);
 
   const [pieCharWidth, setPieChartWidth] = useState(640);
-  const [pieCharHeight, setPieChartHeight] = useState(240);
+  const [pieCharHeight, setPieChartHeight] = useState(200);
 
   useEffect(() => {
     const updateChartWidth = () => {
       if (window.innerWidth < 576) {
         setLineChartWidth(350);
         setPieChartWidth(350);
-        setPieChartHeight(265);
+        setPieChartHeight(220);
         setLineChartHeight(250);
       } else if (window.innerWidth < 768) {
         setLineChartWidth(500);
         setPieChartWidth(500);
-        setPieChartHeight(265);
+        setPieChartHeight(200);
         setLineChartHeight(320);
       } else if (window.innerWidth < 992) {
         setLineChartWidth(370);
         setPieChartWidth(430);
-        setPieChartHeight(265);
+        setPieChartHeight(225);
         setLineChartHeight(320);
       } else if (window.innerWidth < 1200) {
         setLineChartWidth(460);
         setPieChartWidth(460);
-        setPieChartHeight(250);
+        setPieChartHeight(220);
         setLineChartHeight(320);
       } else if (window.innerWidth < 1400) {
         setLineChartWidth(550);
         setPieChartWidth(550);
-        setPieChartHeight(250);
+        setPieChartHeight(230);
         setLineChartHeight(320);
       }
     };
@@ -116,6 +145,7 @@ const Dashboard = () => {
             <h3 className="mb-0 text-gray-800">Dashboard</h3>
           </div>
 
+          {/* Earing carts */}
           <div className="dashboard_cards_lg d-md-flex d-none">
             {Data.map(({ title, amount, rate }, i) => (
               <div key={i} className="dashboard_card mobile">
@@ -135,6 +165,7 @@ const Dashboard = () => {
             ))}
           </div>
 
+          {/* Earing carts swiper */}
           <div className="dashboard_cards_sm d-block d-md-none">
             <Swiper
               className="Cards"
@@ -162,6 +193,7 @@ const Dashboard = () => {
           </div>
 
           <div className="mt-5 row">
+            {/* Line chart */}
             <div className="col-md-6 col-12">
               <LineChart
                 width={lineCharWidth}
@@ -177,19 +209,21 @@ const Dashboard = () => {
               </LineChart>
             </div>
 
+            {/* Pie chart */}
             <div className="col-md-6 col-12 mt-5 mt-md-0 d-flex align-items-center">
               <PieChart width={pieCharWidth} height={pieCharHeight}>
                 <Pie
-                  data={donatChart}
+                  data={pieChart}
                   dataKey="value"
                   nameKey="name"
                   cx="50%"
                   cy="50%"
                   outerRadius={80}
                   fill="#8884d8"
-                  label
+                  label={renderCustomizedLabel}
+                  labelLine={false}
                 >
-                  {donatChart.map((entry, index) => (
+                  {pieChart.map((entry, index) => (
                     <Cell
                       key={`cell-${index}`}
                       fill={COLORS[index % COLORS.length]}
