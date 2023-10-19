@@ -19,19 +19,19 @@ const Signin = () => {
       console.log(data);
 
       if (data.success) {
-        toast.success(data.message, tostOptions);
+        toast.success(data.msg, tostOptions);
         navigate('/')
         // setTimeout(() => {
         //   getUser();
         //   navigate(location?.state?.from || "/");
         // }, 1000);
       } else {
-        toast.error(data.message, tostOptions);
+        toast.error(data.msg, tostOptions);
       }
     } catch (error) {
-      console.log(error);
+      console.log(error?.response?.data?.msg);
 
-      toast.error("Invalid credantioal", tostOptions);
+      toast.error(error?.response?.data?.msg, tostOptions);
     }
   };
 
