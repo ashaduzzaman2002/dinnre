@@ -7,13 +7,7 @@ import Restaurants from "./screens/menu/Restaurants";
 import NotFoundPage from "./screens/404page/404Page";
 import Menu from "./screens/menu/Menu";
 import Welcome from "./screens/welcome/Welcome";
-import RestaurantDash from "./screens/RestaurantOwner/Dashboard/RestaurantDash";
-// import Login from "./screens/auth/Login";
-import PublicRoute from "./routes/PublicRoute";
 import Cart from "./screens/cart/Cart";
-import Order from "./screens/RestaurantOwner/Order/Order";
-import AllFoods from "./screens/RestaurantOwner/AllFood/AllFoods";
-import AddFood from "./screens/RestaurantOwner/AddFood/AddFood";
 import Item from "./screens/menu/Item";
 import CheckoutSuccess from "./screens/checkout/CheckoutSuccess";
 import PaymentSuccess from "./screens/payment/PaymentSuccess";
@@ -22,7 +16,6 @@ import PlaceOrder from "./screens/order/PlaceOrder";
 import Product from "./screens/product/Product";
 import AllProduct from "./screens/all-product/AllProduct";
 import AllRestaurant from "./screens/all-restaurant/AllRestaurant";
-import Signin from "./screens/auth/Signin";
 import ConfirmOrder from "./screens/confirm-order/ConfirmOrder";
 import SingleItem from "./screens/single-item/SingleItem";
 import RestaurantPage from "./screens/restaurant-page/RestaurantPage";
@@ -36,9 +29,7 @@ function App() {
         <Route path="/item" element={<AllProduct />} />
         <Route path="/item/:id" element={<SingleItem />} />
         <Route path="/restaurants" element={<AllRestaurant />} />
-        <Route path="/signin" element={<Signin />} />
         <Route path="/confirm-order" element={<PlaceOrder />} />
-        <Route path="/restaurant/menu" element={<AllFoods />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/menu" element={<Menu />} />
         <Route path="/restaurant/menu/:id" element={<RestaurantPage />} />
@@ -60,16 +51,7 @@ function App() {
             </>
           }
         />
-        {/* <Route
-          path="/menu/restaurant/:restaurant"
-          element={
-            <>
-              <Navbar />
-              <Menu />
-              <Footer />
-            </>
-          }
-        /> */}
+        
 
         <Route
           path="/menu/item/:item_id"
@@ -82,15 +64,7 @@ function App() {
           }
         />
 
-        <Route
-          path="/restaurant"
-          element={<Navigate to={"/restaurant/dashboard"} />}
-        />
-
-        <Route path="/restaurant/dashboard" element={<RestaurantDash />} />
-        <Route path="/restaurant/order" element={<Order />} />
-        <Route path="/restaurant/items" element={<AllFoods />} />
-        <Route path="/restaurant/add-items" element={<AddFood />} />
+  
 
         <Route path="/checkout/success" element={<CheckoutSuccess />} />
 
