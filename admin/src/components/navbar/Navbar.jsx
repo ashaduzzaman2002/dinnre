@@ -71,7 +71,7 @@ const Navbar = ({ navLinks, type }) => {
           </button>
 
           <div className="d-flex align-items-center gap-5">
-            <Link onClick={() => setActiveLink("/")} to="/" className="brand">
+            <Link onClick={() => setActiveLink("/admin")} to="/admin" className="brand">
               <img src="/images/logo.svg" alt="logo" />
             </Link>
 

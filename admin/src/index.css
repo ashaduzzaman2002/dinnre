@@ -19,6 +19,10 @@ body {
   display: none !important;
 }
 
+button {
+  user-select: none !important;
+}
+
 @media screen and (max-width: 1081px) {
   .desktop-view {
     display: none !important;

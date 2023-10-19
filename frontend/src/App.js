@@ -15,8 +15,6 @@ import Order from "./screens/RestaurantOwner/Order/Order";
 import AllFoods from "./screens/RestaurantOwner/AllFood/AllFoods";
 import AddFood from "./screens/RestaurantOwner/AddFood/AddFood";
 import Item from "./screens/menu/Item";
-// import AllRestaurant from "./screens/admin/AllRestaurant/AllRestaurant";
-import AddRestaurant from "./screens/admin/AddRestaurant/AddRestaurant";
 import CheckoutSuccess from "./screens/checkout/CheckoutSuccess";
 import PaymentSuccess from "./screens/payment/PaymentSuccess";
 import PaymentFail from "./screens/payment/PaymentFail";
@@ -43,7 +41,6 @@ function App() {
         <Route path="/restaurant/menu" element={<AllFoods />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/menu" element={<Menu />} />
-        <Route path='/restaurant/resister' element={<AddRestaurant />} />
         <Route path="/restaurant/menu/:id" element={<RestaurantPage />} />
         <Route
           path="/search"
@@ -94,11 +91,6 @@ function App() {
         <Route path="/restaurant/order" element={<Order />} />
         <Route path="/restaurant/items" element={<AllFoods />} />
         <Route path="/restaurant/add-items" element={<AddFood />} />
-
-        <Route path="/admin" element={<Navigate to={"/admin/dashboard"} />} />
-
-        <Route path="/admin/all-restaurant" element={<AllRestaurant />} />
-        <Route path="/admin/add-restaurant" element={<AddRestaurant />} />
 
         <Route path="/checkout/success" element={<CheckoutSuccess />} />
 
