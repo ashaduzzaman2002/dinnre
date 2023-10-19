@@ -56,12 +56,7 @@ const AdminRoute = ({ children }) => {
 
       {children}
 
-      <footer
-        style={{ backgroundColor: "white", color: "gray" }}
-        className="text-center mt-5"
-      >
-        @ Circle allright reserve
-      </footer>
+      
     </>
   );
 };
