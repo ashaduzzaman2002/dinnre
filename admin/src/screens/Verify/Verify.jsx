@@ -81,7 +81,7 @@ const Verify = () => {
     <Protected>
       <Layout title={"Verify"}>
         <div className="dashboard_container container cm">
-          <div>
+          <div className="dashboard_container_order_report_container">
             <div className="dashboard_container_order_report_nav ">
               <div className="dashboard_container_order_report_nav_left d-flex justicy-content-center align-items-center">
                 <h6>Pending Restaurnats</h6>
@@ -122,7 +122,7 @@ const Verify = () => {
 
             <div className="table-responsive">
               <table
-                class="table tbl "
+                className="table tbl "
                 style={{
                   padding: "2rem",
                   borderSpacing: "1rem 1rem",
@@ -130,7 +130,7 @@ const Verify = () => {
                 }}
               >
                 <thead
-                  class="table-light "
+                  className="table-light "
                   style={{
                     background: "#ebebeb59",
                     padding: "1rem 1rem",
@@ -158,7 +158,7 @@ const Verify = () => {
                   />
                 </td> */}
                       <td className="align-middle" style={{ minWidth: 100 }}>
-                        <p class="fw-bold mb-1 ">{obj.name}</p>
+                        <p className="fw-bold mb-1 ">{obj.name}</p>
                       </td>
                       <td
                         className=" align-middle"

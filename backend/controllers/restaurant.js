@@ -7,6 +7,8 @@ const dataURI = require("../utils/dataUri");
 const cloudinary = require("cloudinary");
 const Order = require("../models/Order");
 const { validationResult } = require("express-validator");
+const { mailTransport, mailTemplete, generateOTP } = require("../utils/mail");
+const OTP = require("../models/OTP");
 
 exports.getAllItem = async (req, res) => {
   try {
@@ -55,21 +57,82 @@ exports.getMenuOfARestaurant = async (req, res) => {
   }
 };
 
+// OTP
+exports.sendOTP = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const err = validationResult(req);
+    if (!err.isEmpty()) {
+      return res.status(400).json({ success: false, msg: err.array()[0].msg });
+    }
+
+    const userExist = await Restaurant.findOne({ email });
+    if (userExist)
+      return res
+        .json(401)
+        .json({ succcess: false, msg: "User already exist." });
+    const otp = generateOTP();
+    const hashOTP = bcrypt.hashSync(otp, 10);
+
+    const otpExist = await OTP.findOne({ email });
+
+    if (otpExist) {
+      const updatedOtp = await OTP.findByIdAndUpdate(otpExist?._id, {
+        otp: hashOTP,
+      });
+
+      if (!updatedOtp)
+        return res.status(404).json({ message: "OTP not found" });
+
+      mailTransport().sendMail({
+        from: "crezytechy@gmail.com",
+        to: email,
+        subject: "Please verify your email account",
+        html: mailTemplete(otp),
+      });
+
+      return res.json({ success: true, message: "OTP send successfully" });
+    } else {
+      const newOtp = new OTP({
+        email,
+        otp: hashOTP,
+      });
+
+      await newOtp.save();
+
+      mailTransport().sendMail({
+        from: "crezytechy@gmail.com",
+        to: email,
+        subject: "Please verify your email account",
+        html: mailTemplete(otp),
+      });
+      return res.json({ success: true, message: "OTP send successfully" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(501).json({ success: true, msg: "Internal server error" });
+  }
+};
+
 // Register Restuarant
 exports.registerRestaurant = async (req, res) => {
   const { name, email, password, location, cityName, profile_img } = req.body;
 
   const { id } = req.user;
-  
-  const err = validationResult(req)
-  if(!err.isEmpty()) {
-    return res.status(400).json({success: false, msg: err.array()})
+
+  const err = validationResult(req);
+  if (!err.isEmpty()) {
+    return res.status(400).json({ success: false, msg: err.array() });
   }
 
   try {
-    const restaurantUser = await Restaurant.findOne({ email })
-    if(restaurantUser) return res.status(400).json({success: false, msg: 'User already exist.'})
-    
+    const restaurantUser = await Restaurant.findOne({ email });
+    if (restaurantUser)
+      return res
+        .status(400)
+        .json({ success: false, msg: "User already exist." });
+
     const lowerCaseCityName = cityName.toLowerCase();
     let city = await City.findOne({ name: lowerCaseCityName });
     if (!city) {
@@ -77,7 +140,7 @@ exports.registerRestaurant = async (req, res) => {
         name: lowerCaseCityName,
       });
     }
-    
+
     const hashPassword = bcrypt.hashSync(password, 10);
     let restaurant = new Restaurant({
       name,
@@ -102,27 +165,35 @@ exports.registerRestaurant = async (req, res) => {
 exports.loginRestaurant = async (req, res) => {
   const { email, password } = req.body;
 
-  const err = validationResult(req)
-  if(!err.isEmpty()) {
-    return res.status(400).json({success: false, msg: err.array().at(0).msg})
+  const err = validationResult(req);
+  if (!err.isEmpty()) {
+    return res.status(400).json({ success: false, msg: err.array().at(0).msg });
   }
 
   try {
     let user = await Restaurant.findOne({ email });
 
-    if (!user) return res.status(404).json({ success: false, msg: "User not exist" });
-    
+    if (!user)
+      return res.status(404).json({ success: false, msg: "User not exist" });
+
     const isPasswordMatched = await bcrypt.compare(password, user.password);
-    
-    if (!isPasswordMatched) return res.status(401).json({ success: false, msg: "Invalid credentials" });
-    
+
+    if (!isPasswordMatched)
+      return res
+        .status(401)
+        .json({ success: false, msg: "Invalid credentials" });
+
     // if (!user.verified) return res.status(404).json({ success: false, msg: "User is not active" });
 
     res.clearCookie("jwt");
 
-    const token = await jwt.sign({ id: user._id, role: "RESTAURENT" },  process.env.JWT_SECRECT, {
-      expiresIn: '30d',
-    });
+    const token = await jwt.sign(
+      { id: user._id, role: "RESTAURENT" },
+      process.env.JWT_SECRECT,
+      {
+        expiresIn: "30d",
+      }
+    );
 
     res.cookie("token", token, {
       path: "/",
@@ -131,13 +202,14 @@ exports.loginRestaurant = async (req, res) => {
       sameSite: "lax",
     });
 
-    user.password = undefined
+    user.password = undefined;
 
-    res.status(200).json({ success: true, msg: "User logged in successfully", user });
-
+    res
+      .status(200)
+      .json({ success: true, msg: "User logged in successfully", user });
   } catch (error) {
-    console.log(error)
-    res.status(501).json({success: false, msg: 'Internal server error'})
+    console.log(error);
+    res.status(501).json({ success: false, msg: "Internal server error" });
   }
 };
 
