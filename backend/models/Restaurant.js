@@ -18,7 +18,7 @@ const restaurantSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    
+
     location: {
       type: String,
       required: true,
@@ -30,6 +30,22 @@ const restaurantSchema = new mongoose.Schema(
     },
 
     profile_img: {
+      type: String,
+    },
+
+    bankName: {
+      type: String,
+    },
+
+    accountNo: {
+      type: String,
+    },
+
+    ifsc: {
+      type: String,
+    },
+
+    upi: {
       type: String,
     },
 
