@@ -9,6 +9,7 @@ import {
   Filter,
   FilterDark,
 } from "../../assets/svg/Icon";
+import Protected from "../../routes/Protected";
 
 const Orders = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -77,78 +78,79 @@ const Orders = () => {
     }
   };
   return (
-    <Layout title={"Orders"}>
-      <div className="dashboard_container container cm">
-        <div>
-          <div className="dashboard_container_order_report_nav ">
-            <div className="dashboard_container_order_report_nav_left d-flex justicy-content-center align-items-center">
-              <h6>Orders</h6>
-            </div>
+    <Protected>
+      <Layout title={"Orders"}>
+        <div className="dashboard_container container cm">
+          <div>
+            <div className="dashboard_container_order_report_nav ">
+              <div className="dashboard_container_order_report_nav_left d-flex justicy-content-center align-items-center">
+                <h6>Orders</h6>
+              </div>
 
-            <div className="d-none d-md-flex">
-              <div className=" order_report_nav_right d-flex gap-2 justicy-content-center align-items-center ">
-                <div className="order_report_container_search  ">
-                  <input
-                    className="rounded-pill border border-white px-2 py-1 "
-                    style={{ background: "#F4F4F4" }}
-                    type="text"
-                    name="search"
-                    id="search"
-                    placeholder="Search"
-                    onChange={handleSearch}
-                  />
+              <div className="d-none d-md-flex">
+                <div className=" order_report_nav_right d-flex gap-2 justicy-content-center align-items-center ">
+                  <div className="order_report_container_search  ">
+                    <input
+                      className="rounded-pill border border-white px-2 py-1 "
+                      style={{ background: "#F4F4F4" }}
+                      type="text"
+                      name="search"
+                      id="search"
+                      placeholder="Search"
+                      onChange={handleSearch}
+                    />
+                  </div>
+                  <button
+                    className="dashboard_container_btn d-flex justify-content-center align-items-center gap-2 h-75 "
+                    style={{ background: "#393C49" }}
+                  >
+                    <Filter />
+                    <span>Filter Order</span>
+                  </button>
                 </div>
-                <button
-                  className="dashboard_container_btn d-flex justify-content-center align-items-center gap-2 h-75 "
-                  style={{ background: "#393C49" }}
-                >
-                  <Filter />
-                  <span>Filter Order</span>
-                </button>
+              </div>
+
+              <div className=" d-flex justify-content-center align-items-center gap-4 d-md-none">
+                <div>
+                  <FilterDark />
+                </div>
+                <div>
+                  <AddDark />
+                </div>
               </div>
             </div>
 
-            <div className=" d-flex justify-content-center align-items-center gap-4 d-md-none">
-              <div>
-                <FilterDark />
-              </div>
-              <div>
-                <AddDark />
-              </div>
-            </div>
-          </div>
-
-          <div className="table-responsive">
-            <table
-              class="table tbl "
-              style={{
-                padding: "2rem",
-                borderSpacing: "1rem 1rem",
-                width: "100%",
-              }}
-            >
-              <thead
-                class="table-light "
+            <div className="table-responsive">
+              <table
+                class="table tbl "
                 style={{
-                  background: "#ebebeb59",
-                  padding: "1rem 1rem",
-                  borderRadius: "2rem",
+                  padding: "2rem",
+                  borderSpacing: "1rem 1rem",
+                  width: "100%",
                 }}
               >
-                {/* <th style={{ paddingLeft: "1rem" }}>Image</th> */}
-                <th>Tittle</th>
-                <th>Description</th>
-                <th>Category</th>
-                <th>Type</th>
-                <th>Price</th>
-                <th className=" text-center">Status</th>
-              </thead>
-              <tbody className="tbl">
-                {foods.map((obj, i) => (
-                  <React.Fragment key={i}>
-                    <div className="mt-2"></div>
-                    <tr className="list_card">
-                      {/* <td className="" style={{ width: "8%" }}>
+                <thead
+                  class="table-light "
+                  style={{
+                    background: "#ebebeb59",
+                    padding: "1rem 1rem",
+                    borderRadius: "2rem",
+                  }}
+                >
+                  {/* <th style={{ paddingLeft: "1rem" }}>Image</th> */}
+                  <th>Tittle</th>
+                  <th>Description</th>
+                  <th>Category</th>
+                  <th>Type</th>
+                  <th>Price</th>
+                  <th className=" text-center">Status</th>
+                </thead>
+                <tbody className="tbl">
+                  {foods.map((obj, i) => (
+                    <React.Fragment key={i}>
+                      <div className="mt-2"></div>
+                      <tr className="list_card">
+                        {/* <td className="" style={{ width: "8%" }}>
                         <img
                           src={obj.img}
                           alt=""
@@ -157,104 +159,111 @@ const Orders = () => {
                           style={{ borderRadius: "10px" }}
                         />
                       </td> */}
-                      <td className="align-middle" style={{ minWidth: 100 }}>
-                        <p class="fw-bold mb-1 ">{obj.name}</p>
-                      </td>
-                      <td
-                        className=" align-middle"
-                        style={{ minWidth: 100, maxWidth: 100 }}
-                      >
-                        {obj.desc.slice(0, 15)}
-                        {obj.desc.length > 15 ? "..." : ""}
-                      </td>
-                      <td
-                        className=" align-middle text-capitalize"
-                        style={{ minWidth: 100 }}
-                      >
-                        {obj.category}
-                      </td>
-                      <td
-                        className=" align-middle text-capitalize"
-                        style={{ minWidth: 100 }}
-                      >
-                        {obj.type}
-                      </td>
-                      <td className=" align-middle" style={{ minWidth: 100 }}>
-                        ₹{obj.price}
-                      </td>
-                      <td className=" align-middle" style={{ width: "20%" }}>
-                        <div className=" d-flex gap-2 justify-content-evenly align-items-center m-0 p-0">
-                          <button
-                            className="dashboard_container_status_btn"
-                            style={{ background: "#E88B00", cursor: "default" }}
-                          >
-                            <Edit />
-                            <span>Deactive</span>
-                          </button>
-                          <button
-                            className="dashboard_container_status_btn"
-                            style={{ background: "#DC3545", cursor: "default" }}
-                            onClick={() => handleDelete(obj._id)}
-                          >
-                            <Delete />
-                            <span>Delete</span>
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  </React.Fragment>
-                ))}
+                        <td className="align-middle" style={{ minWidth: 100 }}>
+                          <p class="fw-bold mb-1 ">{obj.name}</p>
+                        </td>
+                        <td
+                          className=" align-middle"
+                          style={{ minWidth: 100, maxWidth: 100 }}
+                        >
+                          {obj.desc.slice(0, 15)}
+                          {obj.desc.length > 15 ? "..." : ""}
+                        </td>
+                        <td
+                          className=" align-middle text-capitalize"
+                          style={{ minWidth: 100 }}
+                        >
+                          {obj.category}
+                        </td>
+                        <td
+                          className=" align-middle text-capitalize"
+                          style={{ minWidth: 100 }}
+                        >
+                          {obj.type}
+                        </td>
+                        <td className=" align-middle" style={{ minWidth: 100 }}>
+                          ₹{obj.price}
+                        </td>
+                        <td className=" align-middle" style={{ width: "20%" }}>
+                          <div className=" d-flex gap-2 justify-content-evenly align-items-center m-0 p-0">
+                            <button
+                              className="dashboard_container_status_btn"
+                              style={{
+                                background: "#E88B00",
+                                cursor: "default",
+                              }}
+                            >
+                              <Edit />
+                              <span>Deactive</span>
+                            </button>
+                            <button
+                              className="dashboard_container_status_btn"
+                              style={{
+                                background: "#DC3545",
+                                cursor: "default",
+                              }}
+                              onClick={() => handleDelete(obj._id)}
+                            >
+                              <Delete />
+                              <span>Delete</span>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    </React.Fragment>
+                  ))}
 
-                <div className="mt-2 p-0 bg-danger "></div>
-                <tr className="list_card">
-                  <td colSpan={7}>
-                    <div className="  my-2 d-flex  justify-content-end align-items-center gap-1 ">
-                      <span>prev</span>
-                      <div
-                        className="border border-white text-white d-inline-block  "
-                        style={{
-                          padding: ".15rem .4rem",
-                          background: "#393C49",
-                          borderRadius: ".4rem",
-                          fontSize: "10px",
-                          textAlign: "center",
-                        }}
-                      >
-                        1
+                  <div className="mt-2 p-0 bg-danger "></div>
+                  <tr className="list_card">
+                    <td colSpan={7}>
+                      <div className="  my-2 d-flex  justify-content-end align-items-center gap-1 ">
+                        <span>prev</span>
+                        <div
+                          className="border border-white text-white d-inline-block  "
+                          style={{
+                            padding: ".15rem .4rem",
+                            background: "#393C49",
+                            borderRadius: ".4rem",
+                            fontSize: "10px",
+                            textAlign: "center",
+                          }}
+                        >
+                          1
+                        </div>
+                        <div
+                          className="border border-white text-white d-inline-block  "
+                          style={{
+                            padding: ".15rem .4rem",
+                            background: "#393C49",
+                            borderRadius: ".4rem",
+                            fontSize: "10px",
+                            textAlign: "center",
+                          }}
+                        >
+                          1
+                        </div>
+                        <div
+                          className="border border-white text-white d-inline-block  "
+                          style={{
+                            padding: ".15rem .4rem",
+                            background: "#393C49",
+                            borderRadius: ".4rem",
+                            fontSize: "10px",
+                            textAlign: "center",
+                          }}
+                        >
+                          1
+                        </div>
                       </div>
-                      <div
-                        className="border border-white text-white d-inline-block  "
-                        style={{
-                          padding: ".15rem .4rem",
-                          background: "#393C49",
-                          borderRadius: ".4rem",
-                          fontSize: "10px",
-                          textAlign: "center",
-                        }}
-                      >
-                        1
-                      </div>
-                      <div
-                        className="border border-white text-white d-inline-block  "
-                        style={{
-                          padding: ".15rem .4rem",
-                          background: "#393C49",
-                          borderRadius: ".4rem",
-                          fontSize: "10px",
-                          textAlign: "center",
-                        }}
-                      >
-                        1
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-      </div>
-    </Layout>
+      </Layout>
+    </Protected>
   );
 };
 

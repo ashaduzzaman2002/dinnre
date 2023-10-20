@@ -16,7 +16,6 @@ const Signin = () => {
 
   const [miniLoading, setMiniLoading] = useState(false);
 
-  console.log(loading);
   const handleLogin = async () => {
     setMiniLoading(true);
     try {

@@ -94,11 +94,13 @@ input[type="file"] {
   background-color: #be2aed;
   border: 1px solid #be2aed;
   color: white;
+  transition: all 0.3s ease-in-out;
 }
 
 .btn:hover {
-  border: 1px solid #be2aed;
-  color: #be2aed;
+  border: 1px solid #9c20c1;
+  background-color: #9c20c1;
+  color: white;
 }
 
 .btn:disabled {
