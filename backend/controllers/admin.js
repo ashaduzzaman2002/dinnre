@@ -6,7 +6,7 @@ const Restaurant = require("../models/Restaurant");
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
-  
+
   const err = validationResult(req);
   if (!err.isEmpty()) {
     return res.status(400).json({ success: false, msg: err.array()[0].msg });
@@ -27,9 +27,13 @@ exports.login = async (req, res) => {
 
     res.clearCookie("jwt");
 
-    const token = await jwt.sign({ id: user._id, role: "ADMIN" }, process.env.JWT_SECRECT, {
-      expiresIn: "30d"
-    });
+    const token = await jwt.sign(
+      { id: user._id, role: "ADMIN" },
+      process.env.JWT_SECRECT,
+      {
+        expiresIn: "30d",
+      }
+    );
 
     res.cookie("token", token, {
       path: "/",
@@ -128,7 +132,6 @@ exports.getProfile = async (req, res) => {
       msg: "User details fetched seccessfully",
       user,
     });
-
   } catch (error) {
     return res.status(500).json({
       success: false,
@@ -141,27 +144,27 @@ exports.handleVerify = async (req, res) => {
   try {
     const { userId } = req.params;
     const { id, role } = req.user;
-    
-    if(!userId) {
+
+    if (!userId) {
       return res.status(400).json({
         success: false,
-        msg: "User id is invalid"
+        msg: "User id is invalid",
       });
     }
 
-    if(role !== "ADMIN") {
+    if (role !== "ADMIN") {
       return res.status(403).json({
         success: false,
-        msg: "Unauthorized access denied"
+        msg: "Unauthorized access denied",
       });
     }
-    
+
     const user = await Restaurant.findById(userId);
-    
-    if(!user) {
+
+    if (!user) {
       return res.status(400).json({
         success: false,
-        msg: "User id is invalid"
+        msg: "User id is invalid",
       });
     }
 
@@ -171,112 +174,112 @@ exports.handleVerify = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      msg: "User is verified successfully"
+      msg: "User is verified successfully",
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      msg: "Internal server error"
-    }) ;   
+      msg: "Internal server error",
+    });
   }
-}
+};
 
 exports.handleDecline = async (req, res) => {
   try {
     const { userId } = req.params;
     const { id, role } = req.user;
-    
-    if(!userId) {
+
+    if (!userId) {
       return res.status(400).json({
         success: false,
-        msg: "User id is invalid"
+        msg: "User id is invalid",
       });
     }
 
-    if(role !== "ADMIN") {
+    if (role !== "ADMIN") {
       return res.status(403).json({
         success: false,
-        msg: "Unauthorized access denied"
+        msg: "Unauthorized access denied",
       });
     }
-    
+
     const user = await Restaurant.findById(userId);
-    
-    if(!user) {
+
+    if (!user) {
       return res.status(400).json({
         success: false,
-        msg: "User does not exist"
-      });      
+        msg: "User does not exist",
+      });
     }
 
     await Restaurant.findByIdAndDelete(userId);
-  
+
     res.status(200).json({
       success: true,
-      msg: "User is verification declined successfully"
+      msg: "User is verification declined successfully",
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
-      msg: "Internal server error"
-    }); 
+      msg: "Internal server error",
+    });
   }
-}
+};
 
 exports.getAllVerifiedRestaurents = async (req, res) => {
   try {
     const { id, role } = req.user;
 
-    if(role !== "ADMIN") {
+    if (role !== "ADMIN") {
       return res.status(403).json({
         success: false,
-        msg: "Unauthorized, access denied"
-      })
+        msg: "Unauthorized, access denied",
+      });
     }
 
-    const restaurants = await Restaurant.find({verified: true}).select("-password");
+    const restaurants = await Restaurant.find({ verified: true }).select(
+      "-password"
+    );
 
     res.status(200).json({
       success: true,
       msg: "All verified restaurents are fetched successfully",
-      restaurants
+      restaurants,
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
-      msg: "Internal server error"
+      msg: "Internal server error",
     });
   }
-}
+};
 
 exports.getAllPendingRestaurents = async (req, res) => {
   try {
     const { id, role } = req.user;
 
-    if(role !== "ADMIN") {
+    if (role !== "ADMIN") {
       return res.status(403).json({
         success: false,
-        msg: "Unauthorized, access denied"
-      })
+        msg: "Unauthorized, access denied",
+      });
     }
 
-    const restaurants = await Restaurant.find({verified: false}).select("-password");
+    const restaurants = await Restaurant.find({ verified: false }).select(
+      "-password"
+    );
 
     res.status(200).json({
       success: true,
       msg: "All pending restaurents are fetched successfully",
-      restaurants
+      restaurants,
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
-      msg: "Internal server error"
+      msg: "Internal server error",
     });
   }
-}
+};
 
-
-exports.getAllOrderDetails = async (req, res) => {}
+exports.getAllOrderDetails = async (req, res) => {};

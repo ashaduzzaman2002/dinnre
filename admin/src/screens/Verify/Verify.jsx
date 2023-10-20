@@ -147,10 +147,8 @@ const Verify = () => {
                 </thead>
                 <tbody className="tbl">
                   {foods.map((obj, i) => (
-                    <React.Fragment key={i}>
-                      <div className="mt-2"></div>
-                      <tr className="list_card">
-                        {/* <td className="" style={{ width: "8%" }}>
+                    <tr key={i} className="list_card">
+                      {/* <td className="" style={{ width: "8%" }}>
                   <img
                     src={obj.img}
                     alt=""
@@ -159,58 +157,57 @@ const Verify = () => {
                     style={{ borderRadius: "10px" }}
                   />
                 </td> */}
-                        <td className="align-middle" style={{ minWidth: 100 }}>
-                          <p class="fw-bold mb-1 ">{obj.name}</p>
-                        </td>
-                        <td
-                          className=" align-middle"
-                          style={{ minWidth: 100, maxWidth: 100 }}
-                        >
-                          {obj.desc.slice(0, 15)}
-                          {obj.desc.length > 15 ? "..." : ""}
-                        </td>
-                        <td
-                          className=" align-middle text-capitalize"
-                          style={{ minWidth: 100 }}
-                        >
-                          {obj.category}
-                        </td>
-                        <td
-                          className=" align-middle text-capitalize"
-                          style={{ minWidth: 100 }}
-                        >
-                          {obj.type}
-                        </td>
-                        <td className=" align-middle" style={{ minWidth: 100 }}>
-                          ₹{obj.price}
-                        </td>
-                        <td className=" align-middle" style={{ width: "20%" }}>
-                          <div className=" d-flex gap-2 justify-content-evenly align-items-center m-0 p-0">
-                            <button
-                              className="dashboard_container_status_btn"
-                              style={{
-                                background: "#E88B00",
-                                cursor: "default",
-                              }}
-                            >
-                              <Edit />
-                              <span>Deactive</span>
-                            </button>
-                            <button
-                              className="dashboard_container_status_btn"
-                              style={{
-                                background: "#DC3545",
-                                cursor: "default",
-                              }}
-                              onClick={() => handleDelete(obj._id)}
-                            >
-                              <Delete />
-                              <span>Delete</span>
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    </React.Fragment>
+                      <td className="align-middle" style={{ minWidth: 100 }}>
+                        <p class="fw-bold mb-1 ">{obj.name}</p>
+                      </td>
+                      <td
+                        className=" align-middle"
+                        style={{ minWidth: 100, maxWidth: 100 }}
+                      >
+                        {obj.desc.slice(0, 15)}
+                        {obj.desc.length > 15 ? "..." : ""}
+                      </td>
+                      <td
+                        className=" align-middle text-capitalize"
+                        style={{ minWidth: 100 }}
+                      >
+                        {obj.category}
+                      </td>
+                      <td
+                        className=" align-middle text-capitalize"
+                        style={{ minWidth: 100 }}
+                      >
+                        {obj.type}
+                      </td>
+                      <td className=" align-middle" style={{ minWidth: 100 }}>
+                        ₹{obj.price}
+                      </td>
+                      <td className=" align-middle" style={{ width: "20%" }}>
+                        <div className=" d-flex gap-2 justify-content-evenly align-items-center m-0 p-0">
+                          <button
+                            className="dashboard_container_status_btn"
+                            style={{
+                              background: "#E88B00",
+                              cursor: "default",
+                            }}
+                          >
+                            <Edit />
+                            <span>Deactive</span>
+                          </button>
+                          <button
+                            className="dashboard_container_status_btn"
+                            style={{
+                              background: "#DC3545",
+                              cursor: "default",
+                            }}
+                            onClick={() => handleDelete(obj._id)}
+                          >
+                            <Delete />
+                            <span>Delete</span>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
                   ))}
 
                   <div className="mt-2 p-0 bg-danger "></div>

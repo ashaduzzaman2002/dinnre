@@ -7,6 +7,9 @@ export const AppProvider = ({ children }) => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const [verifiedRestaurants, setVerifiedRestaurants] = useState([]);
+  const [vrLoading, setVRLoading] = useState(false);
+
   const getProfile = async () => {
     setLoading(true);
     try {
@@ -24,12 +27,30 @@ export const AppProvider = ({ children }) => {
     }
   };
 
+  const getVerifiedRestaurants = async () => {
+    try {
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getProfile();
   }, []);
 
   return (
-    <AppContext.Provider value={{ profile, setProfile, loading, setLoading }}>
+    <AppContext.Provider
+      value={{
+        profile,
+        setProfile,
+        loading,
+        setLoading,
+        verifiedRestaurants,
+        setVerifiedRestaurants,
+        vrLoading,
+        setVRLoading,
+      }}
+    >
       {children}
     </AppContext.Provider>
   );
