@@ -223,3 +223,60 @@ exports.handleDecline = async (req, res) => {
     }); 
   }
 }
+
+exports.getAllVerifiedRestaurents = async (req, res) => {
+  try {
+    const { id, role } = req.user;
+
+    if(role !== "ADMIN") {
+      return res.status(403).json({
+        success: false,
+        msg: "Unauthorized, access denied"
+      })
+    }
+
+    const restaurants = await Restaurant.find({verified: true}).select("-password");
+
+    res.status(200).json({
+      success: true,
+      msg: "All verified restaurents are fetched successfully",
+      restaurants
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      msg: "Internal server error"
+    });
+  }
+}
+
+exports.getAllPendingRestaurents = async (req, res) => {
+  try {
+    const { id, role } = req.user;
+
+    if(role !== "ADMIN") {
+      return res.status(403).json({
+        success: false,
+        msg: "Unauthorized, access denied"
+      })
+    }
+
+    const restaurants = await Restaurant.find({verified: false}).select("-password");
+
+    res.status(200).json({
+      success: true,
+      msg: "All pending restaurents are fetched successfully",
+      restaurants
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      msg: "Internal server error"
+    });
+  }
+}
+
+
+exports.getAllOrderDetails = async (req, res) => {}
