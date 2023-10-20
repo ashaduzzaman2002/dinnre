@@ -2,10 +2,11 @@ const Admin = require("../models/Admin");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
+const Restaurant = require("../models/Restaurant");
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
-
+  
   const err = validationResult(req);
   if (!err.isEmpty()) {
     return res.status(400).json({ success: false, msg: err.array()[0].msg });
@@ -26,8 +27,8 @@ exports.login = async (req, res) => {
 
     res.clearCookie("jwt");
 
-    const token = await jwt.sign({ user: user._id }, process.env.JWT_SECRECT, {
-      expiresIn: "30d",
+    const token = await jwt.sign({ id: user._id, role: "ADMIN" }, process.env.JWT_SECRECT, {
+      expiresIn: "30d"
     });
 
     res.cookie("token", token, {
@@ -102,16 +103,16 @@ exports.logout = async (req, res) => {
 
 exports.getProfile = async (req, res) => {
   try {
-    const { userId } = req;
+    const { id, role } = req.user;
 
-    if (!userId) {
+    if (!id) {
       return res.status(400).json({
         success: false,
         msg: "Unauthorized access",
       });
     }
 
-    const user = await Admin.findById(userId);
+    const user = await Admin.findById(id);
 
     if (!user) {
       return res.status(400).json({
@@ -127,11 +128,98 @@ exports.getProfile = async (req, res) => {
       msg: "User details fetched seccessfully",
       user,
     });
+
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
       success: false,
       msg: "Internal server error",
     });
   }
 };
+
+exports.handleVerify = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { id, role } = req.user;
+    
+    if(!userId) {
+      return res.status(400).json({
+        success: false,
+        msg: "User id is invalid"
+      });
+    }
+
+    if(role !== "ADMIN") {
+      return res.status(403).json({
+        success: false,
+        msg: "Unauthorized access denied"
+      });
+    }
+    
+    const user = await Restaurant.findById(userId);
+    
+    if(!user) {
+      return res.status(400).json({
+        success: false,
+        msg: "User id is invalid"
+      });
+    }
+
+    user.verified = true;
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      msg: "User is verified successfully"
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      msg: "Internal server error"
+    }) ;   
+  }
+}
+
+exports.handleDecline = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { id, role } = req.user;
+    
+    if(!userId) {
+      return res.status(400).json({
+        success: false,
+        msg: "User id is invalid"
+      });
+    }
+
+    if(role !== "ADMIN") {
+      return res.status(403).json({
+        success: false,
+        msg: "Unauthorized access denied"
+      });
+    }
+    
+    const user = await Restaurant.findById(userId);
+    
+    if(!user) {
+      return res.status(400).json({
+        success: false,
+        msg: "User does not exist"
+      });      
+    }
+
+    await Restaurant.findByIdAndDelete(userId);
+  
+    res.status(200).json({
+      success: true,
+      msg: "User is verification declined successfully"
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      msg: "Internal server error"
+    }); 
+  }
+}
