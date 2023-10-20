@@ -30,3 +30,4 @@ router.get("/all/verified-restaurants", validedUser, getAllVerifiedRestaurents);
 router.get("/all/pending-restaurants", validedUser, getAllPendingRestaurents);
 
 module.exports = router;
+    

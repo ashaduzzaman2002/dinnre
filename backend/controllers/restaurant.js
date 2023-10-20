@@ -59,7 +59,7 @@ exports.getMenuOfARestaurant = async (req, res) => {
 exports.registerRestaurant = async (req, res) => {
   const { name, email, password, location, cityName, profile_img } = req.body;
 
-  const userId = req.userId;
+  const { id } = req.user;
   
   const err = validationResult(req)
   if(!err.isEmpty()) {
@@ -104,7 +104,7 @@ exports.loginRestaurant = async (req, res) => {
 
   const err = validationResult(req)
   if(!err.isEmpty()) {
-    return res.status(400).json({success: false, msg: err.array()})
+    return res.status(400).json({success: false, msg: err.array().at(0).msg})
   }
 
   try {
@@ -120,11 +120,11 @@ exports.loginRestaurant = async (req, res) => {
 
     res.clearCookie("jwt");
 
-    const token = await jwt.sign({ user: user._id },  process.env.JWT_SECRECT, {
+    const token = await jwt.sign({ id: user._id, role: "RESTAURENT" },  process.env.JWT_SECRECT, {
       expiresIn: '30d',
     });
 
-    res.cookie(user._id, token, {
+    res.cookie("token", token, {
       path: "/",
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
       httpOnly: true,
@@ -186,7 +186,7 @@ exports.getRestaurant = async (req, res) => {
 
 // add food
 exports.addFood = async (req, res) => {
-  const userId = req.userId;
+  const { id } = req.user;
   const { name, desc, img, price, type, category } = req.body;
 
   const file = req.file;
@@ -194,7 +194,7 @@ exports.addFood = async (req, res) => {
   // return console.log(name)
 
   try {
-    const user = await User.findById(userId);
+    const user = await User.findById(id);
 
     if (!user || user.role !== "restaurant_owner") {
       return res
@@ -259,11 +259,11 @@ exports.getFoodById = async (req, res) => {
 };
 
 exports.deleteItem = async (req, res) => {
-  const userId = req.userId;
+  const { id } = req.user;
   const { food_id } = req.body;
 
   try {
-    const user = await User.findById(userId);
+    const user = await User.findById(id);
 
     if (!user || user.role !== "restaurant_owner") {
       return res
@@ -289,7 +289,7 @@ exports.deleteItem = async (req, res) => {
 };
 
 exports.getOrder = async (req, res) => {
-  const userId = req.userId;
+  const { id } = req.user;
 
   try {
     const order = await Order.find();
