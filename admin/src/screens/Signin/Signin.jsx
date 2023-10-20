@@ -31,7 +31,7 @@ const Signin = () => {
             navigate("/");
             setMiniLoading(false);
           }
-        }, 1500);
+        }, 1000);
       } else {
         toast.error(data.msg, tostOptions);
         setMiniLoading(false);
