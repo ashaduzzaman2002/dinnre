@@ -15,18 +15,18 @@ exports.login = async (req, res) => {
       return res.status(401).json({ success: false, msg: 'Invalid credentials' });
     res.clearCookie('jwt');
     
-    const token = jwt.sign({ user: user._id }, process.env.JWT_SECRECT, {
+    const token = jwt.sign({ id: user._id, role: "RESTAURENT" }, process.env.JWT_SECRECT, {
       expiresIn: '30d',
     });
 
-    res.cookie(user._id, token, {
+    res.cookie("token", token, {
       path: '/',
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
       httpOnly: true,
       sameSite: 'lax',
     });
 
-    res.json({
+    res.status(200).json({
       success: true,
       msg: 'User logged in successfully',
       user
@@ -38,10 +38,10 @@ exports.login = async (req, res) => {
 
 // get user
 exports.getUser = async (req, res) => {
-  const userId = req.userId;
+  const { id, role } = req.user;
 
   try {
-    const user = await User.findById(userId, '-password');
+    const user = await User.findById(id, '-password');
     res.json({ success: true, user });
   } catch (error) {
     console.log(error);
@@ -50,9 +50,10 @@ exports.getUser = async (req, res) => {
 
 // logout
 exports.logout = async (req, res) => {
-  const userId = req.userId;
   try {
-    res.clearCookie(userId);
-    res.json({ msg: 'Logout successfully' });
-  } catch (error) {}
+    res.clearCookie("token");
+    res.status(200).json({ msg: 'Logout successfully' });
+  } catch (error) {
+    res.status(200).json({ msg: 'Logout successfully' });
+  }
 };
