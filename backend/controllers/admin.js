@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
 const Restaurant = require("../models/Restaurant");
+const Order = require("../models/Order");
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
@@ -282,4 +283,29 @@ exports.getAllPendingRestaurents = async (req, res) => {
   }
 };
 
-exports.getAllOrderDetails = async (req, res) => {};
+exports.getAllOrderDetails = async (req, res) => {
+  try {
+    const { id, role } = req.user;
+
+    if(role !== "ADMIN") {
+      return res.status(403).json({
+        success: false,
+        msg: "Unauthorized access denied"
+      })
+    }
+
+    const orders = await Order.find({});
+
+    res.status(200).json({
+      success: true,
+      msg: "All order fetched successfully",
+      orders
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({
+      success: false,
+      msg: "Internal server error"
+    })    
+  }
+};
