@@ -1,12 +1,13 @@
 .signup_container {
-  margin-top: 5rem;
+  /* margin-top: 5rem; */
   padding: 0;
   position: relative;
   height: 30rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  min-height: 75vh;
+  /* min-height: 75vh; */
+  height: 100vh;
 }
 
 .signup_box {
@@ -48,25 +49,37 @@
   background: url(../../assets/img/signin-left.svg);
   background-repeat: no-repeat;
   background-position: center;
-  background-size: cover;
+  background-size: contain;
   z-index: -10;
+
+  width: 300px;
 }
 
 .signup_right_logo {
   position: absolute;
-  height: 102%;
+  height: 100%;
   aspect-ratio: 28.9015/41.96238;
   background: url(../../assets/img/signin-right.svg);
   background-repeat: no-repeat;
   background-position: center;
-  background-size: cover;
+  background-size: contain;
   z-index: -10;
   right: 0;
+
+  width: 470px;
 }
 
 @media screen and (max-width: 1140px) {
   .signup_box {
     width: 50%;
+  }
+
+  .signup_left_logo {
+    width: 300px;
+  }
+  
+  .signup_right_logo {
+    width: 450px;
   }
 }
 
@@ -86,5 +99,13 @@
     height: 1.3rem;
     padding: 1rem 1rem;
     font-size: medium;
+  }
+
+  .signup_left_logo {
+    width: 200px;
+  }
+  
+  .signup_right_logo {
+    width: 280px;
   }
 }

@@ -30,7 +30,7 @@ exports.login = async (req, res) => {
       expiresIn: "30d",
     });
 
-    res.cookie('token', token, {
+    res.cookie("token", token, {
       path: "/",
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
       httpOnly: true,
@@ -81,7 +81,7 @@ exports.register = async (req, res) => {
 
 exports.logout = async (req, res) => {
   try {
-    res.cookie('token', null, {
+    res.cookie("token", null, {
       path: "/",
       expires: 0,
       httpOnly: true,
@@ -90,48 +90,48 @@ exports.logout = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      msg: "Logout successful"
-    })
+      msg: "Logout successful",
+    });
   } catch (error) {
     res.status(500).json({
       success: false,
-      msg: "Internal server error"
-    })    
+      msg: "Internal server error",
+    });
   }
-}
+};
 
 exports.getProfile = async (req, res) => {
   try {
     const { userId } = req;
 
-    if(!userId) {
+    if (!userId) {
       return res.status(400).json({
         success: false,
-        msg: "Unauthorized access"
-      })
+        msg: "Unauthorized access",
+      });
     }
 
     const user = await Admin.findById(userId);
 
-    if(!user) {
+    if (!user) {
       return res.status(400).json({
         success: false,
-        msg: "User does not exist"
-      })
+        msg: "User does not exist",
+      });
     }
 
-    user.password = undefined
+    user.password = undefined;
 
     res.status(200).json({
       success: true,
       msg: "User details fetched seccessfully",
-      user
+      user,
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.status(500).json({
       success: false,
-      msg: "Internal server error"
-    })
-  } 
-}
+      msg: "Internal server error",
+    });
+  }
+};

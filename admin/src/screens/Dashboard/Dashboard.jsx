@@ -20,6 +20,7 @@ import {
   Pie,
   Cell,
 } from "recharts";
+import Protected from "../../routes/Protected";
 
 const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = ({
@@ -138,43 +139,18 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <Layout>
-      <div className="restaurant-dash">
-        <div className="container" style={{ paddingTop: "6rem" }}>
-          <div className="d-sm-flex align-items-center justify-content-between mb-4">
-            <h3 className="mb-0 text-gray-800">Dashboard</h3>
-          </div>
+    <Protected>
+      <Layout>
+        <div className="restaurant-dash">
+          <div className="container" style={{ paddingTop: "6rem" }}>
+            <div className="d-sm-flex align-items-center justify-content-between mb-4">
+              <h3 className="mb-0 text-gray-800">Dashboard</h3>
+            </div>
 
-          {/* Earing carts */}
-          <div className="dashboard_cards_lg d-md-flex d-none">
-            {Data.map(({ title, amount, rate }, i) => (
-              <div key={i} className="dashboard_card mobile">
-                <div>
-                  <span>{title}</span>
-                </div>
-                <div className="dashboard_card_bottom">
-                  <h5>₹{amount}</h5>
-                  <div className="dashboard_card_bottom_right">
-                    <span>{rate}</span>
-                    <div>
-                      <Increase />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Earing carts swiper */}
-          <div className="dashboard_cards_sm d-block d-md-none">
-            <Swiper
-              className="Cards"
-              slidesPerView={1}
-              spaceBetween={30}
-              autoplay={{ delay: 100 }}
-            >
+            {/* Earing carts */}
+            <div className="dashboard_cards_lg d-md-flex d-none">
               {Data.map(({ title, amount, rate }, i) => (
-                <SwiperSlide key={i} className="dashboard_card mobile">
+                <div key={i} className="dashboard_card mobile">
                   <div>
                     <span>{title}</span>
                   </div>
@@ -187,57 +163,87 @@ const Dashboard = () => {
                       </div>
                     </div>
                   </div>
-                </SwiperSlide>
+                </div>
               ))}
-            </Swiper>
-          </div>
-
-          <div className="mt-5 row">
-            {/* Line chart */}
-            <div className="col-md-6 col-12">
-              <LineChart
-                width={lineCharWidth}
-                height={lineCharHeight}
-                data={monthlyIncome}
-              >
-                <XAxis dataKey="name" />
-                <YAxis />
-                <CartesianGrid stroke="#ccc" />
-                <Line type="monotone" dataKey="inr" stroke="#8884d8" />
-                <Tooltip label="name" formatter={(value) => [`INR ${value}`]} />
-                <Legend />
-              </LineChart>
             </div>
 
-            {/* Pie chart */}
-            <div className="col-md-6 col-12 mt-5 mt-md-0 d-flex align-items-center">
-              <PieChart width={pieCharWidth} height={pieCharHeight}>
-                <Pie
-                  data={pieChart}
-                  dataKey="value"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={80}
-                  fill="#8884d8"
-                  label={renderCustomizedLabel}
-                  labelLine={false}
+            {/* Earing carts swiper */}
+            <div className="dashboard_cards_sm d-block d-md-none">
+              <Swiper
+                className="Cards"
+                slidesPerView={1}
+                spaceBetween={30}
+                autoplay={{ delay: 100 }}
+              >
+                {Data.map(({ title, amount, rate }, i) => (
+                  <SwiperSlide key={i} className="dashboard_card mobile">
+                    <div>
+                      <span>{title}</span>
+                    </div>
+                    <div className="dashboard_card_bottom">
+                      <h5>₹{amount}</h5>
+                      <div className="dashboard_card_bottom_right">
+                        <span>{rate}</span>
+                        <div>
+                          <Increase />
+                        </div>
+                      </div>
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
+
+            <div className="mt-5 row">
+              {/* Line chart */}
+              <div className="col-md-6 col-12">
+                <LineChart
+                  width={lineCharWidth}
+                  height={lineCharHeight}
+                  data={monthlyIncome}
                 >
-                  {pieChart.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </PieChart>
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <CartesianGrid stroke="#ccc" />
+                  <Line type="monotone" dataKey="inr" stroke="#8884d8" />
+                  <Tooltip
+                    label="name"
+                    formatter={(value) => [`INR ${value}`]}
+                  />
+                  <Legend />
+                </LineChart>
+              </div>
+
+              {/* Pie chart */}
+              <div className="col-md-6 col-12 mt-5 mt-md-0 d-flex align-items-center">
+                <PieChart width={pieCharWidth} height={pieCharHeight}>
+                  <Pie
+                    data={pieChart}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={80}
+                    fill="#8884d8"
+                    label={renderCustomizedLabel}
+                    labelLine={false}
+                  >
+                    {pieChart.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                  <Legend />
+                </PieChart>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </Layout>
+      </Layout>
+    </Protected>
   );
 };
 

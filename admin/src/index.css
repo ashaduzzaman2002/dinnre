@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Nunito+Sans:opsz@6..12&family=Outfit:wght@600&family=Poppins:wght@600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Nunito+Sans:opsz@6..12&family=Outfit:wght@600&family=Poppins:wght@600&display=swap");
 * {
   font-family: "Lato", sans-serif !important;
   margin: 0;
@@ -28,11 +28,10 @@ button {
     display: none !important;
   }
 
-  .mobile-view  {
+  .mobile-view {
     display: block !important;
   }
 }
-
 
 @media screen and (min-width: 1980px) {
   .container {
@@ -50,18 +49,16 @@ button {
   .item-container {
     gap: 15px;
   }
-  
 }
 
 @media screen and (max-width: 1200px) {
   .item-container {
-   display: none;
+    display: none;
   }
 
   .slider-custom {
     display: block !important;
   }
-  
 }
 
 @media screen and (max-width: 769px) {
@@ -83,8 +80,7 @@ button {
   display: none;
 }
 
-
-input[type="file"]{
+input[type="file"] {
   color: transparent;
   position: absolute;
   top: 0;
@@ -94,13 +90,18 @@ input[type="file"]{
   width: 100%;
 }
 
-.btn{
-  background-color: #BE2AED;
-  border: 1px solid #BE2AED;
+.btn {
+  background-color: #be2aed;
+  border: 1px solid #be2aed;
   color: white;
 }
 
-.btn:hover{
-  border: 1px solid #BE2AED;
-  color: #BE2AED;
+.btn:hover {
+  border: 1px solid #be2aed;
+  color: #be2aed;
+}
+
+.btn:disabled {
+  background-color: #d46ef4;
+  border-color: #d46ef4;
 }

@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const { register, login, logout, getProfile } = require('../controllers/adminAuth')
+const { register, login, logout, getProfile } = require('../controllers/admin')
 const { body } = require("express-validator")
 const { AdminLoginInputValidation, AdminCreateUserInputValidation } = require('../middleware/inputValidation')
 const { validedUser } = require('../middleware/userValidation')

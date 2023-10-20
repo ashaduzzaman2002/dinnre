@@ -2,17 +2,29 @@ import React, { useContext, useEffect, useState } from "react";
 import "./navbar.css";
 import { Link, useNavigate } from "react-router-dom";
 import { CloseBtn, MenuBar } from "../../assets/svg/Icon";
-// import { AppContext } from "../../context/AppContext";
+import { AppContext } from "../../context/AppContext";
+import { dbObject } from "../../helper/api";
 
 const Navbar = ({ navLinks, type }) => {
   const { pathname } = window.location;
   const [activeLink, setActiveLink] = useState(pathname);
   const navigate = useNavigate();
-  //   const { loggout, user, cities } = useContext(AppContext);
+  const { profile, setProfile } = useContext(AppContext);
 
-  const loggout = () => {};
+  const loggout = async () => {
+    try {
+      const { data } = await dbObject("/logout");
+      console.log(data);
 
-  const user = {};
+      if (data?.success) {
+        setProfile(null);
+      }
+      navigate("/admin/signin");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     setActiveLink(pathname);
   }, [pathname]);
@@ -71,7 +83,11 @@ const Navbar = ({ navLinks, type }) => {
           </button>
 
           <div className="d-flex align-items-center gap-5">
-            <Link onClick={() => setActiveLink("/admin")} to="/admin" className="brand">
+            <Link
+              onClick={() => setActiveLink("/admin")}
+              to="/admin"
+              className="brand"
+            >
               <img src="/images/logo.svg" alt="logo" />
             </Link>
 
@@ -107,7 +123,7 @@ const Navbar = ({ navLinks, type }) => {
                 height="32"
                 className="rounded-circle me-2"
               />
-              <strong>{user?.username}</strong>
+              <strong>{profile?.username}</strong>
             </a>
             <ul className="dropdown-menu text-small shadow">
               <li>
@@ -123,7 +139,7 @@ const Navbar = ({ navLinks, type }) => {
               <li>
                 <hr className="dropdown-divider" />
               </li>
-              {user && (
+              {profile && (
                 <li>
                   <button onClick={loggout} className="dropdown-item" href="#">
                     Sign out
