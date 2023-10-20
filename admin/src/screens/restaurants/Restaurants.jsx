@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Layout from "../../layout/Layout";
 import "./restaurants.css";
 import {
-  Add,
   AddDark,
   Delete,
   Edit,
@@ -10,56 +9,33 @@ import {
   FilterDark,
 } from "../../assets/svg/Icon";
 import Protected from "../../routes/Protected";
+import { useContext } from "react";
+import { AppContext } from "../../context/AppContext";
 
 const Restaurants = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const data = [
-    {
-      name: "D Bapi",
-      desc: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ex, dolor cum vel ipsa dolore est odit harum? Id, cumque amet?",
-    },
-    {
-      name: "Dadaboudi",
-      desc: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ex, dolor cum vel ipsa dolore est odit harum? Id, cumque amet?",
-    },
-    {
-      name: "Shimla Biriany",
-      desc: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ex, dolor cum vel ipsa dolore est odit harum? Id, cumque amet?",
-    },
-  ];
-  const [foods, setFoods] = useState(data);
+  const { verifiedRestaurants, setVerifiedRestaurants } =
+    useContext(AppContext);
+
+  const [restaurnats, setRestaurants] = useState(verifiedRestaurants);
 
   const handleSearch = (event) => {
     const value = event.target.value;
-    setSearchTerm(value);
+    let results = [];
 
-    const results = foods.filter((item) =>
-      item.name.toLowerCase().includes(value.toLowerCase())
-    );
+    if (event.key === "Backspace" || event.key === "Delete") {
+      const newValue = value?.slice(0, value?.length - 1);
 
-    setFoods(results);
-  };
-
-  //   const getData = async () => {
-  //     try {
-  //       const { data } = await dbObject.get(
-  //         `/restaurants/restaurant/${user?.restaurant}/foods`
-  //       );
-  //       setFoods(data.foods);
-  //       console.log(data);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-  //   useEffect(() => {
-  //     getData();
-  //   }, [user]);
-
-  useEffect(() => {
-    if (searchTerm === "") {
-      setFoods(data);
+      results = verifiedRestaurants.filter((item) =>
+        item.name.toLowerCase().includes(newValue.toLowerCase())
+      );
+    } else {
+      results = restaurnats.filter((item) =>
+        item.name.toLowerCase().includes(value.toLowerCase())
+      );
     }
-  }, [searchTerm]);
+
+    setRestaurants(results);
+  };
 
   const handleDelete = async (food_id) => {
     try {
@@ -71,7 +47,9 @@ const Restaurants = () => {
 
       if (data.success) {
         toast.success(data.msg, tostOptions);
-        setFoods(foods.filter((item) => item._id !== food_id));
+        setVerifiedRestaurants(
+          setVerifiedRestaurants.filter((item) => item._id !== food_id)
+        );
       }
     } catch (error) {
       console.log(error);
@@ -99,6 +77,7 @@ const Restaurants = () => {
                       id="search"
                       placeholder="Search"
                       onChange={handleSearch}
+                      onKeyDown={handleSearch}
                     />
                   </div>
                   <button
@@ -106,7 +85,7 @@ const Restaurants = () => {
                     style={{ background: "#393C49" }}
                   >
                     <Filter />
-                    <span>Filter Order</span>
+                    <span>Filter</span>
                   </button>
                 </div>
               </div>
@@ -147,7 +126,7 @@ const Restaurants = () => {
                   <th className=" text-center">Status</th>
                 </thead>
                 <tbody className="tbl">
-                  {foods.map((obj, i) => (
+                  {restaurnats.map((obj, i) => (
                     <tr key={i} className="list_card">
                       {/* <td className="" style={{ width: "8%" }}>
                         <img
@@ -165,8 +144,8 @@ const Restaurants = () => {
                         className=" align-middle"
                         style={{ minWidth: 100, maxWidth: 100 }}
                       >
-                        {obj.desc.slice(0, 15)}
-                        {obj.desc.length > 15 ? "..." : ""}
+                        {obj.desc?.slice(0, 15)}
+                        {obj.desc?.length > 15 ? "..." : ""}
                       </td>
                       <td
                         className=" align-middle text-capitalize"
@@ -211,7 +190,6 @@ const Restaurants = () => {
                     </tr>
                   ))}
 
-                  <div className="mt-2 p-0 bg-danger "></div>
                   <tr className="list_card">
                     <td colSpan={7}>
                       <div className="  my-2 d-flex  justify-content-end align-items-center gap-1 ">

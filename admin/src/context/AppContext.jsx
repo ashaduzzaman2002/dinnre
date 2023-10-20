@@ -10,6 +10,7 @@ export const AppProvider = ({ children }) => {
   const [verifiedRestaurants, setVerifiedRestaurants] = useState([]);
   const [vrLoading, setVRLoading] = useState(false);
 
+  // get profile data
   const getProfile = async () => {
     setLoading(true);
     try {
@@ -27,8 +28,15 @@ export const AppProvider = ({ children }) => {
     }
   };
 
+  // get verified restaurants
   const getVerifiedRestaurants = async () => {
     try {
+      const { data } = await dbObject.get("/all/verified-restaurants");
+      console.log(data);
+
+      if (data.success) {
+        setVerifiedRestaurants(data?.restaurants);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -36,6 +44,7 @@ export const AppProvider = ({ children }) => {
 
   useEffect(() => {
     getProfile();
+    getVerifiedRestaurants();
   }, []);
 
   return (
