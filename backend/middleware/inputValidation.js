@@ -1,6 +1,15 @@
 const { body } = require("express-validator");
 
 // User or Restaurant
+exports.OTPInputValidation = [
+  body("email")
+    .not()
+    .isEmpty()
+    .withMessage("Email is required")
+    .isEmail()
+    .withMessage("Invalid email format"),
+];
+
 exports.UserCreateUserInputValidation = [
   body("name")
     .isLength({ min: 4 })

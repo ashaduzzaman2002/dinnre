@@ -30,6 +30,7 @@ export const AppProvider = ({ children }) => {
 
   // get verified restaurants
   const getVerifiedRestaurants = async () => {
+    setVRLoading(true);
     try {
       const { data } = await dbObject.get("/all/verified-restaurants");
       console.log(data);
@@ -37,8 +38,11 @@ export const AppProvider = ({ children }) => {
       if (data.success) {
         setVerifiedRestaurants(data?.restaurants);
       }
+
+      setVRLoading(false);
     } catch (error) {
       console.log(error);
+      setVRLoading(false);
     }
   };
 

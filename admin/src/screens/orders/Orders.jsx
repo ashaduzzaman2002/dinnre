@@ -83,7 +83,7 @@ const Orders = () => {
     <Protected>
       <Layout title={"Orders"}>
         <div className="dashboard_container container cm">
-          <div>
+          <div className="dashboard_container_order_report_container">
             <div className="dashboard_container_order_report_nav ">
               <div className="dashboard_container_order_report_nav_left d-flex justicy-content-center align-items-center">
                 <h6>Orders</h6>
@@ -124,7 +124,7 @@ const Orders = () => {
 
             <div className="table-responsive">
               <table
-                class="table tbl "
+                className="table tbl "
                 style={{
                   padding: "2rem",
                   borderSpacing: "1rem 1rem",
@@ -132,7 +132,7 @@ const Orders = () => {
                 }}
               >
                 <thead
-                  class="table-light "
+                  className="table-light "
                   style={{
                     background: "#ebebeb59",
                     padding: "1rem 1rem",
@@ -160,7 +160,7 @@ const Orders = () => {
                         />
                       </td> */}
                       <td className="align-middle" style={{ minWidth: 100 }}>
-                        <p class="fw-bold mb-1 ">{obj.name}</p>
+                        <p className="fw-bold mb-1 ">{obj.name}</p>
                       </td>
                       <td
                         className=" align-middle"
