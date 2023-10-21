@@ -117,10 +117,8 @@ exports.sendOTP = async (req, res) => {
 
 // Register Restuarant
 exports.registerRestaurant = async (req, res) => {
-  const { name, email, password, location, cityName, profile_img } = req.body;
-
-  const { id } = req.user;
-
+  const { name, email, password, otp } = req.body;
+  
   const err = validationResult(req);
   if (!err.isEmpty()) {
     return res.status(400).json({ success: false, msg: err.array() });
