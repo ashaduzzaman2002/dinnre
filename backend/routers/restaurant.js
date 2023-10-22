@@ -14,6 +14,7 @@ const {
   getMenuOfARestaurant,
   loginRestaurant,
   sendOTP,
+  getProfile,
 } = require("../controllers/restaurant");
 const { validedUser } = require("../middleware/userValidation");
 const singleUpload = require("../middleware/multer");
@@ -27,6 +28,7 @@ const router = Router();
 router.post('/send-otp', OTPInputValidation, sendOTP)
 router.post("/register", UserCreateUserInputValidation, registerRestaurant);
 router.post("/login", UserLoginInputValidation, loginRestaurant);
+router.get("/profile", validedUser, getProfile);
 
 router.get("/get-all-item", getAllItem);
 router.get("/all-restaurant", getAllRestaurant);

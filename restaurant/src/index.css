@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Nunito+Sans:opsz@6..12&family=Outfit:wght@600&family=Poppins:wght@600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Nunito+Sans:opsz@6..12&family=Outfit:wght@600&family=Poppins:wght@600&display=swap");
 * {
   font-family: "Lato", sans-serif !important;
   margin: 0;
@@ -9,7 +9,7 @@ body {
 }
 
 .cm {
-  margin-top: 4rem;
+  margin-top: 7.5rem;
 }
 .mobile-view {
   display: none !important;
@@ -19,16 +19,19 @@ body {
   display: none !important;
 }
 
+button {
+  user-select: none !important;
+}
+
 @media screen and (max-width: 1081px) {
   .desktop-view {
     display: none !important;
   }
 
-  .mobile-view  {
+  .mobile-view {
     display: block !important;
   }
 }
-
 
 @media screen and (min-width: 1980px) {
   .container {
@@ -46,18 +49,16 @@ body {
   .item-container {
     gap: 15px;
   }
-  
 }
 
 @media screen and (max-width: 1200px) {
   .item-container {
-   display: none;
+    display: none;
   }
 
   .slider-custom {
     display: block !important;
   }
-  
 }
 
 @media screen and (max-width: 769px) {
@@ -67,7 +68,7 @@ body {
   }
 
   .cm {
-    margin-top: 3.5rem;
+    margin-top: 6rem;
   }
 }
 
@@ -79,8 +80,7 @@ body {
   display: none;
 }
 
-
-input[type="file"]{
+input[type="file"] {
   color: transparent;
   position: absolute;
   top: 0;
@@ -88,4 +88,27 @@ input[type="file"]{
   left: 0;
   bottom: 0;
   width: 100%;
+}
+
+.btn {
+  background-color: #be2aed;
+  border: 1px solid #be2aed;
+  color: white;
+  transition: all 0.3s ease-in-out;
+  height: 40px;
+}
+
+.btn:hover {
+  border: 1px solid #9c20c1;
+  background-color: #9c20c1;
+  color: white;
+}
+
+.btn:disabled {
+  background-color: #d46ef4;
+  border-color: #d46ef4;
+}
+
+input:focus{
+  outline: none;
 }

@@ -3,7 +3,7 @@ import "./navbar.css";
 import { Link, useNavigate } from "react-router-dom";
 // import { AppContext } from "../../context/AppContext";
 
-const Navbar = ({ navLinks, type }) => {
+const Navbar = () => {
   const { pathname } = window.location;
   const [activeLink, setActiveLink] = useState(pathname);
   const navigate = useNavigate();
@@ -12,6 +12,24 @@ const Navbar = ({ navLinks, type }) => {
   useEffect(() => {
     setActiveLink(pathname);
   }, [pathname]);
+
+  const navLinks = [
+    {
+      title: "Dashboard",
+      path: "/",
+    },
+
+    {
+      title: "Menu",
+      path: "/menu",
+    },
+
+    {
+      title: "Orders",
+      path: "/orders",
+    },
+  ];
+
 
   return (
     <div>

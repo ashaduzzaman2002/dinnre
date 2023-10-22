@@ -27,10 +27,8 @@ exports.UserCreateUserInputValidation = [
 ];
 
 exports.UserLoginInputValidation = [
-  body("email").isEmail().withMessage("Please enter a valid email"),
-  body("password")
-    .isLength({ min: 8, max: 16 })
-    .withMessage("password must be grater than 7 and less than 19"),
+  body("email").not().isEmpty().withMessage("Email is required"),
+  body("password").not().isEmpty().withMessage("Password is required"),
 ];
 
 // Admin

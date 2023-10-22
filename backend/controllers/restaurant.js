@@ -118,7 +118,7 @@ exports.sendOTP = async (req, res) => {
 // Register Restuarant
 exports.registerRestaurant = async (req, res) => {
   const { name, email, password, otp } = req.body;
-  
+
   const err = validationResult(req);
   if (!err.isEmpty()) {
     return res.status(400).json({ success: false, msg: err.array() });
@@ -181,7 +181,10 @@ exports.loginRestaurant = async (req, res) => {
         .status(401)
         .json({ success: false, msg: "Invalid credentials" });
 
-    // if (!user.verified) return res.status(404).json({ success: false, msg: "User is not active" });
+    if (!user.verified)
+      return res
+        .status(404)
+        .json({ success: false, msg: "User is not active" });
 
     res.clearCookie("jwt");
 
@@ -208,6 +211,41 @@ exports.loginRestaurant = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(501).json({ success: false, msg: "Internal server error" });
+  }
+};
+
+exports.getProfile = async (req, res) => {
+  try {
+    const { id } = req.user;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        msg: "Unauthorized access",
+      });
+    }
+
+    const user = await Restaurant.findById(id);
+
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        msg: "User does not exist",
+      });
+    }
+
+    user.password = undefined;
+
+    res.status(200).json({
+      success: true,
+      msg: "User details fetched seccessfully",
+      user,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      msg: "Internal server error",
+    });
   }
 };
 
