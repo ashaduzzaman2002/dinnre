@@ -60,7 +60,6 @@ exports.getMenuOfARestaurant = async (req, res) => {
 // OTP
 exports.sendOTP = async (req, res) => {
   const { email } = req.body;
-
   try {
     const err = validationResult(req);
     if (!err.isEmpty()) {
@@ -70,7 +69,7 @@ exports.sendOTP = async (req, res) => {
     const userExist = await Restaurant.findOne({ email });
     if (userExist)
       return res
-        .json(401)
+        .status(401)
         .json({ succcess: false, msg: "User already exist." });
     const otp = generateOTP();
     const hashOTP = bcrypt.hashSync(otp, 10);
@@ -117,7 +116,9 @@ exports.sendOTP = async (req, res) => {
 
 // Register Restuarant
 exports.registerRestaurant = async (req, res) => {
-  const { name, email, password, otp } = req.body;
+  const { email, password, otp } = req.body;
+
+  return res.json({email, password, otp})
 
   const err = validationResult(req);
   if (!err.isEmpty()) {
@@ -186,7 +187,7 @@ exports.loginRestaurant = async (req, res) => {
         .status(404)
         .json({ success: false, msg: "User is not active" });
 
-    res.clearCookie("jwt");
+    res.clearCookie("token");
 
     const token = await jwt.sign(
       { id: user._id, role: "RESTAURENT" },
@@ -243,6 +244,28 @@ exports.getProfile = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({
+      success: false,
+      msg: "Internal server error",
+    });
+  }
+};
+
+// Logout
+exports.logout = async (req, res) => {
+  try {
+    res.cookie("token", null, {
+      path: "/",
+      expires: 0,
+      httpOnly: true,
+      sameSite: "lax",
+    });
+
+    res.status(200).json({
+      success: true,
+      msg: "Logout successful",
+    });
+  } catch (error) {
+    res.status(500).json({
       success: false,
       msg: "Internal server error",
     });

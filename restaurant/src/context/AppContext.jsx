@@ -17,9 +17,7 @@ export const AppProvider = ({ children }) => {
         setProfile(data?.user);
       }
 
-      setTimeout(() => {
-        setLoading(false);
-      }, 3000);
+      setLoading(false);
     } catch (error) {
       console.log(error);
 

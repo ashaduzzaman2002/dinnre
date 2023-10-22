@@ -11,7 +11,7 @@ const Protected = ({ children }) => {
     return <LoadingScreens />;
   } else {
     if (!profile) {
-      navigate("/admin/signin");
+      navigate("/signin");
       return null;
     } else {
       return <>{children}</>;
