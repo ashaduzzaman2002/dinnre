@@ -10,24 +10,29 @@ import { Box, HStack, PinInput, PinInputField, Text } from "@chakra-ui/react";
 import { AppContext } from "../../context/AppContext";
 
 const Register = () => {
+  // States
   const [input, setInput] = useState({ email: "", password: "" });
   const { setProfile, loading, profile } = useContext(AppContext);
   const navigate = useNavigate();
   const location = useLocation();
   const [isMounted, setIsMounted] = useState(true);
+  const [seconds, setSeconds] = useState(60);
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
 
   const [miniLoading, setMiniLoading] = useState(false);
   const [showOtp, setOtp] = useState(false);
 
   const [pinValues, setPinValues] = useState(["", "", "", "", "", ""]);
 
+  // Handle otp input
   const handlePinInputChange = (index, value) => {
     const newPinValues = [...pinValues];
     newPinValues[index] = value;
     setPinValues(newPinValues);
   };
 
-  const handleLogin = async () => {
+  // Handle Register
+  const handleRegister = async () => {
     setMiniLoading(true);
     try {
       const { data } = await dbObject.post("/register", {
@@ -38,11 +43,11 @@ const Register = () => {
       if (data.success) {
         toast.success(data.msg, tostOptions);
         setTimeout(() => {
-          //   if (isMounted) {
-          //     setProfile(data?.user);
-          //     navigate("/");
-          //     setMiniLoading(false);
-          //   }
+            if (isMounted) {
+              setProfile(data?.user);
+              navigate("/profile");
+              setMiniLoading(false);
+            }
         }, 1000);
       } else {
         toast.error(data.msg, tostOptions);
@@ -57,6 +62,7 @@ const Register = () => {
     }
   };
 
+  // Send OTP
   const sendOtp = async () => {
     setMiniLoading(true);
     try {
@@ -68,6 +74,8 @@ const Register = () => {
         if (isMounted) {
           setOtp(true);
           setMiniLoading(false);
+          setSeconds(60);
+          setIsTimerRunning(true);
         }
       } else {
         toast.error(data.msg, tostOptions);
@@ -81,6 +89,18 @@ const Register = () => {
     }
   };
 
+  // Timer
+  useEffect(() => {
+    let timer;
+    if (isTimerRunning && seconds > 0) {
+      timer = setTimeout(() => setSeconds(seconds - 1), 1000);
+    } else {
+      setIsTimerRunning(false);
+    }
+
+    return () => clearTimeout(timer);
+  }, [isTimerRunning, seconds]);
+
   useEffect(() => {
     setIsMounted(true);
     return () => {
@@ -92,7 +112,7 @@ const Register = () => {
     return <LoadingScreens />;
   } else {
     if (profile) {
-      navigate(location.state?.from || "/admin");
+      navigate(location.state?.from || "/");
       return null;
     } else {
       return (
@@ -159,11 +179,17 @@ const Register = () => {
                   ))}
                 </PinInput>
               </HStack>
-              <Text style={{ cursor: "pointer" }}>Resend OTP</Text>
+              {isTimerRunning ? (
+                <Text>Resend OTP in: {seconds} seconds</Text>
+              ) : (
+                <Text onClick={sendOtp} style={{ cursor: "pointer" }}>
+                  Resend OTP
+                </Text>
+              )}
 
               <button
                 className="btn btn1 w-50"
-                onClick={handleLogin}
+                onClick={handleRegister}
                 disabled={miniLoading}
               >
                 {miniLoading ? <LoadingSpinner /> : "Verify"}

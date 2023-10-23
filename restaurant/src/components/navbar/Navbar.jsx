@@ -145,9 +145,9 @@ const Navbar = () => {
                 </a>
               </li>
               <li>
-                <a className="dropdown-item" href="#">
+                <Link className="dropdown-item" to="/profile">
                   Profile
-                </a>
+                </Link>
               </li>
               <li>
                 <hr className="dropdown-divider" />

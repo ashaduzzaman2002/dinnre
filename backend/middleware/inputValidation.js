@@ -11,9 +11,6 @@ exports.OTPInputValidation = [
 ];
 
 exports.UserCreateUserInputValidation = [
-  body("name")
-    .isLength({ min: 4 })
-    .withMessage("location contains atleast 4 character"),
   body("email").isEmail().withMessage("Please enter a valid email"),
   body("password")
     .isLength({ min: 8, max: 16 })

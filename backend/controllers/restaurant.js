@@ -118,11 +118,9 @@ exports.sendOTP = async (req, res) => {
 exports.registerRestaurant = async (req, res) => {
   const { email, password, otp } = req.body;
 
-  return res.json({email, password, otp})
-
   const err = validationResult(req);
   if (!err.isEmpty()) {
-    return res.status(400).json({ success: false, msg: err.array() });
+    return res.status(400).json({ success: false, msg: err.array()[0].msg });
   }
 
   try {
@@ -132,31 +130,51 @@ exports.registerRestaurant = async (req, res) => {
         .status(400)
         .json({ success: false, msg: "User already exist." });
 
-    const lowerCaseCityName = cityName.toLowerCase();
-    let city = await City.findOne({ name: lowerCaseCityName });
-    if (!city) {
-      city = new City({
-        name: lowerCaseCityName,
-      });
-    }
+    const otpValue = await OTP.findOne({ email });
+    if (!otpValue)
+      return res.status(400).json({ success: false, msg: "Invalid OTP." });
+
+    const isMatchedOTP = bcrypt.compareSync(otp, otpValue.otp);
+    if (!isMatchedOTP)
+      return res.status(400).json({ success: false, msg: "Invalid OTP." });
 
     const hashPassword = bcrypt.hashSync(password, 10);
     let restaurant = new Restaurant({
-      name,
       email,
       password: hashPassword,
-      location,
-      profile_img,
-      city: city._id,
     });
 
-    await city.save();
     await restaurant.save();
 
-    res.json({ success: true, msg: "Restaurant registration successful" });
+    await OTP.findByIdAndDelete(otpValue._id);
+
+    res.clearCookie("token");
+
+    const token = jwt.sign(
+      { id: restaurant._id, role: "RESTAURENT" },
+      process.env.JWT_SECRECT,
+      {
+        expiresIn: "30d",
+      }
+    );
+
+    res.cookie("token", token, {
+      path: "/",
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
+      httpOnly: true,
+      sameSite: "lax",
+    });
+
+    restaurant.password = undefined;
+
+    res.json({
+      success: true,
+      msg: "Registration successful",
+      user: restaurant,
+    });
   } catch (error) {
     console.log(error);
-    res.status(501).json({ success: true, msg: "Internal server error" });
+    res.status(501).json({ success: false, msg: "Internal server error" });
   }
 };
 
@@ -182,14 +200,14 @@ exports.loginRestaurant = async (req, res) => {
         .status(401)
         .json({ success: false, msg: "Invalid credentials" });
 
-    if (!user.verified)
-      return res
-        .status(404)
-        .json({ success: false, msg: "User is not active" });
+    // if (!user.verified)
+    //   return res
+    //     .status(404)
+    //     .json({ success: false, msg: "User is not active" });
 
     res.clearCookie("token");
 
-    const token = await jwt.sign(
+    const token = jwt.sign(
       { id: user._id, role: "RESTAURENT" },
       process.env.JWT_SECRECT,
       {

@@ -6,6 +6,7 @@ export const AppContext = createContext();
 export const AppProvider = ({ children }) => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [isActive, setActive] = useState(false)
 
   // get profile data
   const getProfile = async () => {
@@ -30,7 +31,7 @@ export const AppProvider = ({ children }) => {
   }, []);
 
   return (
-    <AppContext.Provider value={{ profile, setProfile, loading, setLoading }}>
+    <AppContext.Provider value={{ profile, setProfile, loading, setLoading, isActive, setActive }}>
       {children}
     </AppContext.Provider>
   );
