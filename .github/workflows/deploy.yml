@@ -20,7 +20,9 @@ jobs:
         with:
             node-version: ${{ matrix.node-version }}
 
+        
       - name: Install dependencies
+        working-directory: backend
         run: yarn install
 
       - name: close the server
@@ -28,7 +30,7 @@ jobs:
       
       - name: start the server
         run: pm2 start backend/index.js --name dinnre
-        
+
 
 
 
