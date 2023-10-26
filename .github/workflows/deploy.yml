@@ -29,7 +29,8 @@ jobs:
         run: pm2 delete dinnre
       
       - name: start the server
-        run: pm2 start backend/index.js --name dinnre
+        working-directory: backend
+        run: pm2 start index.js --name dinnre
 
 
 
