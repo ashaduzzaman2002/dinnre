@@ -1,0 +1,32 @@
+name: Deploy Dinnre App
+
+on:
+  push:
+    branches: [production]
+
+  pull_request:
+    branches: [production]
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+            node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: close the server
+        run: pm2 delete dinnre
+      
+      - name: start the server
+        run: pm2 start backend/index.js --name dinnre
+
+       
