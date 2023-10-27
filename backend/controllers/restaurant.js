@@ -475,7 +475,6 @@ exports.createAccount = async(req, res) => {
     restaurant.location = location;
 
     if(req.file) {
-      console.log(req.file)
       const response = await cloudinary.v2.uploader.upload(req.file.path, {
         folder: "dinnre-restaurants",
       });
