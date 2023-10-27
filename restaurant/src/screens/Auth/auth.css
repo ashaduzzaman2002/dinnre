@@ -110,3 +110,16 @@
     }
   }
   
+
+  .profile-image {
+    width: 30%;
+    aspect-ratio: 1/1;
+    margin-bottom: 20px;
+  }
+
+  .profile-inner {
+    border: 1px solid #b9b7b79f;
+    border-style: dashed;
+    border-radius: 8px;
+    padding: 8px;
+  }
