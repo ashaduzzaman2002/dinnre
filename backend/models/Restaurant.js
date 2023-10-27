@@ -31,6 +31,10 @@ const restaurantSchema = new mongoose.Schema(
       type: String,
     },
 
+    logo: {
+
+    },
+
     bankName: {
       type: String,
     },
