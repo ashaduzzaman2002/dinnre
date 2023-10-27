@@ -9,6 +9,7 @@ const Order = require("../models/Order");
 const { validationResult } = require("express-validator");
 const { mailTransport, mailTemplete, generateOTP } = require("../utils/mail");
 const OTP = require("../models/OTP");
+const fs = require("fs/promises")
 
 exports.getAllItem = async (req, res) => {
   try {
@@ -448,3 +449,99 @@ exports.getOrder = async (req, res) => {
     console.log(error);
   }
 };
+
+exports.createAccount = async(req, res) => {
+  try {
+    const { name, location } = req.body;
+    const { id } = req.user;
+
+    if(!name || !location) {
+      return res.status(400).json({
+        success: false,
+        msg: "All fields are required"
+      });
+    }
+    
+    const restaurant = await Restaurant.findById(id);
+    
+    if(!restaurant) {
+      return res.status(400).json({
+        success: false,
+        msg: "Invalid user details"
+      });
+    }
+
+    restaurant.name = name;
+    restaurant.location = location;
+
+    if(req.file) {
+      console.log(req.file)
+      const response = await cloudinary.v2.uploader.upload(req.file.path, {
+        folder: "dinnre-restaurants",
+      });
+
+      if(response) {
+        restaurant.profile_img = response.secure_url;
+      }
+
+      fs.unlink(req.file.path);
+    }
+
+    await restaurant.save();
+
+    res.status(200).json({
+      success: true,
+      msg: "Restaurant profile updated successfully"
+    })
+
+
+  } catch (error) {
+    // console.log(error);
+    return res.status(500).json({
+      success: false,
+      msg: "Internal server error"
+    });    
+  }
+}
+
+exports.addBankAccount = async(req, res) => {
+  try {
+    const { bankName, accountNo, ifsc, upi } = req.body;
+
+    const { id } = req.user;
+
+    if(!bankName || !accountNo || !ifsc || !upi) {
+      return res.status(400).json({
+        success: false,
+        msg: "All fields are required"
+      });
+    }
+
+    const restaurant = await Restaurant.findById(id);
+
+    if(!restaurant) {
+      return res.status(400).json({
+        succcess: false,
+        msg: "User does not exist"
+      });
+    }
+
+    restaurant.bankName = bankName
+    restaurant.accountNo = accountNo
+    restaurant.ifsc = ifsc
+    restaurant.upi = upi
+
+    await restaurant.save();
+
+    res.status(200).json({
+      success: true,
+      msg: "Restaurant bank details added successfully"
+    })
+
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      msg: "Internal server error"
+    });
+  }
+}

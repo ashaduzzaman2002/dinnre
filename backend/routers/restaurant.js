@@ -16,6 +16,8 @@ const {
   sendOTP,
   getProfile,
   logout,
+  createAccount,
+  addBankAccount,
 } = require("../controllers/restaurant");
 const { validedUser } = require("../middleware/userValidation");
 const singleUpload = require("../middleware/multer");
@@ -31,8 +33,8 @@ router.post("/register", UserCreateUserInputValidation, registerRestaurant);
 router.post("/login", UserLoginInputValidation, loginRestaurant);
 router.get("/profile", validedUser, getProfile);
 router.get("/logout", validedUser, logout);
-// Create profile
-// Add Bank
+router.put("/create-account", validedUser, singleUpload, checkImageUpload, createAccount);
+router.put("/add-bank", validedUser, addBankAccount);
 
 router.get("/get-all-item", getAllItem);
 router.get("/all-restaurant", getAllRestaurant);

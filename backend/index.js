@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 require("dotenv").config();
 const cors = require("cors");
 const { connectDB } = require("./config/db");
@@ -37,6 +38,7 @@ app.use(
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.resolve(__dirname, 'public')));
 
 app.use("/restaurants", restaurantRouter);
 app.use("/userAuth", userAuthRouter);
