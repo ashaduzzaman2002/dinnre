@@ -5,7 +5,6 @@ const restaurantSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
     },
 
     email: {
@@ -21,7 +20,6 @@ const restaurantSchema = new mongoose.Schema(
 
     location: {
       type: String,
-      required: true,
     },
 
     city: {
@@ -31,6 +29,10 @@ const restaurantSchema = new mongoose.Schema(
 
     profile_img: {
       type: String,
+    },
+
+    logo: {
+
     },
 
     bankName: {

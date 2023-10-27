@@ -1,42 +1,23 @@
 import React from "react";
 import Navbar from "../components/navbar/Navbar";
 import Footer from "../components/footer/Footer";
-import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { Helmet } from "react-helmet";
 
 const Layout = ({ children, title }) => {
-  const location = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
 
-  const navLinks = [
-    {
-      title: "Dashboard",
-      path: "/",
-    },
-
-    {
-      title: "Menu",
-      path: "/menu",
-    },
-
-    {
-      title: "Orders",
-      path: "/orders",
-    },
-  ];
-
   return (
-    <div>
+    <>
       <Helmet>
         <title>{title} - Circle</title>
       </Helmet>
-      <Navbar navLinks={navLinks} />
+      <Navbar />
       {children}
       <Footer />
-    </div>
+    </>
   );
 };
 

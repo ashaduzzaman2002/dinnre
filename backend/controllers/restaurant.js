@@ -60,7 +60,6 @@ exports.getMenuOfARestaurant = async (req, res) => {
 // OTP
 exports.sendOTP = async (req, res) => {
   const { email } = req.body;
-
   try {
     const err = validationResult(req);
     if (!err.isEmpty()) {
@@ -70,7 +69,7 @@ exports.sendOTP = async (req, res) => {
     const userExist = await Restaurant.findOne({ email });
     if (userExist)
       return res
-        .json(401)
+        .status(401)
         .json({ succcess: false, msg: "User already exist." });
     const otp = generateOTP();
     const hashOTP = bcrypt.hashSync(otp, 10);
@@ -117,13 +116,11 @@ exports.sendOTP = async (req, res) => {
 
 // Register Restuarant
 exports.registerRestaurant = async (req, res) => {
-  const { name, email, password, location, cityName, profile_img } = req.body;
-
-  const { id } = req.user;
+  const { email, password, otp } = req.body;
 
   const err = validationResult(req);
   if (!err.isEmpty()) {
-    return res.status(400).json({ success: false, msg: err.array() });
+    return res.status(400).json({ success: false, msg: err.array()[0].msg });
   }
 
   try {
@@ -133,31 +130,51 @@ exports.registerRestaurant = async (req, res) => {
         .status(400)
         .json({ success: false, msg: "User already exist." });
 
-    const lowerCaseCityName = cityName.toLowerCase();
-    let city = await City.findOne({ name: lowerCaseCityName });
-    if (!city) {
-      city = new City({
-        name: lowerCaseCityName,
-      });
-    }
+    const otpValue = await OTP.findOne({ email });
+    if (!otpValue)
+      return res.status(400).json({ success: false, msg: "Invalid OTP." });
+
+    const isMatchedOTP = bcrypt.compareSync(otp, otpValue.otp);
+    if (!isMatchedOTP)
+      return res.status(400).json({ success: false, msg: "Invalid OTP." });
 
     const hashPassword = bcrypt.hashSync(password, 10);
     let restaurant = new Restaurant({
-      name,
       email,
       password: hashPassword,
-      location,
-      profile_img,
-      city: city._id,
     });
 
-    await city.save();
     await restaurant.save();
 
-    res.json({ success: true, msg: "Restaurant registration successful" });
+    await OTP.findByIdAndDelete(otpValue._id);
+
+    res.clearCookie("token");
+
+    const token = jwt.sign(
+      { id: restaurant._id, role: "RESTAURENT" },
+      process.env.JWT_SECRECT,
+      {
+        expiresIn: "30d",
+      }
+    );
+
+    res.cookie("token", token, {
+      path: "/",
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
+      httpOnly: true,
+      sameSite: "lax",
+    });
+
+    restaurant.password = undefined;
+
+    res.json({
+      success: true,
+      msg: "Registration successful",
+      user: restaurant,
+    });
   } catch (error) {
     console.log(error);
-    res.status(501).json({ success: true, msg: "Internal server error" });
+    res.status(501).json({ success: false, msg: "Internal server error" });
   }
 };
 
@@ -183,11 +200,14 @@ exports.loginRestaurant = async (req, res) => {
         .status(401)
         .json({ success: false, msg: "Invalid credentials" });
 
-    // if (!user.verified) return res.status(404).json({ success: false, msg: "User is not active" });
+    // if (!user.verified)
+    //   return res
+    //     .status(404)
+    //     .json({ success: false, msg: "User is not active" });
 
-    res.clearCookie("jwt");
+    res.clearCookie("token");
 
-    const token = await jwt.sign(
+    const token = jwt.sign(
       { id: user._id, role: "RESTAURENT" },
       process.env.JWT_SECRECT,
       {
@@ -210,6 +230,63 @@ exports.loginRestaurant = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(501).json({ success: false, msg: "Internal server error" });
+  }
+};
+
+exports.getProfile = async (req, res) => {
+  try {
+    const { id } = req.user;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        msg: "Unauthorized access",
+      });
+    }
+
+    const user = await Restaurant.findById(id);
+
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        msg: "User does not exist",
+      });
+    }
+
+    user.password = undefined;
+
+    res.status(200).json({
+      success: true,
+      msg: "User details fetched seccessfully",
+      user,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      msg: "Internal server error",
+    });
+  }
+};
+
+// Logout
+exports.logout = async (req, res) => {
+  try {
+    res.cookie("token", null, {
+      path: "/",
+      expires: 0,
+      httpOnly: true,
+      sameSite: "lax",
+    });
+
+    res.status(200).json({
+      success: true,
+      msg: "Logout successful",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      msg: "Internal server error",
+    });
   }
 };
 
