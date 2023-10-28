@@ -1,11 +1,11 @@
 import React from "react";
 import LoadingSpinner from "../laoding/LoadingSpinner";
 
-const FormButton = ({ miniLoading, onClick }) => {
+const FormButton = ({ miniLoading }) => {
   return (
     <button
+      type="submit"
       className={`btn btn1`}
-      onClick={onClick}
       disabled={miniLoading}
     >
       {miniLoading ? <LoadingSpinner /> : "Signup"}

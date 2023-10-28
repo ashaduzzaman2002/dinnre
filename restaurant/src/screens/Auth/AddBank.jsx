@@ -116,7 +116,7 @@ const AddBank = () => {
           />
           <button
             className="btn btn1"
-            onClick={handleLogin}
+            // onClick={handleLogin}
             disabled={miniLoading}
           >
             {miniLoading ? <LoadingSpinner /> : "Add"}

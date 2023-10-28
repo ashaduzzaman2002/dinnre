@@ -12,6 +12,7 @@ import { AppContext } from "../../context/AppContext";
 import { useFormik } from "formik";
 import FormButton from "../../components/button/FormButton";
 import { otpSchema } from "../../validation/FormValidation";
+import FormInput from "../../components/input/FormInput";
 
 const Register = () => {
   const initialOtp = {
@@ -137,37 +138,28 @@ const Register = () => {
 
           <div className="signup_left_logo"></div>
           {!showOtp ? (
-            <form className="box signup_box">
+            <form onSubmit={handleSubmit} className="box signup_box">
               <h1>Please Signup</h1>
 
-              <input
-                type="text"
-                name="email"
-                placeholder="Enter Email"
-                className={errors.email && touched.email ? "errorInput" : ""}
-                value={values.email}
-                onBlur={handleBlur}
-                onChange={handleChange}
+              <FormInput
+                errors={errors}
+                name={"email"}
+                handleBlur={handleBlur}
+                handleChange={handleChange}
+                values={values}
+                touched={touched}
               />
 
-              {errors.email && touched.email ? (
-                <div className="errorMessage">
-                  <small className="">{errors.email}</small>
-                </div>
-              ) : null}
-
-              <input
-                type="password"
-                name="password"
-                placeholder="Enter Password"
-                value={input.password}
-                onChange={(e) =>
-                  setInput({ ...input, password: e.target.value })
-                }
+              <FormInput
+                errors={errors}
+                name={"password"}
+                handleBlur={handleBlur}
+                handleChange={handleChange}
+                values={values}
+                touched={touched}
               />
 
               <FormButton
-                onClick={sendOtp}
                 miniLoading={miniLoading}
                 title="Signup"
               />

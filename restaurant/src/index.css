@@ -112,3 +112,7 @@ input[type="file"] {
 input:focus{
   outline: none;
 }
+
+.w-90 {
+  width: 90%;
+}
