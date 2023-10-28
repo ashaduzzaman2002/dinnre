@@ -1,125 +1,142 @@
 .signup_container {
-    /* margin-top: 5rem; */
-    padding: 0;
-    position: relative;
-    height: 30rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    /* min-height: 75vh; */
-    height: 100vh;
-  }
-  
+  /* margin-top: 5rem; */
+  padding: 0;
+  position: relative;
+  height: 30rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* min-height: 75vh; */
+  height: 100vh;
+}
+
+.signup_box {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  border-radius: 0.9375rem;
+  background: #fff;
+  box-shadow: 0px 2px 34px 0px rgba(0, 0, 0, 0.1);
+  gap: 1rem;
+  padding: 2rem 0;
+}
+
+.signup_box input {
+  width: 90%;
+  height: 2rem;
+  border-radius: 0.3125rem;
+  border: 1px solid #d4d4d4;
+  background: #fff;
+  padding: 1.5rem 1.5rem;
+  font-size: large;
+}
+
+.signup_box h1 {
+  font-size: 2rem;
+}
+
+.btn1 {
+  width: 90%;
+}
+
+.signup_left_logo {
+  height: 100%;
+  aspect-ratio: 17.6705/41.56806;
+  position: absolute;
+  background: url(../../assets/img/signin-left.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  z-index: -10;
+
+  width: 300px;
+}
+
+.signup_right_logo {
+  position: absolute;
+  height: 100%;
+  aspect-ratio: 28.9015/41.96238;
+  background: url(../../assets/img/signin-right.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  z-index: -10;
+  right: 0;
+
+  width: 470px;
+}
+
+@media screen and (max-width: 1140px) {
   .signup_box {
-    width: 30%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: auto;
-    border-radius: 0.9375rem;
-    background: #fff;
-    box-shadow: 0px 2px 34px 0px rgba(0, 0, 0, 0.1);
-    gap: 1rem;
-    padding: 2rem 0;
+    width: 50%;
   }
-  
-  .signup_box input {
-    width: 90%;
-    height: 2rem;
-    border-radius: 0.3125rem;
-    border: 1px solid #d4d4d4;
-    background: #fff;
-    padding: 1.5rem 1.5rem;
-    font-size: large;
-  }
-  
-  .signup_box h1 {
-    font-size: 2rem;
-  }
-  
-  .btn1 {
-    width: 90%;
-  }
-  
+
   .signup_left_logo {
-    height: 100%;
-    aspect-ratio: 17.6705/41.56806;
-    position: absolute;
-    background: url(../../assets/img/signin-left.svg);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-    z-index: -10;
-  
     width: 300px;
   }
-  
+
   .signup_right_logo {
-    position: absolute;
-    height: 100%;
-    aspect-ratio: 28.9015/41.96238;
-    background: url(../../assets/img/signin-right.svg);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-    z-index: -10;
-    right: 0;
-  
-    width: 470px;
+    width: 450px;
   }
-  
-  @media screen and (max-width: 1140px) {
-    .signup_box {
-      width: 50%;
-    }
-  
-    .signup_left_logo {
-      width: 300px;
-    }
-    
-    .signup_right_logo {
-      width: 450px;
-    }
-  }
-  
-  @media screen and (max-width: 600px) {
-    .signup_box {
-      width: 90%;
-      /* font-size: ; */
-    }
-  
-    .signup_box h1 {
-      font-size: 1.3rem;
-      font-weight: bold;
-    }
-  
-    .signup_box input {
-      width: 90%;
-      height: 1.3rem;
-      padding: 1rem 1rem;
-      font-size: medium;
-    }
-  
-    .signup_left_logo {
-      width: 200px;
-    }
-    
-    .signup_right_logo {
-      width: 280px;
-    }
-  }
-  
+}
 
-  .profile-image {
-    width: 30%;
-    aspect-ratio: 1/1;
-    margin-bottom: 20px;
+@media screen and (max-width: 600px) {
+  .signup_box {
+    width: 90%;
+    /* font-size: ; */
   }
 
-  .profile-inner {
-    border: 1px solid #b9b7b79f;
-    border-style: dashed;
-    border-radius: 8px;
-    padding: 8px;
+  .signup_box h1 {
+    font-size: 1.3rem;
+    font-weight: bold;
   }
+
+  .signup_box input {
+    width: 90%;
+    height: 1.3rem;
+    padding: 1rem 1rem;
+    font-size: medium;
+  }
+
+  .signup_left_logo {
+    width: 200px;
+  }
+
+  .signup_right_logo {
+    width: 280px;
+  }
+}
+
+.profile-image {
+  width: 30%;
+  aspect-ratio: 1/1;
+  margin-bottom: 20px;
+}
+
+.profile-inner {
+  border: 1px solid #b9b7b79f;
+  border-style: dashed;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.errorInput {
+  border: 1px solid #f33 !important;
+}
+
+.errorMessage {
+  width: 90%;
+  margin-top: -15px;
+}
+
+.errorMessage small {
+  color: #f00;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  text-transform: capitalize;
+}

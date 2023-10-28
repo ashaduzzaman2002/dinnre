@@ -10,7 +10,12 @@ import { Box, HStack, PinInput, PinInputField, Text } from "@chakra-ui/react";
 import { AppContext } from "../../context/AppContext";
 
 const AddBank = () => {
-  const [input, setInput] = useState({ name: "", location: "", city: "" });
+  const [input, setInput] = useState({
+    bankName: "",
+    ifsc: "",
+    accountNo: "",
+    upi: "",
+  });
   const { setProfile, loading, profile } = useContext(AppContext);
   const navigate = useNavigate();
   const location = useLocation();
@@ -74,63 +79,47 @@ const AddBank = () => {
         <div className="signup_left_logo"></div>
 
         <div className="box signup_box">
-          <h1>Create Profile</h1>
+          <h1>Add Bank</h1>
 
-          <div className="profile-image">
-            <div className="h-100 w-100 profile-inner position-relative d-flex flex-column align-items-center justify-content-center gap-1">
-              <input
-                onChange={fileUpload}
-                type="file"
-                className="h-100"
-                style={{ background: "none", border: "none" }}
-              />
-
-              {image ? (
-                <img
-                  className="w-100 h-100 object-fit-cover"
-                  style={{ borderRadius: 8 }}
-                  src={URL.createObjectURL(image)}
-                />
-              ) : (
-                <>
-                  {" "}
-                  <i
-                    class="bi bi-cloud-upload text-secondary"
-                    style={{ fontSize: "22px" }}
-                  ></i>
-                  <p className="mb-0 text-secondary">click to upload</p>
-                </>
-              )}
-            </div>
-          </div>
           <input
+            className="errorInput"
             type="text"
-            name="name"
-            placeholder="Restaurant Name"
-            value={input.name}
-            onChange={(e) => setInput({ ...input, name: e.target.value })}
+            name="bankName"
+            placeholder="Bank Name"
+            value={input.bankName}
+            onChange={(e) => setInput({ ...input, bankName: e.target.value })}
           />
+
+          
           <input
             type="text"
-            name="city"
-            placeholder="Enter City"
-            value={input.city}
-            onChange={(e) => setInput({ ...input, city: e.target.value })}
+            name="accountNo"
+            placeholder="Account Number"
+            value={input.accountNo}
+            onChange={(e) => setInput({ ...input, accountNo: e.target.value })}
           />
 
           <input
             type="text"
-            name="location"
-            placeholder="Enter Location"
-            value={input.location}
-            onChange={(e) => setInput({ ...input, location: e.target.value })}
+            name="ifsc"
+            placeholder="IFSC Code"
+            value={input.ifsc}
+            onChange={(e) => setInput({ ...input, ifsc: e.target.value })}
+          />
+
+          <input
+            type="text"
+            name="upi"
+            placeholder="UPI id"
+            value={input.upi}
+            onChange={(e) => setInput({ ...input, upi: e.target.value })}
           />
           <button
             className="btn btn1"
             onClick={handleLogin}
             disabled={miniLoading}
           >
-            {miniLoading ? <LoadingSpinner /> : "Create"}
+            {miniLoading ? <LoadingSpinner /> : "Add"}
           </button>
         </div>
 

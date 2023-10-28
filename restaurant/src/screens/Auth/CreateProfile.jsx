@@ -15,6 +15,7 @@ const CreateProfile = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+
   const [miniLoading, setMiniLoading] = useState(false);
 
   const handleLogin = async () => {
@@ -63,6 +64,8 @@ const CreateProfile = () => {
     // setInputs({ ...inputs, file: e.target.files[0] });
     setImage(e.target.files[0]);
   };
+
+
 
   if (loading) {
     return <LoadingScreens />;

@@ -9,7 +9,15 @@ import LoadingSpinner from "../../components/laoding/LoadingSpinner";
 import { Box, HStack, PinInput, PinInputField, Text } from "@chakra-ui/react";
 import { AppContext } from "../../context/AppContext";
 
+import { useFormik } from "formik";
+import FormButton from "../../components/button/FormButton";
+import { otpSchema } from "../../validation/FormValidation";
+
 const Register = () => {
+  const initialOtp = {
+    email: "",
+    password: "",
+  };
   // States
   const [input, setInput] = useState({ email: "", password: "" });
   const { setProfile, loading, profile } = useContext(AppContext);
@@ -43,11 +51,11 @@ const Register = () => {
       if (data.success) {
         toast.success(data.msg, tostOptions);
         setTimeout(() => {
-            if (isMounted) {
-              setProfile(data?.user);
-              navigate("/profile");
-              setMiniLoading(false);
-            }
+          if (isMounted) {
+            setProfile(data?.user);
+            navigate("/profile");
+            setMiniLoading(false);
+          }
         }, 1000);
       } else {
         toast.error(data.msg, tostOptions);
@@ -62,6 +70,14 @@ const Register = () => {
     }
   };
 
+  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
+    useFormik({
+      initialValues: initialOtp,
+      validationSchema: otpSchema,
+      onSubmit: async (values) => {
+        alert(JSON.stringify(values, null, 2));
+      },
+    });
   // Send OTP
   const sendOtp = async () => {
     setMiniLoading(true);
@@ -121,15 +137,25 @@ const Register = () => {
 
           <div className="signup_left_logo"></div>
           {!showOtp ? (
-            <div className="box signup_box">
+            <form className="box signup_box">
               <h1>Please Signup</h1>
+
               <input
                 type="text"
                 name="email"
                 placeholder="Enter Email"
-                value={input.email}
-                onChange={(e) => setInput({ ...input, email: e.target.value })}
+                className={errors.email && touched.email ? "errorInput" : ""}
+                value={values.email}
+                onBlur={handleBlur}
+                onChange={handleChange}
               />
+
+              {errors.email && touched.email ? (
+                <div className="errorMessage">
+                  <small className="">{errors.email}</small>
+                </div>
+              ) : null}
+
               <input
                 type="password"
                 name="password"
@@ -139,13 +165,12 @@ const Register = () => {
                   setInput({ ...input, password: e.target.value })
                 }
               />
-              <button
-                className="btn btn1"
+
+              <FormButton
                 onClick={sendOtp}
-                disabled={miniLoading}
-              >
-                {miniLoading ? <LoadingSpinner /> : "Signup"}
-              </button>
+                miniLoading={miniLoading}
+                title="Signup"
+              />
 
               <div>OR</div>
               <Link
@@ -162,7 +187,7 @@ const Register = () => {
                   Signin
                 </Text>
               </Link>
-            </div>
+            </form>
           ) : (
             <div className="box signup_box">
               <h1>Verify OTP</h1>
