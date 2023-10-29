@@ -5,8 +5,7 @@ import { useLocation, useNavigate, Link } from "react-router-dom";
 import Toastify, { tostOptions } from "../../components/Toastify/Toastify";
 import { toast } from "react-toastify";
 import LoadingScreens from "../../components/laoding/LoadingScreens";
-import LoadingSpinner from "../../components/laoding/LoadingSpinner";
-import { Box, HStack, PinInput, PinInputField, Text } from "@chakra-ui/react";
+import { HStack, PinInput, PinInputField, Text } from "@chakra-ui/react";
 import { AppContext } from "../../context/AppContext";
 
 import { useFormik } from "formik";
@@ -19,12 +18,13 @@ const Register = () => {
     email: "",
     password: "",
   };
+
   // States
   const [input, setInput] = useState({ email: "", password: "" });
+  const [otpError, setOtpError] = useState(null);
   const { setProfile, loading, profile } = useContext(AppContext);
   const navigate = useNavigate();
   const location = useLocation();
-  const [isMounted, setIsMounted] = useState(true);
   const [seconds, setSeconds] = useState(60);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
 
@@ -41,9 +41,16 @@ const Register = () => {
   };
 
   // Handle Register
-  const handleRegister = async () => {
+  const handleRegister = async (e) => {
+    e.preventDefault();
     setMiniLoading(true);
+    setOtpError(null);
     try {
+      if (pinValues.length !== 6) {
+        setMiniLoading();
+        return setOtpError("OTP must be 6 digit");
+      }
+
       const { data } = await dbObject.post("/register", {
         ...input,
         otp: pinValues.join(""),
@@ -52,48 +59,10 @@ const Register = () => {
       if (data.success) {
         toast.success(data.msg, tostOptions);
         setTimeout(() => {
-          if (isMounted) {
-            setProfile(data?.user);
-            navigate("/profile");
-            setMiniLoading(false);
-          }
-        }, 1000);
-      } else {
-        toast.error(data.msg, tostOptions);
-        setMiniLoading(false);
-      }
-    } catch (error) {
-      console.log(error);
-      if (isMounted) {
-        toast.error(error?.response?.data?.msg, tostOptions);
-      }
-      setMiniLoading(false);
-    }
-  };
-
-  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
-    useFormik({
-      initialValues: initialOtp,
-      validationSchema: otpSchema,
-      onSubmit: async (values) => {
-        alert(JSON.stringify(values, null, 2));
-      },
-    });
-  // Send OTP
-  const sendOtp = async () => {
-    setMiniLoading(true);
-    try {
-      const { data } = await dbObject.post("/send-otp", { email: input.email });
-      console.log(data);
-      if (data.success) {
-        toast.success(data.msg, tostOptions);
-
-        if (isMounted) {
-          setOtp(true);
+          navigate("/create-profile");
+          setProfile(data?.user);
           setMiniLoading(false);
-          setSeconds(60);
-          setIsTimerRunning(true);
-        }
+        }, 1000);
       } else {
         toast.error(data.msg, tostOptions);
         setMiniLoading(false);
@@ -102,9 +71,47 @@ const Register = () => {
       console.log(error);
 
       toast.error(error?.response?.data?.msg, tostOptions);
+
       setMiniLoading(false);
     }
   };
+
+  // Send OTP
+  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
+    useFormik({
+      initialValues: initialOtp,
+      validationSchema: otpSchema,
+      onSubmit: async (values) => {
+        setMiniLoading(true);
+        try {
+          const { data } = await dbObject.post("/send-otp", {
+            email: values.email,
+          });
+          console.log(data);
+          if (data.success) {
+            toast.success(data.msg, tostOptions);
+
+            setOtp(true);
+            setMiniLoading(false);
+            setSeconds(60);
+            setIsTimerRunning(true);
+            setInput({
+              ...input,
+              email: values.email,
+              password: values.password,
+            });
+          } else {
+            toast.error(data.msg, tostOptions);
+            setMiniLoading(false);
+          }
+        } catch (error) {
+          console.log(error);
+
+          toast.error(error?.response?.data?.msg, tostOptions);
+          setMiniLoading(false);
+        }
+      },
+    });
 
   // Timer
   useEffect(() => {
@@ -117,13 +124,6 @@ const Register = () => {
 
     return () => clearTimeout(timer);
   }, [isTimerRunning, seconds]);
-
-  useEffect(() => {
-    setIsMounted(true);
-    return () => {
-      setIsMounted(false);
-    };
-  }, []);
 
   if (loading) {
     return <LoadingScreens />;
@@ -148,6 +148,7 @@ const Register = () => {
                 handleChange={handleChange}
                 values={values}
                 touched={touched}
+                placeholder='Enter Email'
               />
 
               <FormInput
@@ -157,12 +158,10 @@ const Register = () => {
                 handleChange={handleChange}
                 values={values}
                 touched={touched}
+                placeholder='Enter Password'
               />
 
-              <FormButton
-                miniLoading={miniLoading}
-                title="Signup"
-              />
+              <FormButton miniLoading={miniLoading} title="Signup" />
 
               <div>OR</div>
               <Link
@@ -181,7 +180,7 @@ const Register = () => {
               </Link>
             </form>
           ) : (
-            <div className="box signup_box">
+            <form onSubmit={handleRegister} className="box signup_box">
               <h1>Verify OTP</h1>
               <HStack pr={30} pl={30}>
                 <PinInput otp>
@@ -196,22 +195,26 @@ const Register = () => {
                   ))}
                 </PinInput>
               </HStack>
+
+              {otpError ? (
+                <div className="errorMessage">
+                  <small className="ms-2">{otpError}</small>
+                </div>
+              ) : null}
               {isTimerRunning ? (
                 <Text>Resend OTP in: {seconds} seconds</Text>
               ) : (
-                <Text onClick={sendOtp} style={{ cursor: "pointer" }}>
+                <Text onClick={handleSubmit} style={{ cursor: "pointer" }}>
                   Resend OTP
                 </Text>
               )}
 
-              <button
-                className="btn btn1 w-50"
-                onClick={handleRegister}
-                disabled={miniLoading}
-              >
-                {miniLoading ? <LoadingSpinner /> : "Verify"}
-              </button>
-            </div>
+              <FormButton
+                width="w-50"
+                miniLoading={miniLoading}
+                title="Verify"
+              />
+            </form>
           )}
 
           <div className="signup_right_logo"></div>

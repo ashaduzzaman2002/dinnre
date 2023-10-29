@@ -6,7 +6,8 @@ export const AppContext = createContext();
 export const AppProvider = ({ children }) => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [isActive, setActive] = useState(false)
+  const [isActive, setActive] = useState(false);
+  const [profileCreacted, setProfileCreated] = useState(false);
 
   // get profile data
   const getProfile = async () => {
@@ -16,6 +17,7 @@ export const AppProvider = ({ children }) => {
       console.log(data);
       if (data?.success) {
         setProfile(data?.user);
+        setProfileCreated(data.user?.name ? true : false);
       }
 
       setLoading(false);
@@ -31,7 +33,18 @@ export const AppProvider = ({ children }) => {
   }, []);
 
   return (
-    <AppContext.Provider value={{ profile, setProfile, loading, setLoading, isActive, setActive }}>
+    <AppContext.Provider
+      value={{
+        profile,
+        setProfile,
+        loading,
+        setLoading,
+        isActive,
+        setActive,
+        profileCreacted,
+        setProfileCreated,
+      }}
+    >
       {children}
     </AppContext.Provider>
   );

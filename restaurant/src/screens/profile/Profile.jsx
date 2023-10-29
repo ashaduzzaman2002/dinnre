@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import Layout from "../../layout/Layout";
 import Protected from "../../routes/Protected";
-import { Box, Heading, Text } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
+import { AppContext } from "../../context/AppContext";
 
 const Profile = () => {
+  const { profile } = useContext(AppContext);
   return (
     <Protected>
       <Layout title={"Profile"}>
@@ -27,7 +29,7 @@ const Profile = () => {
                         style={{ width: 150, height: 220 }}
                       >
                         <img
-                          src="https://imgmedia.lbb.in/media/2023/01/63d37aa371710d3f45ec1fa8_1674803875414.jpg"
+                          src={profile?.profile_img || "/images/no-image.jpg"}
                           alt="Profile image"
                           class="img-fluid img-thumbnail mt-4 mb-2 object-fit-cover"
                           style={{ width: 150, zIndex: 1, height: 200 }}
@@ -42,8 +44,8 @@ const Profile = () => {
                         </button>
                       </div>
                       <div class="ms-3" style={{ marginTop: 130 }}>
-                        <h5>Shimla Biriyani</h5>
-                        <p>restaurant@gmail.com</p>
+                        <h5>{profile?.name}</h5>
+                        <p>{profile?.email}</p>
                       </div>
                     </div>
                     <div
@@ -67,10 +69,7 @@ const Profile = () => {
                             class="font-italic mb-1"
                             style={{ fontStyle: "italic" }}
                           >
-                            {" "}
-                            Lorem ipsum dolor sit amet consectetur adipisicing
-                            elit. Cum totam magni consequatur ad? Ea officia
-                            numquam eius? Repellat, earum fugiat?
+                            {profile?.about}
                           </p>
                         </div>
                       </div>
@@ -78,9 +77,9 @@ const Profile = () => {
                       <div class="mb-5">
                         <p class="lead fw-normal mb-1">Location</p>
                         <div class="p-4" style={{ backgroundColor: "#f8f9fa" }}>
-                          <p class="font-italic mb-1">Chinnar Park,</p>
-                          <p class="font-italic mb-1">Kolkata,</p>
-                          <p class="font-italic mb-0">West Bengal</p>
+                          <p class="font-italic mb-1">{profile?.city}</p>
+                          <p class="font-italic mb-1">{profile?.location}</p>
+                          {/* <p class="font-italic mb-0">West Bengal</p> */}
                         </div>
                       </div>
 
@@ -93,7 +92,7 @@ const Profile = () => {
                                 <Text mb={0} fontWeight={"600"} fontSize="3xl">
                                   Bank
                                 </Text>
-                                <Text fontSize="md">Punjab National Bank</Text>
+                                <Text fontSize="md">{profile?.bankName}</Text>
                               </Box>
                             </div>
                             <div className="col-12 col-md-6 col-lg-4">
@@ -101,7 +100,7 @@ const Profile = () => {
                                 <Text mb={0} fontWeight={"600"} fontSize="3xl">
                                   Account Number
                                 </Text>
-                                <Text fontSize="md">504562325281</Text>
+                                <Text fontSize="md">{profile.accountNo}</Text>
                               </Box>
                             </div>
 
@@ -110,7 +109,7 @@ const Profile = () => {
                                 <Text mb={0} fontWeight={"600"} fontSize="3xl">
                                   Account Holder
                                 </Text>
-                                <Text fontSize="md">Shimla Biriyani</Text>
+                                <Text fontSize="md">{profile.accountHolder}</Text>
                               </Box>
                             </div>
 
@@ -119,7 +118,7 @@ const Profile = () => {
                                 <Text mb={0} fontWeight={"600"} fontSize="3xl">
                                   IFSC Code
                                 </Text>
-                                <Text fontSize="md">PUNB78062</Text>
+                                <Text fontSize="md">{profile.ifsc}</Text>
                               </Box>
                             </div>
 
@@ -129,7 +128,7 @@ const Profile = () => {
                                   UPI Id
                                 </Text>
                                 <Text mb={0} fontSize="md">
-                                  test@ybl
+                                  {profile.upi}
                                 </Text>
                               </Box>
                             </div>

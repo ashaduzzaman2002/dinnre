@@ -130,13 +130,17 @@ const Navbar = () => {
               aria-expanded="false"
             >
               <img
-                src="https://github.com/mdo.png"
+                src={profile?.profile_img || "/images/no-image.jpg"}
                 alt=""
                 width="32"
                 height="32"
                 className="rounded-circle me-2"
               />
-              <strong>{profile?.name}</strong>
+              <strong>
+                {profile?.name?.length > 10
+                  ? `${profile?.name?.slice(0,10)}...`
+                  : profile?.name}
+              </strong>
             </a>
             <ul className="dropdown-menu text-small shadow">
               <li>

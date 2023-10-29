@@ -26,6 +26,10 @@ const restaurantSchema = new mongoose.Schema(
       type: String,
     },
 
+    about: {
+      type: String,
+    },
+
     profile_img: {
       type: String,
     },
@@ -35,6 +39,10 @@ const restaurantSchema = new mongoose.Schema(
     },
 
     accountNo: {
+      type: String,
+    },
+
+    accountHolder: {
       type: String,
     },
 

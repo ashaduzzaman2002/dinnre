@@ -1,71 +1,94 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./auth.css";
 import { dbObject } from "../../helper/api";
-import { useLocation, useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Toastify, { tostOptions } from "../../components/Toastify/Toastify";
 import { toast } from "react-toastify";
 import LoadingScreens from "../../components/laoding/LoadingScreens";
-import LoadingSpinner from "../../components/laoding/LoadingSpinner";
-import { Box, HStack, PinInput, PinInputField, Text } from "@chakra-ui/react";
 import { AppContext } from "../../context/AppContext";
+import { useFormik } from "formik";
+import { createProfileSchema } from "../../validation/FormValidation";
+import FormInput from "../../components/input/FormInput";
+import FormButton from "../../components/button/FormButton";
+import FormTextArea from "../../components/input/FormTextArea";
 
 const CreateProfile = () => {
-  const [input, setInput] = useState({ name: "", location: "", city: "" });
-  const { setProfile, loading, profile } = useContext(AppContext);
+  // initial state
+  const initialValues = {
+    name: "",
+    location: "",
+    city: "",
+    about: ''
+  };
+  // States
+  const { setProfile, loading, profile, profileCreacted } =
+    useContext(AppContext);
   const navigate = useNavigate();
-  const location = useLocation();
-
 
   const [miniLoading, setMiniLoading] = useState(false);
+  const [imageError, setImageError] = useState(null);
 
-  const handleLogin = async () => {
-    setMiniLoading(true);
-    try {
-      const { data } = await dbObject.post("/login", input);
-      console.log(data);
-      if (data.success) {
-        toast.success(data.msg, tostOptions);
-        setTimeout(() => {
-          if (isMounted) {
-            setProfile(data?.user);
-            navigate("/");
+  // Redirect handler
+  useEffect(() => {
+    if (loading) {
+      return;
+    }
+    if (!profile) {
+      return navigate("/signin");
+    } else {
+      if (profileCreacted) {
+        return navigate("/");
+      }
+    }
+  }, [profile, loading, profileCreacted, navigate]);
+
+  // handle create profile
+  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
+    useFormik({
+      initialValues,
+      validationSchema: createProfileSchema,
+      onSubmit: async (values) => {
+        setImageError(null);
+        if (!image) return setImageError("Prolie Image is Required");
+        console.log({ ...values, file: image });
+
+        setMiniLoading(true);
+
+        const formatData = new FormData();
+        formatData.append("file", image, image.name);
+        formatData.append("name", values.name);
+        formatData.append("location", values.location);
+        formatData.append("city", values.city);
+        formatData.append("about", values.about);
+
+        try {
+          const { data } = await dbObject.put("/create-account", formatData);
+          console.log(data);
+
+          if (data.success) {
+            toast.success(data.msg, tostOptions);
+            setTimeout(() => {
+              setProfile(data?.user);
+              navigate("/add-bank");
+              setMiniLoading(false);
+            }, 1000);
+          } else {
+            toast.error(data.msg, tostOptions);
             setMiniLoading(false);
           }
-        }, 1000);
-      } else {
-        toast.error(data.msg, tostOptions);
-        setMiniLoading(false);
-      }
-    } catch (error) {
-      console.log(error?.response?.data?.msg);
-      console.log(error?.response?.data?.msg);
-      if (isMounted) {
-        toast.error(error?.response?.data?.msg, tostOptions);
-      }
-      setMiniLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (profile) return navigate(location.state?.from || "/");
-  }, [profile]);
-  const [isMounted, setIsMounted] = useState(true);
-
-  useEffect(() => {
-    setIsMounted(true);
-    return () => {
-      setIsMounted(false);
-    };
-  }, []);
+        } catch (error) {
+          console.log(error);
+          toast.error(error?.response?.data?.msg, tostOptions);
+          setMiniLoading(false);
+        }
+      },
+    });
 
   const [image, setImage] = useState();
 
   const fileUpload = (e) => {
-    // setInputs({ ...inputs, file: e.target.files[0] });
     setImage(e.target.files[0]);
   };
-
-
 
   if (loading) {
     return <LoadingScreens />;
@@ -76,11 +99,15 @@ const CreateProfile = () => {
 
         <div className="signup_left_logo"></div>
 
-        <div className="box signup_box">
+        <form onSubmit={handleSubmit} className="box signup_box">
           <h1>Create Profile</h1>
 
-          <div className="profile-image">
-            <div className="h-100 w-100 profile-inner position-relative d-flex flex-column align-items-center justify-content-center gap-1">
+          <div className={`profile-image`}>
+            <div
+              className={`h-100 w-100 profile-inner position-relative d-flex flex-column align-items-center justify-content-center gap-1 ${
+                imageError ? "errorInput" : ""
+              }`}
+            >
               <input
                 onChange={fileUpload}
                 type="file"
@@ -105,37 +132,56 @@ const CreateProfile = () => {
                 </>
               )}
             </div>
+
+            {imageError ? (
+              <div className="errorMessage mt-1 d-flex justify-content-center w-100">
+                <small style={{fontSize: 12}} className="text-center">{imageError}</small>
+              </div>
+            ) : null}
           </div>
-          <input
-            type="text"
-            name="name"
+
+          <FormInput
+            errors={errors}
+            name={"name"}
+            handleBlur={handleBlur}
+            handleChange={handleChange}
+            values={values}
+            touched={touched}
             placeholder="Restaurant Name"
-            value={input.name}
-            onChange={(e) => setInput({ ...input, name: e.target.value })}
-          />
-          <input
-            type="text"
-            name="city"
-            placeholder="Enter City"
-            value={input.city}
-            onChange={(e) => setInput({ ...input, city: e.target.value })}
           />
 
-          <input
-            type="text"
-            name="location"
-            placeholder="Enter Location"
-            value={input.location}
-            onChange={(e) => setInput({ ...input, location: e.target.value })}
+          <FormInput
+            errors={errors}
+            name={"city"}
+            handleBlur={handleBlur}
+            handleChange={handleChange}
+            values={values}
+            touched={touched}
+            placeholder="Enter City"
           />
-          <button
-            className="btn btn1"
-            onClick={handleLogin}
-            disabled={miniLoading}
-          >
-            {miniLoading ? <LoadingSpinner /> : "Create"}
-          </button>
-        </div>
+
+          <FormInput
+            errors={errors}
+            name={"location"}
+            handleBlur={handleBlur}
+            handleChange={handleChange}
+            values={values}
+            touched={touched}
+            placeholder="Enter Location"
+          />
+
+          <FormTextArea
+            errors={errors}
+            name={"about"}
+            handleBlur={handleBlur}
+            handleChange={handleChange}
+            values={values}
+            touched={touched}
+            placeholder="Write a small description"
+          />
+
+          <FormButton miniLoading={miniLoading} title={"Create"} />
+        </form>
 
         <div className="signup_right_logo"></div>
       </div>

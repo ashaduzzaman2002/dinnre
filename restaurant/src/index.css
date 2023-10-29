@@ -109,10 +109,14 @@ input[type="file"] {
   border-color: #d46ef4;
 }
 
-input:focus{
+input:focus, textarea:focus{
   outline: none;
 }
 
 .w-90 {
   width: 90%;
+}
+ 
+textarea {
+  resize: none;
 }

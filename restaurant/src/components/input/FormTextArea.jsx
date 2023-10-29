@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const FormInput = ({
+const FormTextArea = ({
   name,
   errors,
   values,
@@ -13,7 +13,8 @@ const FormInput = ({
   return (
     <>
       <div className="w-90 position-relative">
-        <input
+        <textarea
+        // style={{height: 'auto'}}
           type={name === "password" && !showPassword ? "password" : "text"}
           name={name}
           placeholder={placeholder}
@@ -42,4 +43,4 @@ const FormInput = ({
   );
 };
 
-export default FormInput;
+export default FormTextArea;

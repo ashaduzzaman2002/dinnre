@@ -452,10 +452,10 @@ exports.getOrder = async (req, res) => {
 
 exports.createAccount = async (req, res) => {
   try {
-    const { name, location, city } = req.body;
+    const { name, location, city, about } = req.body;
     const { id } = req.user;
 
-    if (!name || !location) {
+    if (!name.length || !location.length || !city.length || !about.length) {
       return res.status(400).json({
         success: false,
         msg: "All fields are required",
@@ -474,6 +474,7 @@ exports.createAccount = async (req, res) => {
     restaurant.name = name;
     restaurant.location = location;
     restaurant.city = city;
+    restaurant.about = about;
 
     if (req.file) {
       const response = await cloudinary.v2.uploader.upload(req.file.path, {
@@ -489,9 +490,12 @@ exports.createAccount = async (req, res) => {
 
     await restaurant.save();
 
+    restaurant.password = undefined
+
     res.status(200).json({
       success: true,
       msg: "Restaurant profile updated successfully",
+      user: restaurant
     });
   } catch (error) {
     // console.log(error);
@@ -504,11 +508,17 @@ exports.createAccount = async (req, res) => {
 
 exports.addBankAccount = async (req, res) => {
   try {
-    const { bankName, accountNo, ifsc, upi } = req.body;
+    const { bankName, accountNo, ifsc, upi, accountHolder } = req.body;
 
     const { id } = req.user;
 
-    if (!bankName || !accountNo || !ifsc || !upi) {
+    if (
+      !bankName.length ||
+      !accountNo.length ||
+      !ifsc.length ||
+      !upi.length ||
+      !accountHolder.length
+    ) {
       return res.status(400).json({
         success: false,
         msg: "All fields are required",
@@ -528,12 +538,16 @@ exports.addBankAccount = async (req, res) => {
     restaurant.accountNo = accountNo;
     restaurant.ifsc = ifsc;
     restaurant.upi = upi;
+    restaurant.accountHolder = accountHolder;
 
     await restaurant.save();
+
+    restaurant.password = undefined
 
     res.status(200).json({
       success: true,
       msg: "Restaurant bank details added successfully",
+      user: restaurant
     });
   } catch (error) {
     return res.status(500).json({

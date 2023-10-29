@@ -6,68 +6,69 @@ import Toastify, { tostOptions } from "../../components/Toastify/Toastify";
 import { toast } from "react-toastify";
 import LoadingScreens from "../../components/laoding/LoadingScreens";
 import LoadingSpinner from "../../components/laoding/LoadingSpinner";
-import { Box, HStack, PinInput, PinInputField, Text } from "@chakra-ui/react";
 import { AppContext } from "../../context/AppContext";
+import { useFormik } from "formik";
+import { bankSchema } from "../../validation/FormValidation";
+import FormButton from "../../components/button/FormButton";
+import FormInput from "../../components/input/FormInput";
 
 const AddBank = () => {
-  const [input, setInput] = useState({
+  const initialValue = {
     bankName: "",
     ifsc: "",
     accountNo: "",
     upi: "",
-  });
-  const { setProfile, loading, profile } = useContext(AppContext);
+    accountHolder: "",
+  };
+
+  const { setProfile, loading, profile, profileCreacted, setProfileCreated } =
+    useContext(AppContext);
   const navigate = useNavigate();
   const location = useLocation();
 
+
+  useEffect(() => {
+    if (loading) {
+      return;
+    }
+    if (!profile) {
+      return navigate("/signin");
+    } else {
+      if (profileCreacted) {
+        return navigate("/");
+      }
+    }
+  }, [profile, loading, profileCreacted, navigate]);
   const [miniLoading, setMiniLoading] = useState(false);
 
-  const handleLogin = async () => {
-    setMiniLoading(true);
-    try {
-      const { data } = await dbObject.post("/login", input);
-      console.log(data);
-      if (data.success) {
-        toast.success(data.msg, tostOptions);
-        setTimeout(() => {
-          if (isMounted) {
-            setProfile(data?.user);
-            navigate("/");
+  const { values, errors, touched, handleChange, handleBlur, handleSubmit } =
+    useFormik({
+      initialValues: initialValue,
+      validationSchema: bankSchema,
+      onSubmit: async (values) => {
+        setMiniLoading(true);
+        try {
+          const { data } = await dbObject.put("/add-bank", values);
+          console.log(data);
+          if (data.success) {
+            toast.success(data.msg, tostOptions);
+            setTimeout(() => {
+              setProfile(data?.user);
+              navigate("/");
+              setProfileCreated(true);
+              setMiniLoading(false);
+            }, 1000);
+          } else {
+            toast.error(data.msg, tostOptions);
             setMiniLoading(false);
           }
-        }, 1000);
-      } else {
-        toast.error(data.msg, tostOptions);
-        setMiniLoading(false);
-      }
-    } catch (error) {
-      console.log(error?.response?.data?.msg);
-      console.log(error?.response?.data?.msg);
-      if (isMounted) {
-        toast.error(error?.response?.data?.msg, tostOptions);
-      }
-      setMiniLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (profile) return navigate(location.state?.from || "/");
-  }, [profile]);
-  const [isMounted, setIsMounted] = useState(true);
-
-  useEffect(() => {
-    setIsMounted(true);
-    return () => {
-      setIsMounted(false);
-    };
-  }, []);
-
-  const [image, setImage] = useState();
-
-  const fileUpload = (e) => {
-    // setInputs({ ...inputs, file: e.target.files[0] });
-    setImage(e.target.files[0]);
-  };
+        } catch (error) {
+          console.log(error);
+          toast.error(error?.response?.data?.msg, tostOptions);
+          setMiniLoading(false);
+        }
+      },
+    });
 
   if (loading) {
     return <LoadingScreens />;
@@ -78,50 +79,60 @@ const AddBank = () => {
 
         <div className="signup_left_logo"></div>
 
-        <div className="box signup_box">
+        <form onSubmit={handleSubmit} className="box signup_box">
           <h1>Add Bank</h1>
 
-          <input
-            className="errorInput"
-            type="text"
-            name="bankName"
+          <FormInput
+            errors={errors}
+            name={"bankName"}
+            handleBlur={handleBlur}
+            handleChange={handleChange}
+            values={values}
+            touched={touched}
             placeholder="Bank Name"
-            value={input.bankName}
-            onChange={(e) => setInput({ ...input, bankName: e.target.value })}
           />
 
-          
-          <input
-            type="text"
-            name="accountNo"
+          <FormInput
+            errors={errors}
+            name={"accountHolder"}
+            handleBlur={handleBlur}
+            handleChange={handleChange}
+            values={values}
+            touched={touched}
+            placeholder="Account Holder Name"
+          />
+
+          <FormInput
+            errors={errors}
+            name={"accountNo"}
+            handleBlur={handleBlur}
+            handleChange={handleChange}
+            values={values}
+            touched={touched}
             placeholder="Account Number"
-            value={input.accountNo}
-            onChange={(e) => setInput({ ...input, accountNo: e.target.value })}
           />
 
-          <input
-            type="text"
-            name="ifsc"
+          <FormInput
+            errors={errors}
+            name={"ifsc"}
+            handleBlur={handleBlur}
+            handleChange={handleChange}
+            values={values}
+            touched={touched}
             placeholder="IFSC Code"
-            value={input.ifsc}
-            onChange={(e) => setInput({ ...input, ifsc: e.target.value })}
           />
 
-          <input
-            type="text"
-            name="upi"
-            placeholder="UPI id"
-            value={input.upi}
-            onChange={(e) => setInput({ ...input, upi: e.target.value })}
+          <FormInput
+            errors={errors}
+            name={"upi"}
+            handleBlur={handleBlur}
+            handleChange={handleChange}
+            values={values}
+            touched={touched}
+            placeholder="UPI Id"
           />
-          <button
-            className="btn btn1"
-            // onClick={handleLogin}
-            disabled={miniLoading}
-          >
-            {miniLoading ? <LoadingSpinner /> : "Add"}
-          </button>
-        </div>
+          <FormButton title={"Add"} miniLoading={miniLoading} />
+        </form>
 
         <div className="signup_right_logo"></div>
       </div>
