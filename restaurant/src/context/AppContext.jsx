@@ -7,7 +7,7 @@ export const AppProvider = ({ children }) => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isActive, setActive] = useState(false);
-  const [profileCreacted, setProfileCreated] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
 
   // get profile data
   const getProfile = async () => {
@@ -17,7 +17,7 @@ export const AppProvider = ({ children }) => {
       console.log(data);
       if (data?.success) {
         setProfile(data?.user);
-        setProfileCreated(data.user?.name ? true : false);
+        setIsVerified(data.user?.verified);
       }
 
       setLoading(false);
@@ -41,8 +41,7 @@ export const AppProvider = ({ children }) => {
         setLoading,
         isActive,
         setActive,
-        profileCreacted,
-        setProfileCreated,
+        isVerified
       }}
     >
       {children}

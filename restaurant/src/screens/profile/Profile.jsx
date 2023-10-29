@@ -109,7 +109,9 @@ const Profile = () => {
                                 <Text mb={0} fontWeight={"600"} fontSize="3xl">
                                   Account Holder
                                 </Text>
-                                <Text fontSize="md">{profile.accountHolder}</Text>
+                                <Text fontSize="md">
+                                  {profile.accountHolder}
+                                </Text>
                               </Box>
                             </div>
 

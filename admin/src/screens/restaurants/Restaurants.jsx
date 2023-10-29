@@ -12,20 +12,29 @@ import Protected from "../../routes/Protected";
 import { useContext } from "react";
 import { AppContext } from "../../context/AppContext";
 import LoadingSecond from "../../components/laoding/LoadingSecond";
+import { useQuery } from "@tanstack/react-query";
+import { dbObject } from "../../helper/api";
 
 const Restaurants = () => {
-  const {
-    verifiedRestaurants,
-    setVerifiedRestaurants,
-    vrLoading,
-    setVRLoading,
-  } = useContext(AppContext);
+  // const {
+  //   verifiedRestaurants,
+  //   setVerifiedRestaurants,
+  //   vrLoading,
+  //   setVRLoading,
+  // } = useContext(AppContext);
 
-  const [restaurnats, setRestaurants] = useState(verifiedRestaurants);
+  const fetchRestaurants = async () => {
+    const { data } = await dbObject.get("/all/verified-restaurants");
+    console.log(data);
 
-  useEffect(() => {
-    setRestaurants(verifiedRestaurants);
-  }, [verifiedRestaurants]);
+    return data?.restaurants;
+  };
+
+  const { isLoading, error, data: restaurnats } = useQuery({
+    queryKey: ["restaurants"],
+    queryFn: fetchRestaurants,
+    staleTime: 5 * 60  * 1000
+  });
 
   const handleSearch = (event) => {
     const value = event.target.value;
@@ -64,6 +73,9 @@ const Restaurants = () => {
       console.log(error);
     }
   };
+
+  console.log(error)
+
 
   return (
     <Protected>
@@ -135,7 +147,7 @@ const Restaurants = () => {
                   <th className=" text-center">Action</th>
                 </thead>
 
-                {!vrLoading && (
+                {!isLoading && (
                   <tbody className="tbl">
                     {restaurnats.map((obj, i) => (
                       <tr key={i} className="list_card">
@@ -239,7 +251,7 @@ const Restaurants = () => {
                 )}
               </table>
 
-              {vrLoading && (
+              {isLoading && (
                 <div
                   className="d-flex align-items-center justify-content-center w-100"
                   style={{ height: 300 }}

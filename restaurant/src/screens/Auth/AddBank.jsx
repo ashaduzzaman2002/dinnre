@@ -21,11 +21,8 @@ const AddBank = () => {
     accountHolder: "",
   };
 
-  const { setProfile, loading, profile, profileCreacted, setProfileCreated } =
-    useContext(AppContext);
+  const { setProfile, loading, profile } = useContext(AppContext);
   const navigate = useNavigate();
-  const location = useLocation();
-
 
   useEffect(() => {
     if (loading) {
@@ -33,12 +30,8 @@ const AddBank = () => {
     }
     if (!profile) {
       return navigate("/signin");
-    } else {
-      if (profileCreacted) {
-        return navigate("/");
-      }
     }
-  }, [profile, loading, profileCreacted, navigate]);
+  }, [profile, loading, navigate]);
   const [miniLoading, setMiniLoading] = useState(false);
 
   const { values, errors, touched, handleChange, handleBlur, handleSubmit } =
@@ -55,7 +48,6 @@ const AddBank = () => {
             setTimeout(() => {
               setProfile(data?.user);
               navigate("/");
-              setProfileCreated(true);
               setMiniLoading(false);
             }, 1000);
           } else {

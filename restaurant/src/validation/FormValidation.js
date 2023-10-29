@@ -6,6 +6,13 @@ export const otpSchema = Yup.object({
   password: Yup.string().required("Password is required"),
 });
 
+
+// otp validation
+export const loginSchema = Yup.object({
+  email: Yup.string().email("Invalid email").required("Email is required"),
+  password: Yup.string().required("Password is required"),
+});
+
 // create profile validation
 export const createProfileSchema = Yup.object({
   name: Yup.string().required("Restaurant Name is required"),

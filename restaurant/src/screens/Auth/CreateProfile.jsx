@@ -18,10 +18,10 @@ const CreateProfile = () => {
     name: "",
     location: "",
     city: "",
-    about: ''
+    about: "",
   };
   // States
-  const { setProfile, loading, profile, profileCreacted } =
+  const { setProfile, loading, profile } =
     useContext(AppContext);
   const navigate = useNavigate();
 
@@ -35,12 +35,8 @@ const CreateProfile = () => {
     }
     if (!profile) {
       return navigate("/signin");
-    } else {
-      if (profileCreacted) {
-        return navigate("/");
-      }
     }
-  }, [profile, loading, profileCreacted, navigate]);
+  }, [profile, loading, navigate]);
 
   // handle create profile
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
@@ -135,7 +131,9 @@ const CreateProfile = () => {
 
             {imageError ? (
               <div className="errorMessage mt-1 d-flex justify-content-center w-100">
-                <small style={{fontSize: 12}} className="text-center">{imageError}</small>
+                <small style={{ fontSize: 12 }} className="text-center">
+                  {imageError}
+                </small>
               </div>
             ) : null}
           </div>
