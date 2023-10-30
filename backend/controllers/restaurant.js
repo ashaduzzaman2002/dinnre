@@ -490,12 +490,12 @@ exports.createAccount = async (req, res) => {
 
     await restaurant.save();
 
-    restaurant.password = undefined
+    restaurant.password = undefined;
 
     res.status(200).json({
       success: true,
       msg: "Restaurant profile updated successfully",
-      user: restaurant
+      user: restaurant,
     });
   } catch (error) {
     // console.log(error);
@@ -542,12 +542,12 @@ exports.addBankAccount = async (req, res) => {
 
     await restaurant.save();
 
-    restaurant.password = undefined
+    restaurant.password = undefined;
 
     res.status(200).json({
       success: true,
       msg: "Restaurant bank details added successfully",
-      user: restaurant
+      user: restaurant,
     });
   } catch (error) {
     return res.status(500).json({

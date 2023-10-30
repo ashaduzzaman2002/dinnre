@@ -225,7 +225,13 @@ const Verify = () => {
                           )
                         )}
 
-                        <span onClick={() => setPage(Math.min(page + 1, Math.round(total / 2)))}>
+                        <span
+                          onClick={() =>
+                            setPage(
+                              Math.min(page + 1, Math.round(total / 2) - 1)
+                            )
+                          }
+                        >
                           Next
                         </span>
                       </div>
