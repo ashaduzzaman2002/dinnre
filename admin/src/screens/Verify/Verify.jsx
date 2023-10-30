@@ -10,9 +10,10 @@ import {
   FilterDark,
 } from "../../assets/svg/Icon";
 import Protected from "../../routes/Protected";
+import { useQuery } from "@tanstack/react-query";
+import { dbObject } from "../../helper/api";
 
 const Verify = () => {
-  const [searchTerm, setSearchTerm] = useState("");
   const data = [
     {
       name: "D Bapi",
@@ -27,56 +28,56 @@ const Verify = () => {
       desc: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ex, dolor cum vel ipsa dolore est odit harum? Id, cumque amet?",
     },
   ];
-  const [foods, setFoods] = useState(data);
 
-  const handleSearch = (event) => {
-    const value = event.target.value;
-    setSearchTerm(value);
+  const [page, setPage] = useState(0);
+  const [search, setSearch] = useState("");
+  // const {
+  //   data,
+  //   isLoading,
+  //   isError,
+  // } = useQuery(["pendingRestaurants", page, search], async () => {
+  //   const response = await fetch(
+  //     `/api/getAllPendingRestaurants?page=${
+  //       page + 1
+  //     }&limit=${2}&search=${search}`
+  //   );
+  //   if (!response.ok) {
+  //     throw new Error("Network response was not ok");
+  //   }
+  //   return response.json();
+  // });
 
-    const results = foods.filter((item) =>
-      item.name.toLowerCase().includes(value.toLowerCase())
+  const [total, setTotal] = useState(0);
+
+  const fetchRestaurants = async () => {
+    const { data } = await dbObject.get(
+      `/all/pending-restaurants?page=${page + 1}&limit=${2}&search=${search}`
     );
 
-    setFoods(results);
+    setTotal(data?.total || 0);
+    console.log(data);
+
+    return data?.restaurants;
   };
 
-  //   const getData = async () => {
-  //     try {
-  //       const { data } = await dbObject.get(
-  //         `/restaurants/restaurant/${user?.restaurant}/foods`
-  //       );
-  //       setFoods(data.foods);
-  //       console.log(data);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-  //   useEffect(() => {
-  //     getData();
-  //   }, [user]);
+  const {
+    isLoading,
+    error,
+    data: restaurnats,
+  } = useQuery({
+    queryKey: ["pendingRestaurants", page, search],
+    queryFn: fetchRestaurants,
+    staleTime: 5 * 60 * 1000,
+  });
 
-  useEffect(() => {
-    if (searchTerm === "") {
-      setFoods(data);
-    }
-  }, [searchTerm]);
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
-  const handleDelete = async (food_id) => {
-    try {
-      alert("Do you want to delete this item");
-      const { data } = await dbObject.post("/restaurants/item/delete", {
-        food_id,
-      });
-      console.log(data);
+  if (error) {
+    return <div>Error fetching data {error.message}</div>;
+  }
 
-      if (data.success) {
-        toast.success(data.msg, tostOptions);
-        setFoods(foods.filter((item) => item._id !== food_id));
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
   return (
     <Protected>
       <Layout title={"Verify"}>
@@ -97,7 +98,6 @@ const Verify = () => {
                       name="search"
                       id="search"
                       placeholder="Search"
-                      onChange={handleSearch}
                     />
                   </div>
                   <button
@@ -146,27 +146,15 @@ const Verify = () => {
                   <th className=" text-center">Status</th>
                 </thead>
                 <tbody className="tbl">
-                  {foods.map((obj, i) => (
+                  {restaurnats?.map((obj, i) => (
                     <tr key={i} className="list_card">
-                      {/* <td className="" style={{ width: "8%" }}>
-                  <img
-                    src={obj.img}
-                    alt=""
-                    height={"45px"}
-                    width={"45px"}
-                    style={{ borderRadius: "10px" }}
-                  />
-                </td> */}
                       <td className="align-middle" style={{ minWidth: 100 }}>
                         <p className="fw-bold mb-1 ">{obj.name}</p>
                       </td>
                       <td
                         className=" align-middle"
                         style={{ minWidth: 100, maxWidth: 100 }}
-                      >
-                        {obj.desc.slice(0, 15)}
-                        {obj.desc.length > 15 ? "..." : ""}
-                      </td>
+                      ></td>
                       <td
                         className=" align-middle text-capitalize"
                         style={{ minWidth: 100 }}
@@ -214,43 +202,32 @@ const Verify = () => {
                   <tr className="list_card">
                     <td colSpan={7}>
                       <div className="  my-2 d-flex  justify-content-end align-items-center gap-1 ">
-                        <span>prev</span>
-                        <div
-                          className="border border-white text-white d-inline-block  "
-                          style={{
-                            padding: ".15rem .4rem",
-                            background: "#393C49",
-                            borderRadius: ".4rem",
-                            fontSize: "10px",
-                            textAlign: "center",
-                          }}
-                        >
-                          1
-                        </div>
-                        <div
-                          className="border border-white text-white d-inline-block  "
-                          style={{
-                            padding: ".15rem .4rem",
-                            background: "#393C49",
-                            borderRadius: ".4rem",
-                            fontSize: "10px",
-                            textAlign: "center",
-                          }}
-                        >
-                          1
-                        </div>
-                        <div
-                          className="border border-white text-white d-inline-block  "
-                          style={{
-                            padding: ".15rem .4rem",
-                            background: "#393C49",
-                            borderRadius: ".4rem",
-                            fontSize: "10px",
-                            textAlign: "center",
-                          }}
-                        >
-                          1
-                        </div>
+                        <span onClick={() => setPage(Math.max(page - 1, 0))}>
+                          prev
+                        </span>
+
+                        {Array.from({ length: Math.round(total / 2) }).map(
+                          (_, i) => (
+                            <div
+                              key={i}
+                              className="border border-white text-white d-inline-block"
+                              style={{
+                                padding: ".15rem .4rem",
+                                background: "#393C49",
+                                borderRadius: ".4rem",
+                                fontSize: "10px",
+                                textAlign: "center",
+                              }}
+                              onClick={() => setPage(i)}
+                            >
+                              {i + 1}
+                            </div>
+                          )
+                        )}
+
+                        <span onClick={() => setPage(Math.min(page + 1, Math.round(total / 2)))}>
+                          Next
+                        </span>
                       </div>
                     </td>
                   </tr>

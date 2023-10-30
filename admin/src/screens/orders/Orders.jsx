@@ -10,6 +10,7 @@ import {
   FilterDark,
 } from "../../assets/svg/Icon";
 import Protected from "../../routes/Protected";
+import { useQuery } from "@tanstack/react-query";
 
 const Orders = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -27,7 +28,7 @@ const Orders = () => {
       desc: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ex, dolor cum vel ipsa dolore est odit harum? Id, cumque amet?",
     },
   ];
-  const [foods, setFoods] = useState(data);
+  // const [foods, setFoods] = useState(data);
 
   const handleSearch = (event) => {
     const value = event.target.value;
@@ -39,21 +40,6 @@ const Orders = () => {
 
     setFoods(results);
   };
-
-  //   const getData = async () => {
-  //     try {
-  //       const { data } = await dbObject.get(
-  //         `/restaurants/restaurant/${user?.restaurant}/foods`
-  //       );
-  //       setFoods(data.foods);
-  //       console.log(data);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-  //   useEffect(() => {
-  //     getData();
-  //   }, [user]);
 
   useEffect(() => {
     if (searchTerm === "") {
@@ -78,7 +64,24 @@ const Orders = () => {
     }
   };
 
-   
+  const [page, setPage] = useState(0);
+  const [search, setSearch] = useState("");
+  const {
+    data: foods,
+    isLoading,
+    isError,
+  } = useQuery(["pendingRestaurants", page, limit, search], async () => {
+    const response = await fetch(
+      `/api/getAllPendingRestaurants?page=${
+        page + 1
+      }&limit=${limit}&search=${search}`
+    );
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    return response.json();
+  });
+
   return (
     <Protected>
       <Layout title={"Orders"}>
@@ -217,18 +220,23 @@ const Orders = () => {
                     <td colSpan={7}>
                       <div className="  my-2 d-flex  justify-content-end align-items-center gap-1 ">
                         <span>prev</span>
-                        <div
-                          className="border border-white text-white d-inline-block  "
-                          style={{
-                            padding: ".15rem .4rem",
-                            background: "#393C49",
-                            borderRadius: ".4rem",
-                            fontSize: "10px",
-                            textAlign: "center",
-                          }}
-                        >
-                          1
-                        </div>
+
+                        {Array.from({ length: 3 }).map((_, i) => (
+                          <div
+                            key={i}
+                            className="border border-white text-white d-inline-block"
+                            style={{
+                              padding: ".15rem .4rem",
+                              background: "#393C49",
+                              borderRadius: ".4rem",
+                              fontSize: "10px",
+                              textAlign: "center",
+                            }}
+                          >
+                            1
+                          </div>
+                        ))}
+
                         <div
                           className="border border-white text-white d-inline-block  "
                           style={{

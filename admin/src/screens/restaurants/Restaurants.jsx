@@ -55,25 +55,6 @@ const Restaurants = () => {
     setRestaurants(results);
   };
 
-  const handleDelete = async (food_id) => {
-    try {
-      alert("Do you want to delete this item");
-      const { data } = await dbObject.post("/restaurants/item/delete", {
-        food_id,
-      });
-      console.log(data);
-
-      if (data.success) {
-        toast.success(data.msg, tostOptions);
-        setVerifiedRestaurants(
-          setVerifiedRestaurants.filter((item) => item._id !== food_id)
-        );
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   console.log(error)
 
 
