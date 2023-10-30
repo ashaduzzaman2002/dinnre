@@ -229,7 +229,11 @@ exports.handleDecline = async (req, res) => {
 
 exports.getAllVerifiedRestaurents = async (req, res) => {
   try {
-    const { id, role } = req.user;
+    const { role } = req.user;
+
+    const page = parseInt(req.query.page) - 1 || 0;
+    const limit = parseInt(req.query.limit) || 10;
+    const search = req.query.search || "";
 
     if (role !== "ADMIN") {
       return res.status(403).json({
@@ -238,13 +242,26 @@ exports.getAllVerifiedRestaurents = async (req, res) => {
       });
     }
 
-    const restaurants = await Restaurant.find({ verified: true }).select(
-      "-password"
-    );
+    const restaurants = await Restaurant.find({
+      verified: true,
+      name: { $regex: new RegExp(search, "i") },
+    })
+      .skip(page * limit)
+      .limit(limit)
+      .select("-password");
+
+    const total = await Restaurant.countDocuments({
+      verified: true,
+      name: { $regex: new RegExp(search, "i") },
+    });
 
     res.status(200).json({
       success: true,
-      msg: "All verified restaurents are fetched successfully",
+      msg: "All restaurents are fetched successfully",
+      total,
+      limit,
+      page,
+      search,
       restaurants,
     });
   } catch (error) {

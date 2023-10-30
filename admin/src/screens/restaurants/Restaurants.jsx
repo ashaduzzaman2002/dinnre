@@ -1,248 +1,122 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Layout from "../../layout/Layout";
-import "./restaurants.css";
-import {
-  AddDark,
-  Delete,
-  Edit,
-  Filter,
-  FilterDark,
-} from "../../assets/svg/Icon";
 import Protected from "../../routes/Protected";
-import { useContext } from "react";
-import { AppContext } from "../../context/AppContext";
-import LoadingSecond from "../../components/laoding/LoadingSecond";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { dbObject } from "../../helper/api";
+import { useDisclosure, useToast } from "@chakra-ui/react";
+
+import CustomTable from "../../components/table/CustomTable";
 
 const Restaurants = () => {
-  // const {
-  //   verifiedRestaurants,
-  //   setVerifiedRestaurants,
-  //   vrLoading,
-  //   setVRLoading,
-  // } = useContext(AppContext);
+  const [page, setPage] = useState(0);
+  const [search, setSearch] = useState("");
+  const limit = 5;
+
+  const queryClient = useQueryClient();
+
+  const toast = useToast();
 
   const fetchRestaurants = async () => {
-    const { data } = await dbObject.get("/all/verified-restaurants");
+    const { data } = await dbObject.get(
+      `/all/verified-restaurants?page=${
+        page + 1
+      }&limit=${limit}&search=${search}`
+    );
     console.log(data);
 
-    return data?.restaurants;
+    return data;
   };
 
-  const { isLoading, error, data: restaurnats } = useQuery({
-    queryKey: ["restaurants"],
+  const { isLoading, error, data } = useQuery({
+    queryKey: ["pendingRestaurants", page, search],
     queryFn: fetchRestaurants,
-    staleTime: 5 * 60  * 1000
+    staleTime: 5 * 60 * 1000,
   });
 
-  const handleSearch = (event) => {
-    const value = event.target.value;
-    let results = [];
+  const headers = [
+    "profile",
+    "Name",
+    "description",
+    "City",
+    "Location",
+    "UPI ID",
+    "Action",
+  ];
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [id, setId] = useState(null);
 
-    if (event.key === "Backspace" || event.key === "Delete") {
-      const newValue = value?.slice(0, value?.length - 1);
-
-      results = verifiedRestaurants.filter((item) =>
-        item.name.toLowerCase().includes(newValue.toLowerCase())
-      );
-    } else {
-      results = restaurnats.filter((item) =>
-        item.name.toLowerCase().includes(value.toLowerCase())
-      );
+  const handleApprove = async (id) => {
+    try {
+      setId(id);
+      onOpen();
+    } catch (error) {
+      console.log(error);
     }
-
-    setRestaurants(results);
   };
 
-  console.log(error)
+  const handleConfirmApprove = async () => {
+    try {
+      onClose();
+      toast({
+        title: "Working fine",
+        status: "success",
+        duration: 1000,
+        position: "top",
+        isClosable: true,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
+  if (error) {
+    return <div>Error fetching data {error.message}</div>;
+  }
 
   return (
     <Protected>
       <Layout title={"Restaurants"}>
-        <div className="dashboard_container container cm">
-          <div className="dashboard_container_order_report_container">
-            <div className="dashboard_container_order_report_nav ">
-              <div className="dashboard_container_order_report_nav_left d-flex justicy-content-center align-items-center">
-                <h6>Restaurnats</h6>
-              </div>
+        <CustomTable
+          tableHeading="All Restaurnats"
+          search={search}
+          setSearch={setSearch}
+          data={data}
+          limit={limit}
+          headers={headers}
+          isLoading={isLoading}
+          isOpen={isOpen}
+          onClose={onClose}
+          setPage={setPage}
+          page={page}
+          confirmFn={[
+            {
+              fn: () => {
+                console.log("first");
+                onClose();
+                toast({
+                  title: "Working fine",
+                  status: "success",
+                  duration: 1000,
+                  position: "top",
+                  isClosable: true,
+                });
+              },
 
-              <div className="d-none d-md-flex">
-                <div className=" order_report_nav_right d-flex gap-2 justicy-content-center align-items-center ">
-                  <div className="order_report_container_search  ">
-                    <input
-                      className="rounded-pill border border-white px-2 py-1 "
-                      style={{ background: "#F4F4F4" }}
-                      type="text"
-                      name="search"
-                      id="search"
-                      placeholder="Search"
-                      onChange={handleSearch}
-                      onKeyDown={handleSearch}
-                    />
-                  </div>
-                  <button
-                    className="dashboard_container_btn d-flex justify-content-center align-items-center gap-2 h-75 "
-                    style={{ background: "#393C49" }}
-                  >
-                    <Filter />
-                    <span>Filter</span>
-                  </button>
-                </div>
-              </div>
-
-              <div className=" d-flex justify-content-center align-items-center gap-4 d-md-none">
-                <div>
-                  <FilterDark />
-                </div>
-                <div>
-                  <AddDark />
-                </div>
-              </div>
-            </div>
-
-            <div className="table-responsive">
-              <table
-                className="table tbl "
-                style={{
-                  padding: "2rem",
-                  borderSpacing: "1rem 1rem",
-                  width: "100%",
-                }}
-              >
-                <thead
-                  className="table-light "
-                  style={{
-                    background: "#ebebeb59",
-                    padding: "1rem 1rem",
-                    borderRadius: "2rem",
-                  }}
-                >
-                  {/* <th style={{ paddingLeft: "1rem" }}>Image</th> */}
-                  <th>Tittle</th>
-                  <th>Description</th>
-                  <th>Category</th>
-                  <th>Type</th>
-                  <th>Price</th>
-                  <th className=" text-center">Action</th>
-                </thead>
-
-                {!isLoading && (
-                  <tbody className="tbl">
-                    {restaurnats.map((obj, i) => (
-                      <tr key={i} className="list_card">
-                        <td className="align-middle" style={{ minWidth: 100 }}>
-                          <p className="fw-bold mb-1 ">{obj.name}</p>
-                        </td>
-                        <td
-                          className=" align-middle"
-                          style={{ minWidth: 100, maxWidth: 100 }}
-                        >
-                          {obj.desc?.slice(0, 15)}
-                          {obj.desc?.length > 15 ? "..." : ""}
-                        </td>
-                        <td
-                          className=" align-middle text-capitalize"
-                          style={{ minWidth: 100 }}
-                        >
-                          {obj.category}
-                        </td>
-                        <td
-                          className=" align-middle text-capitalize"
-                          style={{ minWidth: 100 }}
-                        >
-                          {obj.type}
-                        </td>
-                        <td className=" align-middle" style={{ minWidth: 100 }}>
-                          ₹{obj.price}
-                        </td>
-                        <td className=" align-middle" style={{ width: "20%" }}>
-                          <div className=" d-flex gap-2 justify-content-evenly align-items-center m-0 p-0">
-                            <button
-                              className="dashboard_container_status_btn"
-                              style={{
-                                background: "#E88B00",
-                                cursor: "default",
-                              }}
-                            >
-                              <Edit />
-                              <span>Deactive</span>
-                            </button>
-                            <button
-                              className="dashboard_container_status_btn"
-                              style={{
-                                background: "#DC3545",
-                                cursor: "default",
-                              }}
-                              onClick={() => handleDelete(obj._id)}
-                            >
-                              <Delete />
-                              <span>Delete</span>
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-
-                    <tr className="list_card">
-                      <td colSpan={7}>
-                        <div className="  my-2 d-flex  justify-content-end align-items-center gap-1 ">
-                          <span>prev</span>
-                          <div
-                            className="border border-white text-white d-inline-block  "
-                            style={{
-                              padding: ".15rem .4rem",
-                              background: "#393C49",
-                              borderRadius: ".4rem",
-                              fontSize: "10px",
-                              textAlign: "center",
-                            }}
-                          >
-                            1
-                          </div>
-                          <div
-                            className="border border-white text-white d-inline-block  "
-                            style={{
-                              padding: ".15rem .4rem",
-                              background: "#393C49",
-                              borderRadius: ".4rem",
-                              fontSize: "10px",
-                              textAlign: "center",
-                            }}
-                          >
-                            2
-                          </div>
-                          <div
-                            className="border border-white text-white d-inline-block  "
-                            style={{
-                              padding: ".15rem .4rem",
-                              background: "#393C49",
-                              borderRadius: ".4rem",
-                              fontSize: "10px",
-                              textAlign: "center",
-                            }}
-                          >
-                            3
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                )}
-              </table>
-
-              {isLoading && (
-                <div
-                  className="d-flex align-items-center justify-content-center w-100"
-                  style={{ height: 300 }}
-                >
-                  <LoadingSecond />
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
+              btnText: "Deactive",
+              color: "yellow",
+              heading: "Deactive Restaurant",
+            },
+          ]}
+          actions={[
+            {
+              btnText: "Deactive",
+              color: "yellow",
+              fn: () => {
+                onOpen();
+              },
+            },
+          ]}
+        />
       </Layout>
     </Protected>
   );
