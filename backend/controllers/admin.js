@@ -257,7 +257,10 @@ exports.getAllVerifiedRestaurents = async (req, res) => {
 
 exports.getAllPendingRestaurents = async (req, res) => {
   try {
-    const { id, role } = req.user;
+    const { role } = req.user;
+    const page = parseInt(req.query.page) - 1 || 0;
+    const limit = parseInt(req.query.limit) || 10;
+    const search = req.query.search || "";
 
     if (role !== "ADMIN") {
       return res.status(403).json({
@@ -266,16 +269,30 @@ exports.getAllPendingRestaurents = async (req, res) => {
       });
     }
 
-    const restaurants = await Restaurant.find({ verified: false }).select(
-      "-password"
-    );
+    const restaurants = await Restaurant.find({
+      verified: false,
+      name: { $regex: new RegExp(search, "i") },
+    })
+      .skip(page * limit)
+      .limit(limit)
+      .select("-password");
+
+    const total = await Restaurant.countDocuments({
+      verified: false,
+      name: { $regex: new RegExp(search, "i") },
+    });
 
     res.status(200).json({
       success: true,
       msg: "All pending restaurents are fetched successfully",
+      total,
+      limit,
+      page,
+      search,
       restaurants,
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       success: false,
       msg: "Internal server error",
@@ -287,11 +304,11 @@ exports.getAllOrderDetails = async (req, res) => {
   try {
     const { id, role } = req.user;
 
-    if(role !== "ADMIN") {
+    if (role !== "ADMIN") {
       return res.status(403).json({
         success: false,
-        msg: "Unauthorized access denied"
-      })
+        msg: "Unauthorized access denied",
+      });
     }
 
     const orders = await Order.find({});
@@ -299,13 +316,13 @@ exports.getAllOrderDetails = async (req, res) => {
     res.status(200).json({
       success: true,
       msg: "All order fetched successfully",
-      orders
-    })
+      orders,
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).json({
       success: false,
-      msg: "Internal server error"
-    })    
+      msg: "Internal server error",
+    });
   }
 };
