@@ -12,11 +12,17 @@
 }
 
 .cart-container .cart {
-  padding: 4vh 5vh;
+  /* padding: 4vh 5vh; */
+}
+
+.cart-container .cart-left {
+  max-height: 400px;
+  overflow-y: scroll;
+
 }
 
 .cart-container .summary {
-  background-color: #ddd;
+  /* background-color: #ddd; */
   border-radius: 1rem;
   padding: 4vh;
   color: rgb(65, 65, 65);
@@ -80,14 +86,15 @@ form {
   color: transparent;
 }
 .cart-container .btn {
-  background-color: #db7c38;
-  border-color: #db7c38;
+  background-color: rgba(190, 42, 237, 1);
+  border-color: rgba(190, 42, 237, 1);
   color: white;
   width: 100%;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
+  font-weight: bold;
   margin-top: 4vh;
   padding: 1vh;
-  border-radius: 0;
+  border-radius: .3125rem;
 }
 .cart-container .btn:focus {
   box-shadow: none;
@@ -109,21 +116,41 @@ form {
   text-decoration: none;
 }
 .cart-container #code {
-  background-image: linear-gradient(
+  /* background-image: linear-gradient(
       to left,
       rgba(255, 255, 255, 0.253),
       rgba(255, 255, 255, 0.185)
     ),
-    url('https://img.icons8.com/small/16/000000/long-arrow-right.png');
-  background-repeat: no-repeat;
+    url('https://img.icons8.com/small/16/000000/long-arrow-right.png'); */
+  /* background-repeat: no-repeat;
   background-position-x: 95%;
-  background-position-y: center;
+  background-position-y: center; */
+  background: #fff;
 }
 
 .cart-btn {
   border: none;
   background-color: transparent;
   user-select: none;
+}
+
+.cart-container .bin-icon svg {
+  width: 1.2rem;
+  aspect-ratio: 1 / 1;
+}
+
+::-webkit-scrollbar {
+  width: .3rem;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 2.625rem;
+  background: #F9F9F9;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 2.625rem;
+  background: #333;
 }
 
 @media screen and (max-width: 1002px) {
