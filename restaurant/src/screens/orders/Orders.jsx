@@ -16,62 +16,75 @@ import DP from "../../assets/img/order-dp.svg";
 import AddItem from "../../components/add-item/AddItem";
 import { dbObject } from "../../helper/api";
 import Protected from "../../routes/Protected";
+import CustomTable from "../../components/tables/CustomTable";
 
 const Orders = () => {
-  // const { user } = useContext(AppContext);
-
   const [showModal, setShowModal] = useState(false);
   const [orders, setOrders] = useState([]);
 
-  const List = [
-    {
-      item_image: ITEM,
-      customer_image: DP,
-      customer: {
-        name: "aaa bbb",
-        image: DP,
+  const limit = 8;
+
+  const List = {
+    total: 20,
+    data: [
+      {
+        image: ITEM,
+        customer_image: DP,
+        customer: {
+          name: "aaa bbb",
+          image: DP,
+        },
+        title: "veg thali",
+        catagory: "launch",
+        type: "veg",
+        price: "199.00",
       },
-      title: "veg thali",
-      catagory: "launch",
-      type: "veg",
-      price: "199.00",
-    },
-    {
-      item_image: ITEM,
-      customer_image: DP,
-      customer: {
-        name: "aaa bbb",
-        image: DP,
+      {
+        image: ITEM,
+        customer_image: DP,
+        customer: {
+          name: "aaa bbb",
+          image: DP,
+        },
+        title: "veg thali",
+        catagory: "launch",
+        type: "veg",
+        price: "199.00",
       },
-      title: "veg thali",
-      catagory: "launch",
-      type: "veg",
-      price: "199.00",
-    },
-    {
-      item_image: ITEM,
-      customer_image: DP,
-      customer: {
-        name: "aaa bbb",
-        image: DP,
+      {
+        image: ITEM,
+        customer_image: DP,
+        customer: {
+          name: "aaa bbb",
+          image: DP,
+        },
+        title: "veg thali",
+        catagory: "launch",
+        type: "veg",
+        price: "199.00",
       },
-      title: "veg thali",
-      catagory: "launch",
-      type: "veg",
-      price: "199.00",
-    },
-    {
-      item_image: ITEM,
-      customer_image: DP,
-      customer: {
-        name: "aaa bbb",
-        image: DP,
+      {
+        image: ITEM,
+        customer_image: DP,
+        customer: {
+          name: "aaa bbb",
+          image: DP,
+        },
+        title: "veg thali",
+        catagory: "launch",
+        type: "veg",
+        price: "199.00",
       },
-      title: "veg thali",
-      catagory: "launch",
-      type: "veg",
-      price: "199.00",
-    },
+    ],
+  };
+
+  const headers = [
+    "image",
+    "Customer Name",
+    "Phone Number",
+    "Item Name",
+    "Verification Pin",
+    "Actions",
   ];
 
   const getOrder = async () => {
@@ -92,7 +105,7 @@ const Orders = () => {
     <Protected>
       <Layout title={"Menu"}>
         <div className="dashboard_container container cm">
-          <div className="dashboard_container_order_report_container">
+          {/* <div className="dashboard_container_order_report_container">
             <div className="dashboard_container_order_report_nav ">
               <div className="dashboard_container_order_report_nav_left d-flex justicy-content-center align-items-center">
                 <h6>All Orders</h6>
@@ -329,7 +342,14 @@ const Orders = () => {
                 </tbody>
               </table>
             </div>
-          </div>
+          </div> */}
+
+          <CustomTable
+            headers={headers}
+            limit={limit}
+            tableHeading="All Orders"
+            data={List}
+          />
         </div>
       </Layout>
     </Protected>
