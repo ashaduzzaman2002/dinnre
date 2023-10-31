@@ -16,8 +16,8 @@ export const AppProvider = ({ children }) => {
       const { data } = await dbObject.get("/profile");
       console.log(data);
       if (data?.success) {
+        setIsVerified(data?.user?.verified);
         setProfile(data?.user);
-        setIsVerified(data.user?.verified);
       }
 
       setLoading(false);

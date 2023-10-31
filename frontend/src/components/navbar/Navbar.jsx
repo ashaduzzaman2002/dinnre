@@ -7,7 +7,7 @@ const Navbar = ({ navLinks, type }) => {
   const { pathname } = window.location;
   const [activeLink, setActiveLink] = useState(pathname);
   const navigate = useNavigate();
-  const { loggout, user, cities } = useContext(AppContext);
+  const { cities } = useContext(AppContext);
 
   useEffect(() => {
     setActiveLink(pathname);
@@ -60,26 +60,25 @@ const Navbar = ({ navLinks, type }) => {
                     title={item.title}
                   />
                 ))}
-                {type === "user" ? (
-                  <li class="dropdown d-flex align-items-center mt-3">
-                    <div
-                      class="menu-dropdown dropdown-toggle"
-                      href="#"
-                      role="button"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                    >
-                      City
-                    </div>
-                    <ul class="dropdown-menu">
-                      {cities?.map((item, i) => (
-                        <li>
-                          <p class="dropdown-item mb-0">Kolkata</p>
-                        </li>
-                      ))}
-                    </ul>
-                  </li>
-                ) : null}
+
+                <li class="dropdown d-flex align-items-center mt-3">
+                  <div
+                    class="menu-dropdown dropdown-toggle"
+                    href="#"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    City
+                  </div>
+                  <ul class="dropdown-menu">
+                    {cities?.map((item, i) => (
+                      <li>
+                        <p class="dropdown-item mb-0">Kolkata</p>
+                      </li>
+                    ))}
+                  </ul>
+                </li>
               </ul>
             </div>
           </div>
@@ -142,117 +141,71 @@ const Navbar = ({ navLinks, type }) => {
                 </li>
               ))}
 
-              {type === "user" ? (
-                <li class="dropdown d-flex align-items-center">
-                  <div
-                    class="menu-dropdown dropdown-toggle"
-                    href="#"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    City
-                  </div>
-                  <ul class="dropdown-menu">
-                    {cities?.map((item, i) => (
-                      <li key={i}>
-                        <p class="dropdown-item mb-0 text-capitalize">{item.name}</p>
-                      </li>
-                    ))}
-                  </ul>
-                </li>
-              ) : null}
+              <li class="dropdown d-flex align-items-center">
+                <div
+                  class="menu-dropdown dropdown-toggle"
+                  href="#"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  City
+                </div>
+                <ul class="dropdown-menu">
+                  {cities?.map((item, i) => (
+                    <li key={i}>
+                      <p class="dropdown-item mb-0 text-capitalize">
+                        {item.name}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              </li>
             </ul>
           </div>
 
-          {type === "user" ? (
-            <div className="d-flex gap-md-4">
-              <input
-                className="search-box desktop-view"
-                placeholder="Search here"
-                type="text"
-                name=""
-                id=""
-              />
+          <div className="d-flex gap-md-4">
+            <input
+              className="search-box desktop-view"
+              placeholder="Search here"
+              type="text"
+              name=""
+              id=""
+            />
 
-              <button className="mobile-view search-icon">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="28"
-                  height="28"
-                  viewBox="0 0 28 28"
-                  fill="none"
-                >
-                  <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M13.6744 7.97674C10.5277 7.97674 7.97674 10.5277 7.97674 13.6744C7.97674 16.8212 10.5277 19.3721 13.6744 19.3721C16.8212 19.3721 19.3721 16.8212 19.3721 13.6744C19.3721 10.5277 16.8212 7.97674 13.6744 7.97674ZM7 13.6744C7 9.98824 9.98824 7 13.6744 7C17.3606 7 20.3488 9.98824 20.3488 13.6744C20.3488 15.3417 19.7375 16.8663 18.7267 18.036L20.857 20.1663C21.0477 20.357 21.0477 20.6662 20.857 20.857C20.6662 21.0477 20.357 21.0477 20.1663 20.857L18.036 18.7267C16.8663 19.7375 15.3417 20.3488 13.6744 20.3488C9.98824 20.3488 7 17.3606 7 13.6744Z"
-                    fill="#1C274C"
-                  />
-                </svg>
-              </button>
-              <button className="cart-menu" onClick={() => navigate("/cart")}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                >
-                  <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M6.87526 5.84455C6.8752 5.84082 6.87516 5.83708 6.87516 5.83333V5C6.87516 3.27411 8.27427 1.875 10.0002 1.875C11.7261 1.875 13.1252 3.27411 13.1252 5V5.83333C13.1252 5.83708 13.1251 5.84082 13.1251 5.84455C14.2062 5.87479 14.8647 5.98661 15.3689 6.39998C16.0601 6.96662 16.2525 7.92867 16.6374 9.85275L17.1374 12.3528C17.6908 15.1198 17.9675 16.5033 17.2173 17.4183C16.4672 18.3333 15.0563 18.3333 12.2345 18.3333H7.76583C4.94402 18.3333 3.53311 18.3333 2.78297 17.4183C2.03282 16.5033 2.30952 15.1198 2.86293 12.3528L3.36293 9.85275C3.74775 7.92867 3.94015 6.96662 4.63135 6.39998C5.13559 5.9866 5.79411 5.87479 6.87526 5.84455ZM8.12516 5C8.12516 3.96447 8.96463 3.125 10.0002 3.125C11.0357 3.125 11.8752 3.96447 11.8752 5V5.83333C11.8752 5.83333 11.8752 5.83334 11.8752 5.83333C11.8288 5.83333 11.7819 5.83333 11.7345 5.83333H8.26583C8.21837 5.83333 8.17148 5.83333 8.12516 5.83334C8.12516 5.83334 8.12516 5.83334 8.12516 5.83334V5ZM10.0005 14.375C9.18507 14.375 8.4897 13.8541 8.23201 13.1251C8.11698 12.7996 7.7599 12.629 7.43445 12.7441C7.109 12.8591 6.93843 13.2162 7.05346 13.5416C7.48215 14.7545 8.63886 15.625 10.0005 15.625C11.3621 15.625 12.5188 14.7545 12.9475 13.5416C13.0625 13.2162 12.8919 12.8591 12.5665 12.7441C12.2411 12.629 11.884 12.7996 11.7689 13.1251C11.5113 13.8541 10.8159 14.375 10.0005 14.375Z"
-                    fill="#1C274C"
-                  />
-                </svg>
-              </button>
-            </div>
-          ) : (
-            <div className="dropdown">
-              <a
-                href="#"
-                className="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
+            <button className="mobile-view search-icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="28"
+                height="28"
+                viewBox="0 0 28 28"
+                fill="none"
               >
-                <img
-                  src="https://github.com/mdo.png"
-                  alt=""
-                  width="32"
-                  height="32"
-                  className="rounded-circle me-2"
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M13.6744 7.97674C10.5277 7.97674 7.97674 10.5277 7.97674 13.6744C7.97674 16.8212 10.5277 19.3721 13.6744 19.3721C16.8212 19.3721 19.3721 16.8212 19.3721 13.6744C19.3721 10.5277 16.8212 7.97674 13.6744 7.97674ZM7 13.6744C7 9.98824 9.98824 7 13.6744 7C17.3606 7 20.3488 9.98824 20.3488 13.6744C20.3488 15.3417 19.7375 16.8663 18.7267 18.036L20.857 20.1663C21.0477 20.357 21.0477 20.6662 20.857 20.857C20.6662 21.0477 20.357 21.0477 20.1663 20.857L18.036 18.7267C16.8663 19.7375 15.3417 20.3488 13.6744 20.3488C9.98824 20.3488 7 17.3606 7 13.6744Z"
+                  fill="#1C274C"
                 />
-                <strong>{user?.username}</strong>
-              </a>
-              <ul className="dropdown-menu text-small shadow">
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Settings
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Profile
-                  </a>
-                </li>
-                <li>
-                  <hr className="dropdown-divider" />
-                </li>
-                {user && (
-                  <li>
-                    <button
-                      onClick={loggout}
-                      className="dropdown-item"
-                      href="#"
-                    >
-                      Sign out
-                    </button>
-                  </li>
-                )}
-              </ul>
-            </div>
-          )}
+              </svg>
+            </button>
+            <button className="cart-menu" onClick={() => navigate("/cart")}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+              >
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M6.87526 5.84455C6.8752 5.84082 6.87516 5.83708 6.87516 5.83333V5C6.87516 3.27411 8.27427 1.875 10.0002 1.875C11.7261 1.875 13.1252 3.27411 13.1252 5V5.83333C13.1252 5.83708 13.1251 5.84082 13.1251 5.84455C14.2062 5.87479 14.8647 5.98661 15.3689 6.39998C16.0601 6.96662 16.2525 7.92867 16.6374 9.85275L17.1374 12.3528C17.6908 15.1198 17.9675 16.5033 17.2173 17.4183C16.4672 18.3333 15.0563 18.3333 12.2345 18.3333H7.76583C4.94402 18.3333 3.53311 18.3333 2.78297 17.4183C2.03282 16.5033 2.30952 15.1198 2.86293 12.3528L3.36293 9.85275C3.74775 7.92867 3.94015 6.96662 4.63135 6.39998C5.13559 5.9866 5.79411 5.87479 6.87526 5.84455ZM8.12516 5C8.12516 3.96447 8.96463 3.125 10.0002 3.125C11.0357 3.125 11.8752 3.96447 11.8752 5V5.83333C11.8752 5.83333 11.8752 5.83334 11.8752 5.83333C11.8288 5.83333 11.7819 5.83333 11.7345 5.83333H8.26583C8.21837 5.83333 8.17148 5.83333 8.12516 5.83334C8.12516 5.83334 8.12516 5.83334 8.12516 5.83334V5ZM10.0005 14.375C9.18507 14.375 8.4897 13.8541 8.23201 13.1251C8.11698 12.7996 7.7599 12.629 7.43445 12.7441C7.109 12.8591 6.93843 13.2162 7.05346 13.5416C7.48215 14.7545 8.63886 15.625 10.0005 15.625C11.3621 15.625 12.5188 14.7545 12.9475 13.5416C13.0625 13.2162 12.8919 12.8591 12.5665 12.7441C12.2411 12.629 11.884 12.7996 11.7689 13.1251C11.5113 13.8541 10.8159 14.375 10.0005 14.375Z"
+                  fill="#1C274C"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
       </nav>
     </div>

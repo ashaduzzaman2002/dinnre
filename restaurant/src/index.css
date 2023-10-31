@@ -109,14 +109,21 @@ input[type="file"] {
   border-color: #d46ef4;
 }
 
-input:focus, textarea:focus{
+input:focus,
+textarea:focus {
   outline: none;
 }
 
 .w-90 {
   width: 90%;
 }
- 
+
 textarea {
   resize: none;
+}
+
+:where(img, video) {
+  max-width: 100%;
+  /* height: auto; */
+  aspect-ratio: 1/1;
 }

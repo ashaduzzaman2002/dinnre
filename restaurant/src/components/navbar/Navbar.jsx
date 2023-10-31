@@ -51,26 +51,26 @@ const Navbar = () => {
       {/* Mobile menu */}
 
       <div
-        class="modal fade"
+        className="modal fade"
         id="exampleModal"
-        tabindex="-1"
+        tabIndex="-1"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
       >
-        <div class="modal-dialog m-0">
-          <div class="modal-content">
-            <div class="modal-header">
+        <div className="modal-dialog m-0">
+          <div className="modal-content">
+            <div className="modal-header">
               <h2 className="mb-0 menuHeading">Menu</h2>
               <button
                 type="button"
-                class="btnClose"
+                className="btnClose"
                 data-bs-dismiss="modal"
                 aria-label="Close"
               >
                 <NavClose />
               </button>
             </div>
-            <div class="modal-body">
+            <div className="modal-body">
               <ul className="navbar-nav d-flex">
                 {navLinks.map((item, i) => (
                   <NavLink

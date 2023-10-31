@@ -1,43 +1,46 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const orderSchema = new mongoose.Schema({
-  customerName: {
-    type: String,
-    required: true,
-  },
-
-  customerNumber: {
-    type: Number,
-    required: true,
-  },
-
-  tableNo: {
-    type: String,
-  },
-
-  restaurantId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Restaurant',
-  },
-
-  items: [
-    {
-      foodId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Food',
-      },
-      quantity: Number,
+const orderSchema = new mongoose.Schema(
+  {
+    customerName: {
+      type: String,
+      required: true,
     },
-  ],
-  totalAmount: Number,
-  // Other order details
 
-  status: {
-    type: String,
-    default: 'Pending'
+    customerNumber: {
+      type: Number,
+      required: true,
+    },
+
+    tableNo: {
+      type: String,
+    },
+
+    restaurantId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Restaurant",
+    },
+
+    items: [
+      {
+        foodId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Food",
+        },
+        quantity: Number,
+      },
+    ],
+    totalAmount: Number,
+    pin: Number,
+
+    status: {
+      type: String,
+      default: "Pending",
+    },
+  },
+  {
+    timestamps: true,
   }
-}, {
-  timestamps: true
-});
+);
 
-module.exports = mongoose.model('Order', orderSchema);
+module.exports = mongoose.model("Order", orderSchema);

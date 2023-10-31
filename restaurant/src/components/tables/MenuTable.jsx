@@ -17,8 +17,9 @@ import {
 import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
 import LoadingSecond from "../laoding/LoadingSecond";
 import { Add, AddDark, Filter, FilterDark } from "../../assets/svg/SVG";
+import AddItemModal from "../add-item/AddItemModal";
 
-const CustomTable = ({
+const MenuTable = ({
   search,
   setSearch,
   data,
@@ -32,8 +33,11 @@ const CustomTable = ({
   actions,
   confirmFn,
   tableHeading,
+  onOpen,
+  queryClient,
 }) => {
   const [activeFn, setActiveFn] = useState(null);
+  const [isModal, setIsModal] = useState(false);
   return (
     <div className="dashboard_container_order_report_container">
       <div className="dashboard_container_order_report_nav ">
@@ -66,7 +70,10 @@ const CustomTable = ({
             <div
               className="order_report_container_search_add_order dashboard_container_btn d-flex justify-content-center align-items-center gap-2 h-75"
               style={{ background: "#FF5249" }}
-              onClick={() => setShowModal(true)}
+              onClick={() => {
+                onOpen();
+                setIsModal(true);
+              }}
             >
               <Add />
               <span>Add Order</span>
@@ -78,7 +85,12 @@ const CustomTable = ({
           <div>
             <FilterDark />
           </div>
-          <div>
+          <div
+            onClick={() => {
+              onOpen();
+              setIsModal(true);
+            }}
+          >
             <AddDark />
           </div>
         </div>
@@ -143,19 +155,19 @@ const CustomTable = ({
                         height={"40px"}
                         borderRadius="50%"
                         objectFit={"cover"}
-                        src={item?.image}
+                        src={item?.img}
                         alt=""
                       />
                     </Td>
                     <Td textTransform={"capitalize"}>{item.name}</Td>
-                    <Td textTransform={"capitalize"}>
-                      {item?.about?.slice(0, 25)}...
+                    <Td textTransform={"capitalize"}>{item?.desc}</Td>
+                    <Td textTransform={"capitalize"}>{item.category}</Td>
+
+                    <Td textTransform={"capitalize"}>{item.type}</Td>
+                    <Td>
+                      {" "}
+                      ₹{item?.price ? parseInt(item?.price).toFixed(2) : "0.00"}
                     </Td>
-                    <Td textTransform={"capitalize"}>{item.city}</Td>
-                    <Td textTransform={"capitalize"}>
-                      {item?.location?.slice(0, 25)}...
-                    </Td>
-                    <Td>{item.upi}</Td>
                     <Td>
                       <Flex gap={3}>
                         {actions?.map((btn, i) => (
@@ -180,14 +192,25 @@ const CustomTable = ({
           </Table>
         </TableContainer>
 
-        <AlertBox
-          isOpen={isOpen}
-          btnColor={activeFn ? confirmFn[activeFn - 1].color : "red"}
-          btnText={activeFn ? confirmFn[activeFn - 1].btnText : "Delete"}
-          onClose={onClose}
-          handleConfirm={activeFn ? confirmFn[activeFn - 1].fn : () => {}}
-          heading={activeFn ? confirmFn[activeFn - 1].heading : "Delete"}
-        />
+        {isModal ? (
+          <AddItemModal
+            queryClient={queryClient}
+            page={page}
+            search={search}
+            onClose={onClose}
+            isOpen={isOpen}
+          />
+        ) : (
+          <AlertBox
+            isOpen={isOpen}
+            btnColor={activeFn ? confirmFn[activeFn - 1].color : "red"}
+            btnText={activeFn ? confirmFn[activeFn - 1].btnText : "Delete"}
+            onClose={onClose}
+            handleConfirm={activeFn ? confirmFn[activeFn - 1].fn : () => {}}
+            heading={activeFn ? confirmFn[activeFn - 1].heading : "Delete"}
+          />
+        )}
+
         {isLoading && (
           <div
             className="d-flex align-items-center justify-content-center w-100"
@@ -201,4 +224,4 @@ const CustomTable = ({
   );
 };
 
-export default CustomTable;
+export default MenuTable;

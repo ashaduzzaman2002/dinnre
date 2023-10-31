@@ -201,11 +201,6 @@ exports.loginRestaurant = async (req, res) => {
         .status(401)
         .json({ success: false, msg: "Invalid credentials" });
 
-    // if (!user.verified)
-    //   return res
-    //     .status(404)
-    //     .json({ success: false, msg: "User is not active" });
-
     res.clearCookie("token");
 
     const token = jwt.sign(
@@ -266,187 +261,6 @@ exports.getProfile = async (req, res) => {
       success: false,
       msg: "Internal server error",
     });
-  }
-};
-
-// Logout
-exports.logout = async (req, res) => {
-  try {
-    res.cookie("token", null, {
-      path: "/",
-      expires: 0,
-      httpOnly: true,
-      sameSite: "lax",
-    });
-
-    res.status(200).json({
-      success: true,
-      msg: "Logout successful",
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      msg: "Internal server error",
-    });
-  }
-};
-
-// Get Citis
-exports.getCities = async (req, res) => {
-  try {
-    const cities = await City.find({}, "name");
-    res.json({ success: true, cities });
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-exports.getRestaurantOfCity = async (req, res) => {
-  let cityname = req.params?.city;
-  cityname = cityname?.toLowerCase();
-
-  try {
-    let city = await City.findOne({ name: cityname });
-
-    if (!city)
-      return res.json({
-        success: false,
-        msg: "No restaurant found in your city!",
-      });
-
-    const restaurants = await Restaurant.find({ city: city._id });
-    res.json({ success: true, restaurants });
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-exports.getRestaurant = async (req, res) => {
-  let restaurant_id = req.params?.restaurant_id;
-
-  try {
-    const restaurant = await Restaurant.findById(restaurant_id);
-    if (!restaurant)
-      return res.json({ success: false, msg: "No restaurant found" });
-    res.json({ success: true, restaurant });
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-// add food
-exports.addFood = async (req, res) => {
-  const { id } = req.user;
-  const { name, desc, img, price, type, category } = req.body;
-
-  const file = req.file;
-
-  // return console.log(name)
-
-  try {
-    const user = await User.findById(id);
-
-    if (!user || user.role !== "restaurant_owner") {
-      return res
-        .status(401)
-        .json({ success: false, msg: "Unauthorized access!" });
-    }
-
-    const restaurant = await Restaurant.findById(user.restaurant);
-    if (!restaurant)
-      return res
-        .status(401)
-        .json({ success: false, msg: "Unauthorized access! 2" });
-
-    const fileUri = dataURI(file);
-    const mycloud = await cloudinary.v2.uploader.upload(fileUri.content);
-
-    const food = new Food({
-      restaurant: restaurant._id,
-      name,
-      desc,
-      img: mycloud.secure_url,
-      price,
-      type,
-      category,
-    });
-
-    await food.save();
-
-    res.json({ success: true, msg: "Food added successfully", food });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ succcess: false, msg: "1 Internal server error" });
-  }
-};
-
-exports.getFoodsOfRestaurant = async (req, res) => {
-  const restaurant_id = req.params?.restaurant_id;
-
-  try {
-    const foods = await Food.find({ restaurant: restaurant_id });
-
-    if (!foods)
-      return res.status(404).json({ success: false, msg: "No items found" });
-
-    res.json({ succcess: true, foods: foods.reverse() });
-  } catch (error) {}
-};
-
-exports.getFoodById = async (req, res) => {
-  const food_id = req.params?.food_id;
-
-  try {
-    const food = await Food.findById(food_id);
-
-    if (!food)
-      return res.status(404).json({ success: false, msg: "Item not found" });
-
-    res.json({ success: true, food });
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-exports.deleteItem = async (req, res) => {
-  const { id } = req.user;
-  const { food_id } = req.body;
-
-  try {
-    const user = await User.findById(id);
-
-    if (!user || user.role !== "restaurant_owner") {
-      return res
-        .status(401)
-        .json({ success: false, msg: "Unauthorized access!" });
-    }
-
-    let food = await Food.findById(food_id);
-
-    if (!food) {
-      return res.status(404).json({ success: false, msg: "Item not found" });
-    }
-
-    food = await Food.findByIdAndDelete(food_id);
-
-    res.json({ success: true, msg: "Item deleted successfully" });
-
-    console.log(food);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ succcess: false, msg: "Internal server error" });
-  }
-};
-
-exports.getOrder = async (req, res) => {
-  const { id } = req.user;
-
-  try {
-    const order = await Order.find();
-
-    res.json({ success: true, order });
-  } catch (error) {
-    console.log(error);
   }
 };
 
@@ -554,5 +368,228 @@ exports.addBankAccount = async (req, res) => {
       success: false,
       msg: "Internal server error",
     });
+  }
+};
+
+// Logout
+exports.logout = async (req, res) => {
+  try {
+    res.cookie("token", null, {
+      path: "/",
+      expires: 0,
+      httpOnly: true,
+      sameSite: "lax",
+    });
+
+    res.status(200).json({
+      success: true,
+      msg: "Logout successful",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      msg: "Internal server error",
+    });
+  }
+};
+
+// Get Citis
+exports.getCities = async (req, res) => {
+  try {
+    const cities = await City.find({}, "name");
+    res.json({ success: true, cities });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+exports.getRestaurantOfCity = async (req, res) => {
+  let cityname = req.params?.city;
+  cityname = cityname?.toLowerCase();
+
+  try {
+    let city = await City.findOne({ name: cityname });
+
+    if (!city)
+      return res.json({
+        success: false,
+        msg: "No restaurant found in your city!",
+      });
+
+    const restaurants = await Restaurant.find({ city: city._id });
+    res.json({ success: true, restaurants });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+exports.getRestaurant = async (req, res) => {
+  let restaurant_id = req.params?.restaurant_id;
+
+  try {
+    const restaurant = await Restaurant.findById(restaurant_id);
+    if (!restaurant)
+      return res.json({ success: false, msg: "No restaurant found" });
+    res.json({ success: true, restaurant });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// add food
+exports.addFood = async (req, res) => {
+  const { id, role } = req.user;
+  const { name, desc, price, type, category } = req.body;
+
+  const file = req.file;
+
+  try {
+    const restaurant = await Restaurant.findById(id);
+
+    if (!restaurant || role !== "RESTAURENT") {
+      return res
+        .status(401)
+        .json({ success: false, msg: "1 Unauthorized access!" });
+    }
+
+    const response = await cloudinary.v2.uploader.upload(req.file.path, {
+      folder: "dinnre-restaurants",
+    });
+
+    fs.unlink(req.file.path);
+    const food = new Food({
+      restaurant: restaurant._id,
+      name,
+      desc,
+      img: response.secure_url,
+      price,
+      type,
+      category,
+    });
+
+    await food.save();
+
+    res.json({ success: true, msg: "Food added successfully", food });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ succcess: false, msg: "Internal server error" });
+  }
+};
+
+// get menu
+exports.getMenu = async (req, res) => {
+  const { id } = req.user;
+
+  try {
+    const page = parseInt(req.query.page) - 1 || 0;
+    const limit = parseInt(req.query.limit) || 10;
+    const search = req.query.search || "";
+
+    const menu = await Food.find({
+      restaurant: id,
+      name: { $regex: new RegExp(search, "i") },
+    })
+      .skip(page * limit)
+      .limit(limit);
+
+    const total = await Food.countDocuments({
+      restaurant: id,
+      name: { $regex: new RegExp(search, "i") },
+    });
+
+    res.status(200).json({
+      success: true,
+      msg: "Menu fetched successfully",
+      total,
+      limit,
+      page,
+      search,
+      data: menu,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ succcess: false, msg: "Internal server error" });
+  }
+};
+
+exports.getFoodsOfRestaurant = async (req, res) => {
+  const restaurant_id = req.params?.restaurant_id;
+
+  try {
+    const foods = await Food.find({ restaurant: restaurant_id });
+
+    if (!foods)
+      return res.status(404).json({ success: false, msg: "No items found" });
+
+    res.json({ succcess: true, foods: foods.reverse() });
+  } catch (error) {}
+};
+
+exports.getFoodById = async (req, res) => {
+  const food_id = req.params?.food_id;
+
+  try {
+    const food = await Food.findById(food_id);
+
+    if (!food)
+      return res.status(404).json({ success: false, msg: "Item not found" });
+
+    res.json({ success: true, food });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+exports.deleteItem = async (req, res) => {
+  const { id } = req.user;
+  const { food_id } = req.body;
+
+  try {
+    const user = await User.findById(id);
+
+    if (!user || user.role !== "restaurant_owner") {
+      return res
+        .status(401)
+        .json({ success: false, msg: "Unauthorized access!" });
+    }
+
+    let food = await Food.findById(food_id);
+
+    if (!food) {
+      return res.status(404).json({ success: false, msg: "Item not found" });
+    }
+
+    food = await Food.findByIdAndDelete(food_id);
+
+    res.json({ success: true, msg: "Item deleted successfully" });
+
+    console.log(food);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ succcess: false, msg: "Internal server error" });
+  }
+};
+
+exports.getOrder = async (req, res) => {
+  const { id } = req.user;
+
+  try {
+    const order = await Order.find();
+
+    res.json({ success: true, data: order });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+exports.getPendingOrders = async (req, res) => {
+  const { id } = req.user;
+
+  try {
+    const order = await Order.find({ status: "pending" });
+
+    res.json({ success: true, data: order });
+  } catch (error) {
+    console.log(error);
   }
 };

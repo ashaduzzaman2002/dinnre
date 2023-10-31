@@ -29,8 +29,9 @@ const foodSchema = new mongoose.Schema(
 
     category: {
       type: String,
-      enum: ['breakfast', 'launch', 'dinner'],
+      enum: ['all-time', 'breakfast', 'launch', 'dinner'],
       required: true,
+      default: 'all-time',
     },
 
     restaurant: {

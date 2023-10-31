@@ -9,7 +9,6 @@ export const AppProvider = ({ children }) => {
   const [city, setCity] = useState(null);
   const [restaurants, setRestaurants] = useState([]);
   const [isLogin, setIsLogin] = useState(false);
-  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0.0);
@@ -27,41 +26,7 @@ export const AppProvider = ({ children }) => {
     calculateTotalPrice();
   }, [cartItems]);
 
-  // const addToCart = (item, quantity) => {
-  //   // return console.log(item, quantity)
-  //   // Retrieve existing cart items from localStorage or initialize an empty array
-  //   const existingCartItems = JSON.parse(localStorage.getItem("cart")) || [];
-
-  //   // Check if the item is already in the cart
-  //   const existingItem = existingCartItems.find(
-  //     (cartItem) => cartItem._id === item._id
-  //   );
-
-  //   if (existingItem) {
-  //     // If the item exists in the cart, update its quantity
-  //     const updatedCartItems = existingCartItems.map((cartItem) => {
-  //       if (cartItem._id === item._id) {
-  //         return { ...cartItem, quantity: cartItem.quantity + quantity };
-  //       }
-  //       return cartItem;
-  //     });
-
-  //     // Update cart state and localStorage
-  //     setCartItems(updatedCartItems);
-  //     localStorage.setItem("cart", JSON.stringify(updatedCartItems));
-  //   } else {
-  //     // If the item is not in the cart, add it with the specified quantity
-  //     const updatedCartItems = [
-  //       ...existingCartItems,
-  //       { ...item, quantity: quantity },
-  //     ];
-
-  //     // Update cart state and localStorage
-  //     setCartItems(updatedCartItems);
-  //     localStorage.setItem("cart", JSON.stringify(updatedCartItems));
-  //   }
-  // };
-
+  
   const addToCart = async (item, quantity) => {
     // Retrieve existing cart items from localStorage or initialize an empty array
     const existingCartItems = JSON.parse(localStorage.getItem("cart")) || [];
@@ -186,45 +151,15 @@ export const AppProvider = ({ children }) => {
     setCity(myCity);
   };
 
-  const loggout = async () => {
-    try {
-      setLoading(true);
-      const { data } = await dbObject.get("/auth/logout");
-      console.log(data);
-      setUser(null);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
-  // const getRestaurantOfCity = async (city) => {
-  //   try {
-  //     setLoading(true);
-  //     const { data } = await axios.get(`${baseURL}/restaurant/${city}/all`);
-  //     setRestaurants(data.restaurants);
-  //     setLoading(false);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
-  const getUser = async () => {
-    try {
-      setLoading(true);
-      const { data } = await dbObject.get("/auth/user");
-      console.log(data);
-      // setIsLogin(true);
-      setUser(data.user);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  
 
+
+  // get menu
   const getItems = async () => {
     try {
-      const { data } = await dbObject("/restaurants/get-all-item");
+      const { data } = await dbObject("/menu");
       setItems(data.items);
       console.log(data);
     } catch (error) {
@@ -232,9 +167,10 @@ export const AppProvider = ({ children }) => {
     }
   };
 
+  // get restaurants
   const getRestaurant = async () => {
     try {
-      const { data } = await dbObject("/restaurants/all-restaurant");
+      const { data } = await dbObject("/restaurants");
 
       console.log(data);
       if (data.success) {
@@ -248,7 +184,6 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     getCities();
     getCity();
-    getUser();
     getItems();
     getRestaurant();
   }, [city]);
@@ -256,7 +191,6 @@ export const AppProvider = ({ children }) => {
   return (
     <AppContext.Provider
       value={{
-        getUser,
         cities,
         selectCity,
         city,
@@ -265,10 +199,6 @@ export const AppProvider = ({ children }) => {
         setRestaurants,
         setIsLogin,
         isLogin,
-        loggout,
-        // getRestaurantOfCity,
-        user,
-        setUser,
         loading,
         setLoading,
         cartItems,
