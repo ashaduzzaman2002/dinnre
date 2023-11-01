@@ -2,14 +2,11 @@ const {
   registerRestaurant,
   getCities,
   getRestaurantOfCity,
-  getRestaurant,
   addFood,
   getFoodsOfRestaurant,
   getFoodById,
   deleteItem,
   getOrder,
-  getAllItem,
-  getAllRestaurant,
   getRestaurantById,
   getMenuOfARestaurant,
   loginRestaurant,
@@ -19,6 +16,7 @@ const {
   createAccount,
   addBankAccount,
   getMenu,
+  getPendingOrders,
 } = require("../controllers/restaurant");
 const { validedUser } = require("../middleware/userValidation");
 const singleUpload = require("../middleware/multer");
@@ -50,8 +48,9 @@ router.put("/add-bank", validedUser, addBankAccount);
 router.post("/add/food", validedUser, singleUpload, checkImageUpload, addFood);
 router.get('/menu', validedUser, getMenu)
 
-router.get("/get-all-item", getAllItem);
-router.get("/all-restaurant", getAllRestaurant);
+
+router.get("/all-orders", validedUser, getOrder);
+router.get("/pending-orders", validedUser, getPendingOrders);
 
 router.get("/cities", getCities);
 router.get("/:city/all", getRestaurantOfCity);
@@ -61,7 +60,6 @@ router.get("/restaurant/items/:id", getMenuOfARestaurant);
 router.post("/item/delete", validedUser, deleteItem);
 router.get("/restaurant/:restaurant_id/foods", getFoodsOfRestaurant);
 router.get("/food/items/:food_id", getFoodById);
-router.get("/all-orders", validedUser, getOrder);
-router.get("/pending-orders", validedUser, getOrder);
+
 
 module.exports = router;

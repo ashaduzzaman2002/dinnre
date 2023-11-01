@@ -17,17 +17,21 @@ const orderSchema = new mongoose.Schema(
       ref: "Restaurant",
     },
 
-    items: [
-      {
-        _id: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Food",
-        },
-        quantity: Number,
-      },
-    ],
-    totalAmount: Number,
-    pin: Number,
+    items: Array,
+    totalAmount: {
+      type: Number,
+      required: true,
+    },
+    pin: {
+      type: Number,
+      required: true,
+    },
+
+    createdAt: {
+      type: Date,
+      required: true,
+      default: Date.now
+    },
 
     status: {
       type: String,

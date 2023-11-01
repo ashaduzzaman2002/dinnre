@@ -11,6 +11,8 @@ import "swiper/css";
 import { Pagination } from "swiper/modules";
 import { Text } from "@chakra-ui/react";
 import { Increase } from "../../assets/svg/SVG";
+import { useToast, useDisclosure, Flex, Button } from "@chakra-ui/react";
+import { RepeatIcon } from "@chakra-ui/icons";
 
 const Dashboard = () => {
   const Data = [
@@ -40,20 +42,26 @@ const Dashboard = () => {
   const [search, setSearch] = useState("");
   const limit = 5;
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
+
   const queryClient = useQueryClient();
 
   const headers = [
-    "image",
+    "SL No",
+    "Date",
     "Customer Name",
     "Phone Number",
     "Item Name",
     "Price",
-    "Verification Pin",
+    "Pin",
     "Actions",
   ];
 
   const getOrder = async () => {
-    const { data } = await dbObject.get("/pending-orders");
+    const { data } = await dbObject.get(
+      `/pending-orders?page=${page + 1}&limit=${limit}&search=${search}`
+    );
     console.log(data);
     return data;
   };
@@ -123,15 +131,94 @@ const Dashboard = () => {
             </Swiper>
           </div>
 
-          <h6 className="" style={{ padding: "1rem 0rem", marginTop: ".8rem" }}>
-            Recent Orders
-          </h6>
+          <Flex mt={6} mb={2} justifyContent={"flex-end"}>
+            <Button
+              onClick={() =>
+                queryClient.invalidateQueries([
+                  "pendingOrders",
+                  page,
+                  search,
+                ])
+              }
+              gap={2}
+            >
+              <RepeatIcon /> Refresh
+            </Button>
+          </Flex>
           <OrderTable
             headers={headers}
             limit={limit}
             tableHeading="Pending Orders"
             data={data}
             isLoading={isLoading}
+            onClose={onClose}
+            isOpen={isOpen}
+            onOpen={onOpen}
+            setPage={setPage}
+            setSearch={setSearch}
+            page={page}
+            search={search}
+            queryClient={queryClient}
+            confirmFn={[
+              {
+                fn: () => {
+                  console.log("first");
+                  onClose();
+                  toast({
+                    title: "Working fine",
+                    status: "success",
+                    duration: 1000,
+                    position: "top",
+                    isClosable: true,
+                  });
+                },
+
+                btnText: "Edit",
+                color: "yellow",
+                heading: "Edit Item",
+              },
+              {
+                fn: () => {
+                  console.log("first");
+                  onClose();
+                  toast({
+                    title: "Working fine",
+                    status: "success",
+                    duration: 1000,
+                    position: "top",
+                    isClosable: true,
+                  });
+                },
+
+                btnText: "Delete",
+                color: "red",
+                heading: "Delete Item",
+              },
+            ]}
+            actions={[
+              {
+                btnText: "Cancel",
+                color: "red",
+                fn: () => {
+                  onOpen();
+                },
+              },
+
+              {
+                btnText: "Compelte",
+                color: "yellow",
+                fn: () => {
+                  onOpen();
+                },
+              },
+              {
+                btnText: "Approve",
+                color: "green",
+                fn: () => {
+                  onOpen();
+                },
+              },
+            ]}
           />
         </div>
       </Layout>

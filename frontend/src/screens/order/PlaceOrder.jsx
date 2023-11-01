@@ -39,13 +39,15 @@ const PlaceOrder = () => {
             items
           });
 
+          console.log(data)
+
           setLoading(false);
 
           var options = {
             key: key,
             amount: data.order.amount,
             currency: "INR",
-            name: "Acme Corp",
+            name: "Dinnre",
             description: "Test Transaction",
             image: "https://example.com/your_logo",
             order_id: data.order.id,
@@ -55,7 +57,7 @@ const PlaceOrder = () => {
             prefill: {
               name: values.name,
               email: "gaurav.kumar@example.com",
-              contact: "9000090000",
+              contact: values.number,
             },
             notes: {
               address: "Razorpay Corporate Office",

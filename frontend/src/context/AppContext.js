@@ -126,12 +126,12 @@ export const AppProvider = ({ children }) => {
 
   const getCities = async () => {
     try {
-      setLoading(true);
-      const { data } = await axios(`${baseURL}/restaurants/cities`);
-      if (data.success) {
-        setCities(data.cities);
-        setLoading(false);
-      }
+      // setLoading(true);
+      // const { data } = await axios(`${baseURL}/restaurants/cities`);
+      // if (data.success) {
+      //   setCities(data.cities);
+      //   setLoading(false);
+      // }
     } catch (error) {
       console.log(error);
     }

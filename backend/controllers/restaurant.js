@@ -11,26 +11,6 @@ const { mailTransport, mailTemplete, generateOTP } = require("../utils/mail");
 const OTP = require("../models/OTP");
 const fs = require("fs/promises");
 
-exports.getAllItem = async (req, res) => {
-  try {
-    const items = await Food.find();
-
-    res.json({ success: true, items });
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-exports.getAllRestaurant = async (req, res) => {
-  try {
-    const restaurants = await Restaurant.find();
-
-    res.json({ success: true, restaurants });
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 exports.getRestaurantById = async (req, res) => {
   let id = req.params?.id;
   try {
@@ -512,6 +492,49 @@ exports.getMenu = async (req, res) => {
   }
 };
 
+exports.getOrder = async (req, res) => {
+  const { id } = req.user;
+
+  try {
+    const order = await Order.find();
+
+    res.json({ success: true, data: order });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+exports.getPendingOrders = async (req, res) => {
+  const { id } = req.user;
+
+  try {
+    const page = parseInt(req.query.page) - 1 || 0;
+    const limit = parseInt(req.query.limit) || 10;
+    const search = req.query.search || "";
+
+    const order = await Order.find({
+      restaurantId: id,
+      status: "Pending",
+      customerName: { $regex: new RegExp(search, "i") },
+    })
+      .sort({ createdAt: -1 })
+      .skip(page * limit)
+      .limit(limit);
+
+    const total = await Order.countDocuments({
+      restaurantId: id,
+      status: "Pending",
+      customerName: { $regex: new RegExp(search, "i") },
+    });
+
+    // const order = await Order.find({ status: "pending" });
+
+    res.json({ success: true, data: order, total, limit, page, search });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 exports.getFoodsOfRestaurant = async (req, res) => {
   const restaurant_id = req.params?.restaurant_id;
 
@@ -567,29 +590,5 @@ exports.deleteItem = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ succcess: false, msg: "Internal server error" });
-  }
-};
-
-exports.getOrder = async (req, res) => {
-  const { id } = req.user;
-
-  try {
-    const order = await Order.find();
-
-    res.json({ success: true, data: order });
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-exports.getPendingOrders = async (req, res) => {
-  const { id } = req.user;
-
-  try {
-    const order = await Order.find({ status: "pending" });
-
-    res.json({ success: true, data: order });
-  } catch (error) {
-    console.log(error);
   }
 };

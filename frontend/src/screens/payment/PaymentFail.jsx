@@ -1,15 +1,15 @@
-import React, { useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import React, { useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const PaymentFail = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const navigate = useNavigate();
 
-  const redirect = queryParams.get('redirect');
+  const redirect = queryParams.get("redirect");
 
   useEffect(() => {
-    if (!redirect) return navigate('/cart');
+    if (!redirect) return navigate("/cart");
   }, []);
 
   if (!redirect) {
@@ -20,7 +20,7 @@ const PaymentFail = () => {
       >
         <div
           className="spinner-border text-primary"
-          style={{ width: '3rem', height: '3rem' }}
+          style={{ width: "3rem", height: "3rem" }}
           role="status"
         >
           <span className="sr-only">Loading...</span>

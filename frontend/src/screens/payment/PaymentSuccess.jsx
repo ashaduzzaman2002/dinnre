@@ -1,24 +1,23 @@
-import React, { useContext, useEffect } from 'react';
-import './payment.css';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { AppContext } from '../../context/AppContext';
+import React, { useContext, useEffect } from "react";
+import "./payment.css";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { AppContext } from "../../context/AppContext";
 
 const PaymentSuccess = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const navigate = useNavigate();
-  const {clearCart} = useContext(AppContext)
+  const { clearCart } = useContext(AppContext);
 
-  const paymentId = queryParams.get('paymentId');
-  const otp = queryParams.get('otp');
+  const paymentId = queryParams.get("paymentId");
+  const otp = queryParams.get("otp");
 
   useEffect(() => {
     if ((!paymentId, !otp)) {
-      return navigate('/cart');
-    }else {
-      clearCart()
+      return navigate("/cart");
     }
-  });
+    clearCart();
+  }, [paymentId, otp]);
 
   if ((!paymentId, !otp)) {
     return (
@@ -28,7 +27,7 @@ const PaymentSuccess = () => {
       >
         <div
           className="spinner-border text-primary"
-          style={{ width: '3rem', height: '3rem' }}
+          style={{ width: "3rem", height: "3rem" }}
           role="status"
         >
           <span className="sr-only">Loading...</span>
@@ -45,7 +44,7 @@ const PaymentSuccess = () => {
           <br /> we'll be in touch shortly!
         </p>
 
-        <p className='mt-3'>Payment id: {paymentId}</p>
+        <p className="mt-3">Payment id: {paymentId}</p>
         <p>Refference number</p>
         <span>{otp}</span>
 

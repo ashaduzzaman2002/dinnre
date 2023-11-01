@@ -13,6 +13,7 @@ import {
   Th,
   Thead,
   Tr,
+  Text,
 } from "@chakra-ui/react";
 import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
 import LoadingSecond from "../laoding/LoadingSecond";
@@ -34,6 +35,34 @@ const OrderTable = ({
   tableHeading,
 }) => {
   const [activeFn, setActiveFn] = useState(null);
+
+  function formatDateTime(inputDateString) {
+    // Parse the input date string
+    const date = new Date(inputDateString);
+
+    // Get the date in "dd/mm/yyyy" format
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const year = date.getFullYear();
+
+    // Get the time in 12-hour format with "AM" or "PM"
+    let hours = date.getHours();
+    const minutes = date.getMinutes();
+    const ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12 || 12; // Convert 0 to 12 for 12-hour format
+
+    // Format the date and time
+    const formattedDate = `${day}/${month}/${year}`;
+    const formattedTime = `${hours}:${minutes
+      .toString()
+      .padStart(2, "0")} ${ampm}`;
+
+    return {
+      date: formattedDate,
+      time: formattedTime,
+    };
+  }
+
   return (
     <div className="dashboard_container_order_report_container">
       <div className="dashboard_container_order_report_nav ">
@@ -135,48 +164,54 @@ const OrderTable = ({
             </Thead>
             {!isLoading && (
               <Tbody>
-                {data?.data?.map((item, i) => (
-                  <Tr key={i}>
-                    <Td>
-                      <Image
-                        width={"40px"}
-                        height={"40px"}
-                        borderRadius="50%"
-                        objectFit={"cover"}
-                        src={item?.image}
-                        alt=""
-                      />
-                    </Td>
-                    <Td textTransform={"capitalize"}>{item.customerName}</Td>
-                    <Td textTransform={"capitalize"}>{item?.customerNumber}</Td>
-                    <Td textTransform={"capitalize"}>{item.city}</Td>
-
-                    <Td textTransform={"capitalize"}>
-                      ₹
-                      {item?.totalAmount
-                        ? parseInt(item?.totalAmount).toFixed(2)
-                        : "0.00"}
-                    </Td>
-                    <Td>{item?.pin}</Td>
-                    <Td>
-                      <Flex gap={3}>
-                        {actions?.map((btn, i) => (
-                          <Button
-                            key={i}
-                            onClick={() => {
-                              setActiveFn(i + 1);
-                              btn.fn(item._id);
-                            }}
-                            colorScheme={btn.color}
-                            size="sm"
-                          >
-                            {btn.btnText}
-                          </Button>
+                {data?.data?.map((item, i) => {
+                  const dataTime = formatDateTime(item.createdAt);
+                  return (
+                    <Tr key={i}>
+                      <Td>{i + 1}.</Td>
+                      <Td textTransform={"capitalize"}>
+                        {dataTime?.date} <br />
+                        {dataTime?.time}
+                      </Td>
+                      <Td textTransform={"capitalize"}>{item.customerName}</Td>
+                      <Td textTransform={"capitalize"}>
+                        {item?.customerNumber}
+                      </Td>
+                      <Td textTransform={"capitalize"}>
+                        {item?.items?.map((item, i) => (
+                          <React.Fragment key={i}>
+                            {i + 1}. {item.name} / {item.quantity} <br />
+                          </React.Fragment>
                         ))}
-                      </Flex>
-                    </Td>
-                  </Tr>
-                ))}
+                      </Td>
+
+                      <Td textTransform={"capitalize"}>
+                        ₹
+                        {item?.totalAmount
+                          ? parseInt(item?.totalAmount).toFixed(2)
+                          : "0.00"}
+                      </Td>
+                      <Td>{item?.pin}</Td>
+                      <Td>
+                        <Flex gap={3}>
+                          {actions?.map((btn, i) => (
+                            <Button
+                              key={i}
+                              onClick={() => {
+                                setActiveFn(i + 1);
+                                btn.fn(item._id);
+                              }}
+                              colorScheme={btn.color}
+                              size="sm"
+                            >
+                              {btn.btnText}
+                            </Button>
+                          ))}
+                        </Flex>
+                      </Td>
+                    </Tr>
+                  );
+                })}
               </Tbody>
             )}
           </Table>

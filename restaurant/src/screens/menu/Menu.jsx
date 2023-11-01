@@ -12,8 +12,6 @@ import {
 } from "../../assets/svg/SVG";
 import ITEM from "../../assets/img/order_image.png";
 import DP from "../../assets/img/order-dp.svg";
-// import AddFood from "../AddFood/AddFood";
-import AddItem from "../../components/add-item/AddItem";
 import { dbObject } from "../../helper/api";
 import Protected from "../../routes/Protected";
 import CustomTable from "../../components/tables/OrderTable";
@@ -68,7 +66,7 @@ const Menu = () => {
           <MenuTable
             headers={headers}
             limit={limit}
-            tableHeading="All Orders"
+            tableHeading="Our Menu"
             data={data}
             isLoading={isLoading}
             onClose={onClose}

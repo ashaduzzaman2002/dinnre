@@ -14,6 +14,7 @@ import React, { useState } from "react";
 import { Add, Upload } from "../../assets/svg/SVG";
 import { useMutation } from "@tanstack/react-query";
 import { dbObject } from "../../helper/api";
+import "./addItem.css";
 
 const AddItemModal = ({ isOpen, onClose, queryClient, page, search }) => {
   const [inputs, setInputs] = useState({
@@ -80,7 +81,7 @@ const AddItemModal = ({ isOpen, onClose, queryClient, page, search }) => {
           type: "",
           category: "",
         });
-        queryClient.invalidateQueries(["pendingRestaurants", page, search]);
+        queryClient.invalidateQueries(["menu", page, search]);
         toast({
           title: data.msg,
           status: "success",
