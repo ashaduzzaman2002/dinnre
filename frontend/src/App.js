@@ -15,7 +15,7 @@ import PaymentFail from "./screens/payment/PaymentFail";
 import PlaceOrder from "./screens/order/PlaceOrder";
 import Product from "./screens/product/Product";
 import AllProduct from "./screens/all-product/AllProduct";
-import AllRestaurant from "./screens/all-restaurant/AllRestaurant";
+import AllRestaurant from "./screens/restaurants/AllRestaurant";
 import ConfirmOrder from "./screens/confirm-order/ConfirmOrder";
 import SingleItem from "./screens/single-item/SingleItem";
 import RestaurantPage from "./screens/restaurant-page/RestaurantPage";
@@ -32,7 +32,7 @@ function App() {
         <Route path="/confirm-order" element={<PlaceOrder />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/menu" element={<Menu />} />
-        <Route path="/restaurant/menu/:id" element={<RestaurantPage />} />
+        <Route path="/restaurants/:id" element={<RestaurantPage />} />
         <Route
           path="/search"
           element={
@@ -51,7 +51,6 @@ function App() {
             </>
           }
         />
-        
 
         <Route
           path="/menu/item/:item_id"
@@ -63,8 +62,6 @@ function App() {
             </>
           }
         />
-
-  
 
         <Route path="/checkout/success" element={<CheckoutSuccess />} />
 

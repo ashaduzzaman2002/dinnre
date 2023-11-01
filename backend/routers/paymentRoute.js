@@ -4,8 +4,8 @@ const { checkout, paymentVerification } = require('../controllers/paymentControl
 
 const router = express.Router()
 
-router.post('/checkout', checkout)
-router.post('/verification', paymentVerification)
+router.post('/payment/checkout', checkout)
+router.post('/payment/verification', paymentVerification)
 
 
 module.exports = router

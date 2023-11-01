@@ -141,7 +141,7 @@ const Navbar = ({ navLinks, type }) => {
                 </li>
               ))}
 
-              <li class="dropdown d-flex align-items-center">
+              {/* <li class="dropdown d-flex align-items-center">
                 <div
                   class="menu-dropdown dropdown-toggle"
                   href="#"
@@ -160,7 +160,7 @@ const Navbar = ({ navLinks, type }) => {
                     </li>
                   ))}
                 </ul>
-              </li>
+              </li> */}
             </ul>
           </div>
 

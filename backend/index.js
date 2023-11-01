@@ -41,9 +41,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, 'public')));
 
 app.use("/restaurants", restaurantRouter);
+// app.use("/user/payment", paymentRouter);
 app.use("/user", user);
 app.use("/admin", adminRouter);
-app.use("/payment", paymentRouter);
 
 // Routes
 app.get("/", (req, res) => {
@@ -62,9 +62,7 @@ exports.instance = new Razorpay({
   key_secret: process.env.RAZORPAY_API_SECRECT,
 });
 
-app.get("/api/getkey", (req, res) =>
-  res.json({ success: true, key: process.env.RAZORPAY_API_KEY })
-);
+
 
 connectDB();
 

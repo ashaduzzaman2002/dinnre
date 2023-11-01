@@ -89,7 +89,7 @@ const Profile = () => {
                           <div className="row">
                             <div className="col-12 col-md-6 col-lg-4">
                               <Box maxW="32rem">
-                                <Text mb={0} fontWeight={"600"} fontSize="3xl">
+                                <Text mb={0} fontWeight={"600"} fontSize="lg">
                                   Bank
                                 </Text>
                                 <Text fontSize="md">{profile?.bankName}</Text>
@@ -97,7 +97,7 @@ const Profile = () => {
                             </div>
                             <div className="col-12 col-md-6 col-lg-4">
                               <Box maxW="32rem">
-                                <Text mb={0} fontWeight={"600"} fontSize="3xl">
+                                <Text mb={0} fontWeight={"600"} fontSize="lg">
                                   Account Number
                                 </Text>
                                 <Text fontSize="md">{profile.accountNo}</Text>
@@ -106,7 +106,7 @@ const Profile = () => {
 
                             <div className="col-12 col-md-6 col-lg-4">
                               <Box maxW="32rem">
-                                <Text mb={0} fontWeight={"600"} fontSize="3xl">
+                                <Text mb={0} fontWeight={"600"} fontSize="lg">
                                   Account Holder
                                 </Text>
                                 <Text fontSize="md">
@@ -117,7 +117,7 @@ const Profile = () => {
 
                             <div className="col-12 col-md-6 col-lg-4">
                               <Box maxW="32rem">
-                                <Text mb={0} fontWeight={"600"} fontSize="3xl">
+                                <Text mb={0} fontWeight={"600"} fontSize="lg">
                                   IFSC Code
                                 </Text>
                                 <Text fontSize="md">{profile.ifsc}</Text>
@@ -126,7 +126,7 @@ const Profile = () => {
 
                             <div className="col-12 col-md-6 col-lg-4">
                               <Box maxW="32rem">
-                                <Text mb={0} fontWeight={"600"} fontSize="3xl">
+                                <Text mb={0} fontWeight={"600"} fontSize="lg">
                                   UPI Id
                                 </Text>
                                 <Text mb={0} fontSize="md">
@@ -138,7 +138,7 @@ const Profile = () => {
                         </div>
                       </div>
                       <div class="d-flex justify-content-between align-items-center mb-4">
-                        <p class="lead fw-normal mb-0">Recent photos</p>
+                        <p class="lead fw-normal mb-0">Popular Items</p>
                         <p class="mb-0">
                           <a href="#!" class="text-muted">
                             Show all

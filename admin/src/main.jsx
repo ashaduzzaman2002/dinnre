@@ -6,9 +6,6 @@ import { BrowserRouter } from "react-router-dom";
 import { AppProvider } from "./context/AppContext.jsx";
 
 import {
-  useQuery,
-  useMutation,
-  useQueryClient,
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";

@@ -12,10 +12,6 @@ const orderSchema = new mongoose.Schema(
       required: true,
     },
 
-    tableNo: {
-      type: String,
-    },
-
     restaurantId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Restaurant",
@@ -23,7 +19,7 @@ const orderSchema = new mongoose.Schema(
 
     items: [
       {
-        foodId: {
+        _id: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Food",
         },
