@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../../layout/Layout";
 import { dbObject } from "../../helper/api";
 import Protected from "../../routes/Protected";
@@ -12,9 +12,9 @@ const Orders = () => {
 
   const queryClient = useQueryClient();
 
-
   const headers = [
     "Sl",
+    "date",
     "Customer Name",
     "Phone Number",
     "Item Name",
@@ -23,9 +23,14 @@ const Orders = () => {
     "Actions",
   ];
 
+  useEffect(() => {
+    console.log("Working");
+  }, []);
+
   const getOrder = async () => {
-    const { data } = await dbObject.get(`/all/orders?page=${page + 1
-      }&limit=${limit}&search=${search}`);
+    const { data } = await dbObject.get(
+      `/all/orders?page=${page + 1}&limit=${limit}&search=${search}`
+    );
     console.log(data);
     return data;
   };
@@ -40,11 +45,12 @@ const Orders = () => {
     return <div>Error fetching data {error.message}</div>;
   }
 
+  const startSerial = page * limit + 1;
+
   return (
     <Protected>
-      <Layout title={"Menu"}>
+      <Layout title={"Orders"}>
         <div className="dashboard_container container cm">
-
           <OrderTable
             headers={headers}
             limit={limit}
@@ -55,6 +61,7 @@ const Orders = () => {
             page={page}
             setSearch={setSearch}
             search={search}
+            startSerial={startSerial}
           />
         </div>
       </Layout>

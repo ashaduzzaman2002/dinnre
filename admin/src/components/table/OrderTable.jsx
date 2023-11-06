@@ -34,6 +34,7 @@ const OrderTable = ({
   actions,
   confirmFn,
   tableHeading,
+  startSerial,
 }) => {
   const [activeFn, setActiveFn] = useState(null);
 
@@ -138,9 +139,11 @@ const OrderTable = ({
               <Tbody>
                 {data?.data?.map((item, i) => {
                   const dataTime = formatDateTime(item.createdAt);
+                  const serialNumber = startSerial + i;
                   return (
                     <Tr key={i}>
-                      <Td>{Math.ceil(i+1)}.</Td>
+                      <Td>{serialNumber}.</Td>
+                     
                       <Td textTransform={"capitalize"}>
                         {dataTime?.date} <br />
                         {dataTime?.time}

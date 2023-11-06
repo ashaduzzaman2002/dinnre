@@ -344,7 +344,7 @@ exports.getAllOrderDetails = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      msg: "All pending restaurents are fetched successfully",
+      msg: "All orders are fetched successfully",
       total,
       limit,
       page,

@@ -28,7 +28,13 @@ initialize(server);
 // Middleware
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://localhost:5173"],
+    origin: [
+      "http://localhost:3000",
+      "http://localhost:5173",
+      "https://dinnre.com",
+      "https://admin.dinnre.com",
+      "https://restaurant.dinnre.com",
+    ],
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"],
     methods: ["GET", "POST", "PUT", "DELETE"],
@@ -38,7 +44,7 @@ app.use(
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.resolve(__dirname, 'public')));
+app.use(express.static(path.resolve(__dirname, "public")));
 
 app.use("/restaurants", restaurantRouter);
 // app.use("/user/payment", paymentRouter);
@@ -61,8 +67,6 @@ exports.instance = new Razorpay({
   key_id: process.env.RAZORPAY_API_KEY,
   key_secret: process.env.RAZORPAY_API_SECRECT,
 });
-
-
 
 connectDB();
 
