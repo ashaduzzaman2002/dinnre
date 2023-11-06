@@ -319,21 +319,37 @@ exports.getAllPendingRestaurents = async (req, res) => {
 
 exports.getAllOrderDetails = async (req, res) => {
   try {
-    const { id, role } = req.user;
+    const { role } = req.user;
+    const page = parseInt(req.query.page) - 1 || 0;
+    const limit = parseInt(req.query.limit) || 10;
+    const search = req.query.search || "";
 
     if (role !== "ADMIN") {
       return res.status(403).json({
         success: false,
-        msg: "Unauthorized access denied",
+        msg: "Unauthorized, access denied",
       });
     }
 
-    const orders = await Order.find({});
+    const orders = await Order.find({
+      customerName: { $regex: new RegExp(search, "i") },
+    })
+      .sort({ createdAt: -1 })
+      .skip(page * limit)
+      .limit(limit);
+
+    const total = await Order.countDocuments({
+      customerName: { $regex: new RegExp(search, "i") },
+    });
 
     res.status(200).json({
       success: true,
-      msg: "All order fetched successfully",
-      orders,
+      msg: "All pending restaurents are fetched successfully",
+      total,
+      limit,
+      page,
+      search,
+      data: orders,
     });
   } catch (error) {
     console.log(error);

@@ -28,7 +28,7 @@ const Restaurants = () => {
   };
 
   const { isLoading, error, data } = useQuery({
-    queryKey: ["pendingRestaurants", page, search],
+    queryKey: ["restaurants", page, search],
     queryFn: fetchRestaurants,
     staleTime: 5 * 60 * 1000,
   });

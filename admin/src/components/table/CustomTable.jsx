@@ -3,6 +3,7 @@ import AlertBox from "../alert/AlertBox";
 import {
   Button,
   Flex,
+  Icon,
   IconButton,
   Image,
   Table,
@@ -14,9 +15,15 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from "@chakra-ui/icons";
 import LoadingSecond from "../laoding/LoadingSecond";
 import { Filter, FilterDark } from "../../assets/svg/Icon";
+import Pagination from "../pagination/Pagination";
 
 const CustomTable = ({
   search,
@@ -31,7 +38,7 @@ const CustomTable = ({
   page,
   actions,
   confirmFn,
-  tableHeading
+  tableHeading,
 }) => {
   const [activeFn, setActiveFn] = useState(null);
   return (
@@ -77,43 +84,14 @@ const CustomTable = ({
           <TableContainer>
             <Table variant="striped" colorScheme="gray">
               <TableCaption>
-                <Flex justifyContent={{ base: "start", lg: "center" }} gap={2}>
-                  <IconButton
-                    size={"sm"}
-                    isRound={true}
-                    variant="solid"
-                    aria-label="prev"
-                    icon={<ArrowLeftIcon />}
-                    onClick={() => setPage(Math.max(page - 1, 0))}
+                {data?.total ? (
+                  <Pagination
+                    limit={limit}
+                    page={page}
+                    totalPages={data.total}
+                    setPage={setPage}
                   />
-
-                  {Array.from({
-                    length: Math.ceil(data?.total / limit),
-                  }).map((_, i) => (
-                    <Button
-                      onClick={() => setPage(i)}
-                      key={i}
-                      colorScheme="teal"
-                      size="sm"
-                    >
-                      {i + 1}
-                    </Button>
-                  ))}
-
-                  <IconButton
-                    size={"sm"}
-                    isRound={true}
-                    variant="solid"
-                    // colorScheme="teal"
-                    aria-label="next"
-                    icon={<ArrowRightIcon />}
-                    onClick={() =>
-                      setPage(
-                        Math.min(page + 1, Math.ceil(data?.total / limit) - 1)
-                      )
-                    }
-                  />
-                </Flex>
+                ) : null}
               </TableCaption>
               <Thead>
                 <Tr>
@@ -149,7 +127,7 @@ const CustomTable = ({
                         <Flex gap={3}>
                           {actions?.map((btn, i) => (
                             <Button
-                            key={i}
+                              key={i}
                               onClick={() => {
                                 setActiveFn(i + 1);
                                 btn.fn(item._id);
