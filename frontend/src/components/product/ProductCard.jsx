@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import "./productCard.css";
 import { Clock, Minus, Plus, Star } from "../../assets/svg/SVG";
 import { AppContext } from "../../context/AppContext";
+import { useNavigate } from "react-router-dom";
 
 const ProductCard = ({ item }) => {
   const { addToCart, getQuantity } = useContext(AppContext);
@@ -25,6 +26,7 @@ const ProductCard = ({ item }) => {
     setItemQuantity(initialQuantity);
   }, [initialQuantity]);
 
+  const naviagate = useNavigate()
 
   return (
     <div className="card">
@@ -55,7 +57,13 @@ const ProductCard = ({ item }) => {
 
         <div className="d-flex justify-content-between card-add-to-cart">
           <button
-            onClick={() => addToCart(item, itemQuantity)}
+            onClick={() => {
+              if(itemQuantity > 2){
+                naviagate('/cart')
+              }else {
+                addToCart(item, itemQuantity)
+              }
+            }}
             style={{
               backgroundColor: itemQuantity > 0 ? "#BE2AED" : "#F4F4F4",
               color: itemQuantity > 0 ? "#fff" : "#A3A3A3",

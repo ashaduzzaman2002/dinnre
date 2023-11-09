@@ -2,8 +2,14 @@ const Food = require("../models/Food");
 const Restaurant = require("../models/Restaurant");
 
 exports.getMenu = async (req, res) => {
+  const page = parseInt(req.query.page) - 1 || 0;
+  const limit = parseInt(req.query.limit) || 8;
+
   try {
-    const items = await Food.find();
+    const items = await Food.find()
+      .skip(page * limit)
+
+    const total = await Food.countDocuments();
 
     res.json({ success: true, items });
   } catch (error) {
